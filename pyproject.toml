@@ -1,0 +1,12 @@
+[project]
+name = "agent-tool-use"
+version = "0.1.0"
+description = "Observe agent tool selection, execution, and evaluation in tau2-bench."
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "tau2",
+]
+
+[tool.uv.sources]
+tau2 = { path = "../tau2-bench" }
