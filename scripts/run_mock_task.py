@@ -73,7 +73,8 @@ def run_git(*args: str) -> str:
         capture_output=True,
         text=True,
     )
-    return result.stdout.strip()
+    # Preserve the leading status columns from `git status --porcelain`.
+    return result.stdout.rstrip("\r\n")
 
 
 def load_minimal_agent_module() -> ModuleType:
@@ -127,11 +128,19 @@ def main() -> None:
         )
 
     tau2_commit = run_git("rev-parse", "HEAD")
-    tau2_status = run_git("status", "--porcelain")
-    if tau2_status:
+    tau2_changes = [
+        line for line in run_git("status", "--porcelain").splitlines() if line
+    ]
+    # The upstream v1.0.1 tag bumps pyproject.toml to 1.0.1 but still records
+    # tau2 as 1.0.0 in uv.lock. `uv sync` corrects that stale lock entry, so
+    # allow this known metadata-only change while rejecting every other edit.
+    relevant_tau2_changes = [
+        line for line in tau2_changes if line[3:] != "uv.lock"
+    ]
+    if relevant_tau2_changes:
         raise RuntimeError(
-            "The tau2-bench checkout has uncommitted changes; refusing to run "
-            "against a modified reference checkout"
+            "The tau2-bench checkout has changes other than uv.lock; refusing "
+            f"to run against a modified reference checkout: {relevant_tau2_changes}"
         )
 
     # The installed tau2 package does not bundle domain data. Point it at the
@@ -193,7 +202,10 @@ def main() -> None:
         "tau2_bench": {
             "path": str(TAU2_ROOT),
             "commit": tau2_commit,
-            "working_tree_clean": True,
+            "working_tree_clean": not tau2_changes,
+            "ignored_working_tree_changes": [
+                line[3:] for line in tau2_changes if line[3:] == "uv.lock"
+            ],
         },
         "runtime": {
             "python": platform.python_version(),
