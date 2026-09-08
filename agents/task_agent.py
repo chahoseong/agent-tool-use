@@ -8,9 +8,11 @@ from tau2.data_model.message import (
     APICompatibleMessage,
     AssistantMessage,
     Message,
+    MultiToolMessage,
     SystemMessage,
 )
 from tau2.environment.tool import Tool
+from tau2.utils.llm_utils import generate
 
 
 @dataclass
@@ -73,15 +75,23 @@ class TaskAgent(HalfDuplexAgent[TaskAgentState]):
     def generate_next_message(
         self, message: ValidAgentInputMessage, state: TaskAgentState
     ) -> tuple[AssistantMessage, TaskAgentState]:
-        """Define the next-turn contract; implementation belongs to a follow-up.
+        """Append the input and generate one response using the conversation state.
 
-        Accept a UserMessage, ToolMessage, or MultiToolMessage and current state.
-        The future implementation will append the input (individual tool results
-        for a bundle), pass system instructions, history, and tools to tau2's
-        generate utility, then append its AssistantMessage to the history.
-
-        Return (assistant_message, updated_state). The assistant message contains
-        text or tool-call requests; tau2 executes tools and delivers their results
-        as subsequent inputs. This method currently raises NotImplementedError.
+        Preserve bundled tool results as individual history entries in order.
+        Store and return the response; tau2 executes any requested tools and
+        delivers their results as subsequent inputs.
         """
-        raise NotImplementedError("Next message generation is not implemented yet.")
+        if isinstance(message, MultiToolMessage):
+            state.messages.extend(message.tool_messages)
+        else:
+            state.messages.append(message)
+
+        assistant_message = generate(
+            model=self.llm,
+            messages=[*state.system_messages, *state.messages],
+            tools=self.tools,
+            **self.llm_args,
+        )
+        assert isinstance(assistant_message, AssistantMessage)
+        state.messages.append(assistant_message)
+        return assistant_message, state
