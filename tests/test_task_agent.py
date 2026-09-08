@@ -1,4 +1,4 @@
-"""Verify conversation state and message generation without calling an LLM."""
+"""Verify message history and response generation without calling an LLM."""
 
 from typing import Any
 
@@ -25,7 +25,7 @@ def agent() -> TaskAgent:
 
 
 @pytest.fixture(params=["omitted", "empty", "populated"])
-def history(request: pytest.FixtureRequest) -> list[Message] | None:
+def message_history(request: pytest.FixtureRequest) -> list[Message] | None:
     if request.param == "omitted":
         return None
     if request.param == "empty":
@@ -62,36 +62,50 @@ def test_initial_state_separates_user_request_from_system_messages(
     assert state.messages == [request]
 
 
-def test_initial_state_preserves_history(
-    agent: TaskAgent, history: list[Message] | None
+def test_initial_state_preserves_message_history(
+    agent: TaskAgent, message_history: list[Message] | None
 ) -> None:
-    expected = list(history) if history is not None else []
-    state = agent.get_init_state() if history is None else agent.get_init_state(history)
-    assert state.messages == expected
+    expected_message_history = (
+        list(message_history) if message_history is not None else []
+    )
+    state = (
+        agent.get_init_state()
+        if message_history is None
+        else agent.get_init_state(message_history)
+    )
+    assert state.messages == expected_message_history
 
 
-@pytest.mark.parametrize("history", ["empty", "populated"], indirect=True)
-def test_state_history_changes_preserve_input_history(
-    agent: TaskAgent, history: list[Message] | None
+@pytest.mark.parametrize("message_history", ["empty", "populated"], indirect=True)
+def test_input_message_history_remains_unchanged_when_state_message_history_changes(
+    agent: TaskAgent, message_history: list[Message] | None
 ) -> None:
-    assert history is not None
-    expected = list(history)
-    state = agent.get_init_state(history)
-    assert history == expected
+    assert message_history is not None
+    expected_message_history = list(message_history)
+    state = agent.get_init_state(message_history)
+    assert message_history == expected_message_history
     state.messages.append(AssistantMessage(role="assistant", content="Done"))
-    assert history == expected
+    assert message_history == expected_message_history
 
 
-def test_state_history_changes_preserve_other_states(
-    agent: TaskAgent, history: list[Message] | None
+def test_state_message_history_remains_unchanged_when_another_state_message_history_changes(
+    agent: TaskAgent, message_history: list[Message] | None
 ) -> None:
-    expected = list(history) if history is not None else []
-    first = agent.get_init_state() if history is None else agent.get_init_state(history)
+    expected_message_history = (
+        list(message_history) if message_history is not None else []
+    )
+    first = (
+        agent.get_init_state()
+        if message_history is None
+        else agent.get_init_state(message_history)
+    )
     second = (
-        agent.get_init_state() if history is None else agent.get_init_state(history)
+        agent.get_init_state()
+        if message_history is None
+        else agent.get_init_state(message_history)
     )
     first.messages.append(AssistantMessage(role="assistant", content="Done"))
-    assert second.messages == expected
+    assert second.messages == expected_message_history
 
 
 def test_initial_state_rejects_multi_tool_message(agent: TaskAgent) -> None:
@@ -113,10 +127,10 @@ def test_initial_state_rejects_multi_tool_message(agent: TaskAgent) -> None:
 @pytest.mark.parametrize(
     "input_kind", ["user", "tool", "multiple_tools", "mixed_tool_results"]
 )
-def test_agent_preserves_input_messages_in_conversation_history(
+def test_agent_appends_input_message_and_generated_response_to_message_history(
     agent: TaskAgent, monkeypatch: pytest.MonkeyPatch, input_kind: str
 ) -> None:
-    prior_history: list[Message] = [
+    initial_message_history: list[Message] = [
         UserMessage(role="user", content="Help me inspect my tasks."),
         AssistantMessage(role="assistant", content="Which tasks should I inspect?"),
     ]
@@ -161,7 +175,7 @@ def test_agent_preserves_input_messages_in_conversation_history(
                     requestor="assistant",
                 )
             )
-        prior_history.extend(
+        initial_message_history.extend(
             [
                 UserMessage(role="user", content="Inspect the selected tasks."),
                 AssistantMessage(role="assistant", tool_calls=tool_calls),
@@ -174,29 +188,83 @@ def test_agent_preserves_input_messages_in_conversation_history(
             else MultiToolMessage(role="tool", tool_messages=tool_results)
         )
 
-    state = agent.get_init_state(prior_history)
+    state = agent.get_init_state(initial_message_history)
     expected_system = [message.model_dump() for message in state.system_messages]
-    expected_history = [
-        message.model_dump() for message in [*prior_history, *expected_inputs]
+    expected_message_history = [
+        message.model_dump() for message in [*initial_message_history, *expected_inputs]
     ]
+    generated_response = AssistantMessage(
+        role="assistant", content="I have the results."
+    )
+    expected_response = generated_response.model_dump()
     generation_contexts: list[list[dict[str, Any]]] = []
 
     def fake_generate(*, messages: list[Message], **kwargs: object) -> AssistantMessage:
         generation_contexts.append([message.model_dump() for message in messages])
-        return AssistantMessage(role="assistant", content="I have the results.")
+        return generated_response
 
     monkeypatch.setattr(task_agent_module, "generate", fake_generate)
 
     _, updated_state = agent.generate_next_message(incoming, state)
 
-    assert generation_contexts == [expected_system + expected_history]
+    assert generation_contexts == [expected_system + expected_message_history]
     assert [
-        message.model_dump()
-        for message in updated_state.messages[: len(expected_history)]
-    ] == expected_history
+        message.model_dump() for message in updated_state.messages
+    ] == expected_message_history + [expected_response]
     assert [
         message.model_dump() for message in updated_state.system_messages
     ] == expected_system
+
+
+def test_agent_preserves_message_history_across_tool_use_turns(
+    agent: TaskAgent, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    user_request = UserMessage(role="user", content="Inspect task-2.")
+    tool_request = AssistantMessage(
+        role="assistant",
+        tool_calls=[
+            ToolCall(
+                id="call-z",
+                name="get_task",
+                arguments={"task_id": "task-2"},
+                requestor="assistant",
+            )
+        ],
+    )
+    tool_result = ToolMessage(
+        role="tool",
+        id="call-z",
+        content='{"title": "Buy milk"}',
+        requestor="assistant",
+    )
+    follow_up = AssistantMessage(role="assistant", content="Task-2 is Buy milk.")
+    state = agent.get_init_state()
+    expected_system = [message.model_dump() for message in state.system_messages]
+    expected_message_history = [
+        message.model_dump()
+        for message in [user_request, tool_request, tool_result, follow_up]
+    ]
+    generation_contexts: list[list[dict[str, Any]]] = []
+    generated_responses = iter([tool_request, follow_up])
+
+    def fake_generate(*, messages: list[Message], **kwargs: object) -> AssistantMessage:
+        generation_contexts.append([message.model_dump() for message in messages])
+        return next(generated_responses)
+
+    monkeypatch.setattr(task_agent_module, "generate", fake_generate)
+
+    first_response, state = agent.generate_next_message(user_request, state)
+    second_response, state = agent.generate_next_message(tool_result, state)
+
+    assert generation_contexts == [
+        expected_system + expected_message_history[:1],
+        expected_system + expected_message_history[:3],
+    ]
+    assert first_response.model_dump() == expected_message_history[1]
+    assert second_response.model_dump() == expected_message_history[3]
+    assert [
+        message.model_dump() for message in state.messages
+    ] == expected_message_history
 
 
 def test_agent_passes_tools_and_model_settings_to_generate_response(
@@ -252,7 +320,7 @@ def test_agent_passes_tools_and_model_settings_to_generate_response(
 
 
 @pytest.mark.parametrize("response_kind", ["text", "tool_calls"])
-def test_agent_returns_generated_response_with_updated_conversation_history(
+def test_agent_returns_generated_response_with_updated_message_history(
     monkeypatch: pytest.MonkeyPatch, response_kind: str
 ) -> None:
     def get_task(task_id: str) -> str:
@@ -293,17 +361,17 @@ def test_agent_returns_generated_response_with_updated_conversation_history(
                 requestor="assistant",
             ),
         ]
-    prior_history: list[Message] = [
+    initial_message_history: list[Message] = [
         UserMessage(role="user", content="Help me inspect my tasks."),
         AssistantMessage(role="assistant", content="Which tasks should I inspect?"),
     ]
     incoming = UserMessage(
         role="user", content="Inspect task-2 and list up to three urgent work tasks."
     )
-    state = agent.get_init_state(prior_history)
+    state = agent.get_init_state(initial_message_history)
     expected_response = generated_response.model_dump()
-    expected_history = [
-        message.model_dump() for message in [*prior_history, incoming]
+    expected_message_history = [
+        message.model_dump() for message in [*initial_message_history, incoming]
     ] + [expected_response]
     generation_count = 0
 
@@ -322,4 +390,4 @@ def test_agent_returns_generated_response_with_updated_conversation_history(
     assert response.model_dump() == expected_response
     assert [
         message.model_dump() for message in updated_state.messages
-    ] == expected_history
+    ] == expected_message_history
