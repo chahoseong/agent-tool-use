@@ -13,7 +13,6 @@ from types import ModuleType
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
-
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 TAU2_ROOT = PROJECT_ROOT.parent / "tau2-bench"
 MINIMAL_AGENT_PATH = TAU2_ROOT / "examples" / "agents" / "minimal_text_agent.py"
@@ -134,9 +133,7 @@ def main() -> None:
     # The upstream v1.0.1 tag bumps pyproject.toml to 1.0.1 but still records
     # tau2 as 1.0.0 in uv.lock. `uv sync` corrects that stale lock entry, so
     # allow this known metadata-only change while rejecting every other edit.
-    relevant_tau2_changes = [
-        line for line in tau2_changes if line[3:] != "uv.lock"
-    ]
+    relevant_tau2_changes = [line for line in tau2_changes if line[3:] != "uv.lock"]
     if relevant_tau2_changes:
         raise RuntimeError(
             "The tau2-bench checkout has changes other than uv.lock; refusing "
@@ -166,7 +163,9 @@ def main() -> None:
         "api_key": api_key,
         "temperature": 0,
     }
-    config = TextRunConfig(
+    # tau2 declares defaults inside Annotated[..., Field(default=...)], which
+    # mypy does not recognize as optional constructor arguments.
+    config = TextRunConfig(  # type: ignore[call-arg]
         domain="mock",
         task_ids=[TASK_ID],
         num_tasks=1,
@@ -229,7 +228,12 @@ def main() -> None:
 
     if orchestrator.environment.tools is None:
         raise RuntimeError("Mock environment did not expose an assistant toolkit")
-    final_state = orchestrator.environment.tools.db.model_dump(mode="json")
+    database = orchestrator.environment.tools.db
+    if database is None:
+        raise RuntimeError(
+            "Mock environment assistant toolkit did not expose a database"
+        )
+    final_state = database.model_dump(mode="json")
     write_json(OUTPUT_DIR / "final-state.json", final_state)
 
     print(f"Saved observation artifacts to {OUTPUT_DIR}")
