@@ -15,7 +15,7 @@ tau2 = { path = "../tau2-bench" }
 extend-select = ["I"]
 
 [tool.mypy]
-files = ["scripts"]
+files = ["scripts", "agents", "tests"]
 check_untyped_defs = true
 warn_unused_ignores = true
 
@@ -26,8 +26,12 @@ module = ["tau2", "tau2.*"]
 follow_untyped_imports = true
 follow_imports = "silent"
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
 [dependency-groups]
 dev = [
     "mypy>=2.3.1",
+    "pytest>=9.1.1",
     "ruff>=0.16.6",
 ]
