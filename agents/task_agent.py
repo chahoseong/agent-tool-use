@@ -1,7 +1,7 @@
 """TaskAgent's conversation state and tau2 interface."""
 
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, cast
 
 from tau2.agent.base_agent import HalfDuplexAgent, ValidAgentInputMessage
 from tau2.data_model.message import (
@@ -14,6 +14,11 @@ from tau2.data_model.message import (
 from tau2.environment.tool import Tool
 from tau2.utils.llm_utils import generate
 
+AGENT_PROMPT = (
+    "You are a helpful customer service agent.\n\n"
+    "Follow the policy strictly. Use the provided tools to help the user."
+)
+
 
 @dataclass
 class TaskAgentState:
@@ -22,8 +27,8 @@ class TaskAgentState:
     This state stores context for the agent, not the environment's task database.
     """
 
-    system_messages: list[SystemMessage]
-    messages: list[APICompatibleMessage]
+    instructions: list[SystemMessage]
+    message_history: list[APICompatibleMessage]
 
 
 class TaskAgent(HalfDuplexAgent[TaskAgentState]):
@@ -41,6 +46,10 @@ class TaskAgent(HalfDuplexAgent[TaskAgentState]):
         self.llm = llm
         self.llm_args = dict(llm_args) if llm_args is not None else {}
 
+    def set_seed(self, seed: int) -> None:
+        """Use the trial seed supplied by tau2 for response generation."""
+        self.llm_args["seed"] = seed
+
     def get_init_state(
         self, message_history: list[Message] | None = None
     ) -> TaskAgentState:
@@ -50,48 +59,66 @@ class TaskAgent(HalfDuplexAgent[TaskAgentState]):
         the caller or another state. Message objects themselves are not copied.
 
         tau2's Orchestrator filters initial history through
-        is_valid_agent_history_message, supplying individual messages.
-        MultiToolMessage bundles are turn inputs, not initial history entries;
-        passing one here raises TypeError. This method makes no LLM call.
+        is_valid_agent_history_message; trust that input to contain individual
+        API-compatible messages. This method makes no LLM call.
         """
-        system_prompt = (
-            "You are a helpful customer service agent.\n\n"
-            f"## Domain Policy\n{self.domain_policy}\n\n"
-            "Follow the policy strictly. Use the provided tools to help the user."
+        system_prompt = f"{AGENT_PROMPT}\n\n## Domain Policy\n{self.domain_policy}"
+        messages = cast(
+            list[APICompatibleMessage],
+            list(message_history) if message_history is not None else [],
         )
-        messages: list[APICompatibleMessage] = []
-        for message in message_history if message_history is not None else []:
-            if not isinstance(message, APICompatibleMessage):
-                raise TypeError(
-                    "Initial history must contain individual messages, "
-                    "not MultiToolMessage bundles."
-                )
-            messages.append(message)
         return TaskAgentState(
-            system_messages=[SystemMessage(role="system", content=system_prompt)],
-            messages=messages,
+            instructions=[SystemMessage(role="system", content=system_prompt)],
+            message_history=messages,
         )
 
     def generate_next_message(
         self, message: ValidAgentInputMessage, state: TaskAgentState
     ) -> tuple[AssistantMessage, TaskAgentState]:
-        """Append the input and generate one response using the conversation state.
+        """Generate one response, then append the input and response to the state.
 
         Preserve bundled tool results as individual history entries in order.
         Store and return the response; tau2 executes any requested tools and
-        delivers their results as subsequent inputs.
+        delivers their results as subsequent inputs. Leave state unchanged if
+        generation fails or returns an invalid response.
         """
+        inputs: list[APICompatibleMessage]
         if isinstance(message, MultiToolMessage):
-            state.messages.extend(message.tool_messages)
+            inputs = list(message.tool_messages)
         else:
-            state.messages.append(message)
+            inputs = [message]
 
         assistant_message = generate(
             model=self.llm,
-            messages=[*state.system_messages, *state.messages],
+            messages=[*state.instructions, *state.message_history, *inputs],
             tools=self.tools,
             **self.llm_args,
         )
-        assert isinstance(assistant_message, AssistantMessage)
-        state.messages.append(assistant_message)
+        if not isinstance(assistant_message, AssistantMessage):
+            raise TypeError("Response generation must return an AssistantMessage.")
+        state.message_history.extend([*inputs, assistant_message])
         return assistant_message, state
+
+
+def create_task_agent(
+    tools: list[Tool],
+    domain_policy: str,
+    *,
+    llm: str | None = None,
+    llm_args: dict[str, Any] | None = None,
+    **kwargs: object,
+) -> TaskAgent:
+    """Create a TaskAgent from tau2.runner.build.build_agent's factory inputs.
+
+    The official runner also passes task and audio context through kwargs;
+    TaskAgent only uses tools, policy, and model settings. Construction does
+    not invoke the model or execute tools.
+    """
+    if llm is None:
+        raise ValueError("TaskAgent requires an llm model name.")
+    return TaskAgent(
+        tools=tools,
+        domain_policy=domain_policy,
+        llm=llm,
+        llm_args=llm_args,
+    )
