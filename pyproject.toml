@@ -5,6 +5,7 @@ description = "Observe agent tool selection, execution, and evaluation in tau2-b
 readme = "README.md"
 requires-python = ">=3.12,<3.14"
 dependencies = [
+    "pydantic>=2.13.5,<3",
     "tau2",
 ]
 
@@ -15,7 +16,7 @@ tau2 = { path = "../tau2-bench" }
 extend-select = ["I"]
 
 [tool.mypy]
-files = ["scripts", "agents", "tests"]
+files = ["scripts", "agents", "evals", "tests"]
 check_untyped_defs = true
 warn_unused_ignores = true
 

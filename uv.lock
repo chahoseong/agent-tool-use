@@ -21,6 +21,7 @@ name = "agent-tool-use"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "pydantic" },
     { name = "tau2" },
 ]
 
@@ -32,7 +33,10 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "tau2", directory = "../tau2-bench" }]
+requires-dist = [
+    { name = "pydantic", specifier = ">=2.13.5,<3" },
+    { name = "tau2", directory = "../tau2-bench" },
+]
 
 [package.metadata.requires-dev]
 dev = [
