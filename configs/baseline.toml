@@ -1,13 +1,17 @@
 # 공식 tau2-bench mock 평가 설정 (llama.cpp 서버 전용)
 [evaluation]
 # 평가할 task ID를 하나 이상 직접 지정하세요. 기본 task는 없습니다.
-task_ids = ["create_task_1"]
+task_ids = [
+    "create_task_1",
+    "update_task_1",
+    "update_task_with_message_history",
+    "impossible_task_1",
+]
 seed = 42
-num_trials = 1
+num_trials = 3
 max_concurrency = 1
-# 생략하면 tau2-bench의 기본 실행 제한을 사용합니다.
-# max_steps = 200
-# max_errors = 10
+max_steps = 200
+max_errors = 10
 
 [agent]
 # 서버가 제공하는 모델 ID로 수정하세요. openai/ 접두사는 붙이지 않습니다.
