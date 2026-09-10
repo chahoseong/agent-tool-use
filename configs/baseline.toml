@@ -1,0 +1,39 @@
+# 공식 tau2-bench mock 평가 설정 (llama.cpp 서버 전용)
+[evaluation]
+# 평가할 task ID를 하나 이상 직접 지정하세요. 기본 task는 없습니다.
+task_ids = ["create_task_1"]
+seed = 42
+num_trials = 1
+max_concurrency = 1
+# 생략하면 tau2-bench의 기본 실행 제한을 사용합니다.
+# max_steps = 200
+# max_errors = 10
+
+[agent]
+# 서버가 제공하는 모델 ID로 수정하세요. openai/ 접두사는 붙이지 않습니다.
+model = "google/gemma-4-12B-it-qat-q4_0-gguf:Q4_0"
+base_url = "http://100.80.184.89:8080/v1"
+# 인증이 필요한 경우 키 값 대신 환경변수 이름을 지정하세요.
+# api_key_env = "EVAL_AGENT_API_KEY"
+
+# 필요한 생성 옵션만 주석을 해제하세요.
+# [agent.generation]
+# temperature = 0.0
+# top_p = 1.0
+# max_tokens = 1024
+
+[user]
+# 공식 사용자 시뮬레이터에 사용할 모델과 서버 주소입니다.
+model = "google/gemma-4-12B-it-qat-q4_0-gguf:Q4_0"
+base_url = "http://100.80.184.89:8080/v1"
+# api_key_env = "EVAL_USER_API_KEY"
+
+# [user.generation]
+# temperature = 0.0
+# top_p = 1.0
+# max_tokens = 1024
+
+# 출력 상위 디렉토리입니다. 상대 경로는 프로젝트 루트 기준입니다.
+# 실행마다 별도 하위 디렉토리를 생성합니다.
+[output]
+directory = "artifacts/evaluations"
