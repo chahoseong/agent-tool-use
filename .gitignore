@@ -218,6 +218,7 @@ __marimo__/
 .streamlit/secrets.toml
 
 # Generated tau2-bench run artifacts
+/artifacts/evaluations/
 /artifacts/mock/task_1/run-config.json
 /artifacts/mock/task_1/simulation.json
 /artifacts/mock/task_1/final-state.json
