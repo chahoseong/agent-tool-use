@@ -4,6 +4,7 @@ import tomllib
 from collections.abc import Callable
 from importlib import import_module
 from pathlib import Path
+from types import SimpleNamespace
 
 import httpx
 import pytest
@@ -170,7 +171,7 @@ def test_authentication_reports_role_when_configured_key_is_unavailable(
     else:
         monkeypatch.setenv("EVAL_TEST_API_KEY", value)
 
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(runner_module.EvaluationPreparationError) as error:
         runner_module._resolve_api_key("EVAL_TEST_API_KEY", role=role)
 
     assert str(error.value) == (
@@ -254,7 +255,7 @@ def test_model_check_reports_http_failure_without_exposing_response(
     )
     options = ModelOptions(model="model", base_url="http://localhost/v1")
 
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(runner_module.EvaluationPreparationError) as error:
         runner_module._check_model(options, role="user", api_key="test-only-key")
 
     assert str(error.value) == f"user: Model check failed: {reason}."
@@ -279,7 +280,7 @@ def test_model_check_reports_transport_failure_without_retrying(
     requests = mock_http(fail)
     options = ModelOptions(model="model", base_url="http://localhost/v1")
 
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(runner_module.EvaluationPreparationError) as error:
         runner_module._check_model(options, role="agent", api_key=None)
 
     assert str(error.value) == f"agent: Model check failed: {reason}."
@@ -299,7 +300,7 @@ def test_model_check_rejects_invalid_model_list_without_exposing_body(
     mock_http(lambda request: httpx.Response(200, content=body))
     options = ModelOptions(model="model", base_url="http://localhost/v1")
 
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(runner_module.EvaluationPreparationError) as error:
         runner_module._check_model(options, role="user", api_key=None)
 
     assert str(error.value) == "user: Model check failed: invalid model list response."
@@ -311,7 +312,7 @@ def test_model_check_rejects_model_without_exact_id_match(mock_http: Callable) -
     )
     options = ModelOptions(model="model", base_url="http://localhost/v1")
 
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(runner_module.EvaluationPreparationError) as error:
         runner_module._check_model(options, role="agent", api_key=None)
 
     assert (
@@ -382,7 +383,7 @@ def test_preflight_stops_before_server_requests_when_user_key_is_unavailable(
     monkeypatch.delenv("EVAL_TEST_USER_KEY")
     requests = mock_http(lambda request: httpx.Response(200, json={"data": []}))
 
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(runner_module.EvaluationPreparationError) as error:
         runner_module._preflight_models(preflight_config)
 
     assert str(error.value) == (
@@ -397,7 +398,7 @@ def test_preflight_stops_before_user_request_when_agent_model_check_fails(
 ) -> None:
     requests = mock_http(lambda request: httpx.Response(200, json={"data": []}))
 
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(runner_module.EvaluationPreparationError) as error:
         runner_module._preflight_models(preflight_config)
 
     assert (
@@ -444,7 +445,7 @@ def test_evaluation_returns_official_results_path_after_preparing_run(
     config_path = tmp_path / "evaluation.toml"
     saved_paths: list[Path] = []
 
-    def run_domain(config: TextRunConfig) -> None:
+    def run_domain(config: TextRunConfig) -> SimpleNamespace:
         assert registry.get_agent_factory(config.agent) is create_task_agent
         assert config.task_ids == evaluation_config.evaluation.task_ids
         assert config.save_to is not None
@@ -455,6 +456,14 @@ def test_evaluation_returns_official_results_path_after_preparing_run(
         result_path = directory / "results.json"
         result_path.write_text('{"official_result": true}', encoding="utf-8")
         saved_paths.append(result_path)
+        return SimpleNamespace(
+            simulations=[
+                SimpleNamespace(
+                    termination_reason="max_steps",
+                    reward_info=SimpleNamespace(reward=0.0),
+                )
+            ]
+        )
 
     monkeypatch.setattr(import_module("tau2.runner"), "run_domain", run_domain)
 
@@ -494,7 +503,7 @@ def test_evaluation_stops_before_creating_output_when_preparation_fails(
 
     monkeypatch.setattr(import_module("tau2.runner"), "run_domain", unexpected_run)
 
-    with pytest.raises(ValueError):
+    with pytest.raises(runner_module.EvaluationPreparationError):
         runner_module.run_evaluation(
             evaluation_config, config_path=tmp_path / "evaluation.toml"
         )
@@ -530,3 +539,71 @@ def test_evaluation_preserves_artifacts_when_official_execution_fails(
     assert len(saved_paths) == 1
     assert saved_paths[0].read_text("utf-8") == "partial results"
     assert saved_paths[0].with_name("metadata.toml").is_file()
+
+
+@pytest.mark.parametrize("error_count", [1, 2], ids=["mixed_results", "all_errors"])
+def test_evaluation_reports_infrastructure_errors_with_preserved_results(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    evaluation_config: EvalConfig,
+    error_count: int,
+) -> None:
+    from tau2.data_model.simulation import TerminationReason, TextRunConfig
+
+    def run_domain(config: TextRunConfig) -> SimpleNamespace:
+        assert config.save_to is not None
+        result_path = Path(config.save_to) / "results.json"
+        result_path.write_text("official results", encoding="utf-8")
+        reasons = [TerminationReason.INFRASTRUCTURE_ERROR] * error_count
+        reasons += [TerminationReason.USER_STOP] * (2 - error_count)
+        return SimpleNamespace(
+            simulations=[
+                SimpleNamespace(termination_reason=reason) for reason in reasons
+            ]
+        )
+
+    monkeypatch.setattr(import_module("tau2.runner"), "run_domain", run_domain)
+
+    with pytest.raises(runner_module.EvaluationInfrastructureError) as error:
+        runner_module.run_evaluation(
+            evaluation_config, config_path=tmp_path / "evaluation.toml"
+        )
+
+    assert error.value.total_count == 2
+    assert error.value.error_count == error_count
+    assert error.value.results_path.read_text("utf-8") == "official results"
+    assert error.value.results_path.with_name("metadata.toml").is_file()
+
+
+@pytest.mark.parametrize(
+    ("operation", "message"),
+    [
+        ("create_run_directory", "Cannot create evaluation run directory."),
+        ("write_metadata", "Cannot write evaluation metadata."),
+    ],
+)
+def test_evaluation_reports_storage_preparation_failure_before_execution(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    evaluation_config: EvalConfig,
+    operation: str,
+    message: str,
+) -> None:
+    from evals import metadata
+
+    def denied(*args: object, **kwargs: object) -> None:
+        raise OSError("private filesystem error details")
+
+    def unexpected_run(config: object) -> None:
+        pytest.fail("Evaluation started after a storage preparation failure")
+
+    monkeypatch.setattr(metadata, operation, denied)
+    monkeypatch.setattr(import_module("tau2.runner"), "run_domain", unexpected_run)
+
+    with pytest.raises(runner_module.EvaluationPreparationError) as error:
+        runner_module.run_evaluation(
+            evaluation_config, config_path=tmp_path / "evaluation.toml"
+        )
+
+    assert str(error.value) == message
+    assert error.value.__suppress_context__

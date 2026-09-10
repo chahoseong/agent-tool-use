@@ -3,10 +3,15 @@
 from tau2.data_model.tasks import Task
 from tau2.runner.helpers import load_tasks
 
+from evals.errors import EvaluationPreparationError
+
 
 def list_tasks() -> list[Task]:
     """Return all official mock tasks without filtering or transformation."""
-    return load_tasks("mock")
+    try:
+        return load_tasks("mock")
+    except (OSError, ValueError):
+        raise EvaluationPreparationError("Cannot read mock tasks.") from None
 
 
 def get_task(task_id: str) -> Task:
@@ -14,7 +19,7 @@ def get_task(task_id: str) -> Task:
     for task in list_tasks():
         if task.id == task_id:
             return task
-    raise ValueError(f"Unknown mock task ID: {task_id}.")
+    raise EvaluationPreparationError(f"Unknown mock task ID: {task_id}.")
 
 
 def validate_task_ids(task_ids: list[str]) -> None:
@@ -22,7 +27,9 @@ def validate_task_ids(task_ids: list[str]) -> None:
     existing_ids = {task.id for task in list_tasks()}
     unknown_ids = [task_id for task_id in task_ids if task_id not in existing_ids]
     if unknown_ids:
-        raise ValueError(f"Unknown mock task IDs: {', '.join(unknown_ids)}.")
+        raise EvaluationPreparationError(
+            f"Unknown mock task IDs: {', '.join(unknown_ids)}."
+        )
 
 
 def format_task_list(tasks: list[Task]) -> str:

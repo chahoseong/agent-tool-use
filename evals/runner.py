@@ -8,9 +8,24 @@ import httpx
 from pydantic import BaseModel, ValidationError
 
 from evals.config import EvalConfig, ModelOptions
+from evals.errors import EvaluationPreparationError
 
 if TYPE_CHECKING:
     from tau2.data_model.simulation import TextRunConfig
+
+
+class EvaluationInfrastructureError(Exception):
+    """Report failed simulations while retaining their official results."""
+
+    def __init__(
+        self, *, total_count: int, error_count: int, results_path: Path
+    ) -> None:
+        self.total_count = total_count
+        self.error_count = error_count
+        self.results_path = results_path
+        super().__init__(
+            f"{error_count} of {total_count} simulations failed with infrastructure errors."
+        )
 
 
 def run_evaluation(config: EvalConfig, *, config_path: Path) -> Path:
@@ -19,6 +34,7 @@ def run_evaluation(config: EvalConfig, *, config_path: Path) -> Path:
     Preparation failures propagate before execution. Once execution starts,
     preserve metadata and any official checkpoints if it fails.
     """
+    from tau2.data_model.simulation import TerminationReason
     from tau2.runner import run_domain
 
     from evals.metadata import create_run_directory, write_metadata
@@ -27,11 +43,30 @@ def run_evaluation(config: EvalConfig, *, config_path: Path) -> Path:
     validate_task_ids(config.evaluation.task_ids)
     _preflight_models(config)
     _register_task_agent()
-    run_directory = create_run_directory(config.output.directory)
-    write_metadata(run_directory, config=config, config_path=config_path)
+    try:
+        run_directory = create_run_directory(config.output.directory)
+    except OSError:
+        raise EvaluationPreparationError(
+            "Cannot create evaluation run directory."
+        ) from None
+    try:
+        write_metadata(run_directory, config=config, config_path=config_path)
+    except OSError:
+        raise EvaluationPreparationError("Cannot write evaluation metadata.") from None
     run_config = _build_run_config(config, run_directory)
-    run_domain(run_config)
-    return run_directory / "results.json"
+    results = run_domain(run_config)
+    results_path = run_directory / "results.json"
+    error_count = sum(
+        simulation.termination_reason == TerminationReason.INFRASTRUCTURE_ERROR
+        for simulation in results.simulations
+    )
+    if error_count:
+        raise EvaluationInfrastructureError(
+            total_count=len(results.simulations),
+            error_count=error_count,
+            results_path=results_path,
+        )
+    return results_path
 
 
 def _register_task_agent() -> None:
@@ -44,7 +79,7 @@ def _register_task_agent() -> None:
     if existing is create_task_agent:
         return
     if existing is not None:
-        raise ValueError(
+        raise EvaluationPreparationError(
             "Agent task_agent is already registered with a different factory."
         )
     registry.register_agent_factory(create_task_agent, "task_agent")
@@ -113,7 +148,7 @@ def _resolve_api_key(api_key_env: str | None, *, role: str) -> str | None:
         return None
     key = os.environ.get(api_key_env)
     if not key:
-        raise ValueError(
+        raise EvaluationPreparationError(
             f"{role}: API key environment variable {api_key_env} is missing or empty."
         )
     return key
@@ -128,23 +163,29 @@ def _check_model(options: ModelOptions, *, role: str, api_key: str | None) -> No
         with httpx.Client(timeout=10.0, follow_redirects=False) as client:
             response = client.get(url, headers=headers)
     except httpx.TimeoutException:
-        raise ValueError(f"{role}: Model check failed: request timed out.") from None
+        raise EvaluationPreparationError(
+            f"{role}: Model check failed: request timed out."
+        ) from None
     except httpx.RequestError:
-        raise ValueError(f"{role}: Model check failed: connection failed.") from None
+        raise EvaluationPreparationError(
+            f"{role}: Model check failed: connection failed."
+        ) from None
 
     if response.status_code in {401, 403}:
-        raise ValueError(f"{role}: Model check failed: authentication failed.")
+        raise EvaluationPreparationError(
+            f"{role}: Model check failed: authentication failed."
+        )
     if not response.is_success:
-        raise ValueError(
+        raise EvaluationPreparationError(
             f"{role}: Model check failed: server returned HTTP {response.status_code}."
         )
     try:
         models = _ModelsResponse.model_validate_json(response.content)
     except ValidationError:
-        raise ValueError(
+        raise EvaluationPreparationError(
             f"{role}: Model check failed: invalid model list response."
         ) from None
     if not any(model.id == options.model for model in models.data):
-        raise ValueError(
+        raise EvaluationPreparationError(
             f"{role}: Model check failed: configured model ID was not found."
         )
