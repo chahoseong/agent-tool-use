@@ -1,11 +1,94 @@
 """Preparation and execution of official mock evaluations."""
 
 import os
+from pathlib import Path
+from typing import TYPE_CHECKING
 
 import httpx
 from pydantic import BaseModel, ValidationError
 
 from evals.config import EvalConfig, ModelOptions
+
+if TYPE_CHECKING:
+    from tau2.data_model.simulation import TextRunConfig
+
+
+def run_evaluation(config: EvalConfig, *, config_path: Path) -> Path:
+    """Prepare a mock evaluation and return its official results file path.
+
+    Preparation failures propagate before execution. Once execution starts,
+    preserve metadata and any official checkpoints if it fails.
+    """
+    from tau2.runner import run_domain
+
+    from evals.metadata import create_run_directory, write_metadata
+    from evals.tasks import validate_task_ids
+
+    validate_task_ids(config.evaluation.task_ids)
+    _preflight_models(config)
+    _register_task_agent()
+    run_directory = create_run_directory(config.output.directory)
+    write_metadata(run_directory, config=config, config_path=config_path)
+    run_config = _build_run_config(config, run_directory)
+    run_domain(run_config)
+    return run_directory / "results.json"
+
+
+def _register_task_agent() -> None:
+    """Register our factory once, rejecting a name owned by another factory."""
+    from tau2.registry import registry
+
+    from agents.task_agent import create_task_agent
+
+    existing = registry.get_agent_factory("task_agent")
+    if existing is create_task_agent:
+        return
+    if existing is not None:
+        raise ValueError(
+            "Agent task_agent is already registered with a different factory."
+        )
+    registry.register_agent_factory(create_task_agent, "task_agent")
+
+
+def _build_run_config(config: EvalConfig, run_directory: Path) -> "TextRunConfig":
+    """Translate validated settings without resolving keys or starting evaluation."""
+    from tau2.data_model.simulation import TextRunConfig
+
+    return TextRunConfig.model_validate(
+        {
+            "domain": "mock",
+            "task_set_name": "mock",
+            "task_split_name": None,
+            "task_ids": list(config.evaluation.task_ids),
+            "agent": "task_agent",
+            "user": "user_simulator",
+            "llm_agent": f"openai/{config.agent.model}",
+            "llm_user": f"openai/{config.user.model}",
+            "llm_args_agent": _build_llm_args(config.agent),
+            "llm_args_user": _build_llm_args(config.user),
+            "seed": config.evaluation.seed,
+            "num_trials": config.evaluation.num_trials,
+            "max_concurrency": config.evaluation.max_concurrency,
+            "max_steps": config.evaluation.max_steps,
+            "max_errors": config.evaluation.max_errors,
+            # run_domain appends results.json here, despite the field docs.
+            "save_to": str(run_directory.resolve()),
+        }
+    )
+
+
+def _build_llm_args(options: ModelOptions) -> dict[str, str | int | float]:
+    """Keep credentials as LiteLLM environment references in recorded arguments."""
+    return {
+        **{key: value for key, value in options.generation.items()},
+        "base_url": options.base_url,
+        # A non-empty placeholder prevents fallback to unrelated SDK credentials.
+        "api_key": (
+            f"os.environ/{options.api_key_env}"
+            if options.api_key_env is not None
+            else "not-needed"
+        ),
+    }
 
 
 class _ModelInfo(BaseModel):

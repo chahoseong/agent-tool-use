@@ -1,12 +1,135 @@
 """Verify preparation for official mock evaluation runs."""
 
+import tomllib
 from collections.abc import Callable
+from importlib import import_module
+from pathlib import Path
 
 import httpx
 import pytest
 
 from evals import runner as runner_module
 from evals.config import EvalConfig, ModelOptions
+
+
+def test_registered_task_agent_supports_repeated_official_construction(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from tau2.domains.mock.environment import get_environment
+    from tau2.registry import Registry
+    from tau2.runner.build import build_agent
+
+    from agents.task_agent import TaskAgent
+
+    registry = Registry()
+    monkeypatch.setattr(import_module("tau2.registry"), "registry", registry)
+    monkeypatch.setattr(import_module("tau2.runner.build"), "registry", registry)
+    environment = get_environment()
+    llm_args = {"base_url": "http://localhost:8080/v1", "temperature": 0.2}
+
+    for _ in range(2):
+        runner_module._register_task_agent()
+        agent = build_agent(
+            "task_agent", environment, llm="openai/test-model", llm_args=llm_args
+        )
+
+        assert isinstance(agent, TaskAgent)
+        assert agent.llm == "openai/test-model"
+        assert agent.llm_args == llm_args
+        assert agent.domain_policy == environment.get_policy()
+        assert [tool.openai_schema for tool in agent.tools] == [
+            tool.openai_schema for tool in environment.get_tools()
+        ]
+
+
+def test_task_agent_registration_rejects_name_owned_by_another_factory(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from tau2.registry import Registry
+
+    registry = Registry()
+    monkeypatch.setattr(import_module("tau2.registry"), "registry", registry)
+
+    def other_factory() -> None:
+        pass
+
+    registry.register_agent_factory(other_factory, "task_agent")
+
+    with pytest.raises(ValueError, match="task_agent.*different factory"):
+        runner_module._register_task_agent()
+
+    assert registry.get_agent_factory("task_agent") is other_factory
+
+
+@pytest.mark.parametrize(
+    "authenticated", [True, False], ids=["with_keys", "without_keys"]
+)
+def test_run_config_maps_evaluation_settings_to_official_mock_execution(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    authenticated: bool,
+) -> None:
+    from tau2.data_model.simulation import TextRunConfig
+
+    monkeypatch.setenv("EVAL_TEST_AGENT_KEY", "private-agent-key")
+    monkeypatch.setenv("EVAL_TEST_USER_KEY", "private-user-key")
+    monkeypatch.setenv("OPENAI_API_KEY", "unrelated-private-key")
+    config = EvalConfig.model_validate(
+        {
+            "evaluation": {
+                "task_ids": ["second_task", "first_task"],
+                "seed": 73,
+                "num_trials": 3,
+                "max_concurrency": 2,
+                "max_steps": 25,
+                "max_errors": 4,
+            },
+            "agent": {
+                "model": "org/agent-model",
+                "base_url": "http://localhost:8080/v1",
+                "api_key_env": "EVAL_TEST_AGENT_KEY" if authenticated else None,
+                "generation": {"temperature": 0.2, "top_p": 0.8, "max_tokens": 256},
+            },
+            "user": {
+                "model": "user-model",
+                "base_url": "http://localhost:8081/v1",
+                "api_key_env": "EVAL_TEST_USER_KEY" if authenticated else None,
+            },
+        }
+    )
+    original_config = config.model_dump()
+    run_directory = tmp_path / "run"
+
+    result = runner_module._build_run_config(config, run_directory)
+
+    assert isinstance(result, TextRunConfig)
+    assert result.domain == "mock"
+    assert result.task_set_name == "mock"
+    assert result.task_split_name is None
+    assert result.num_tasks is None
+    assert result.task_ids == ["second_task", "first_task"]
+    assert result.seed == 73
+    assert result.num_trials == 3
+    assert result.max_concurrency == 2
+    assert result.max_steps == 25
+    assert result.max_errors == 4
+    assert result.agent == "task_agent"
+    assert result.user == "user_simulator"
+    assert result.llm_agent == "openai/org/agent-model"
+    assert result.llm_user == "openai/user-model"
+    assert result.llm_args_agent == {
+        "base_url": "http://localhost:8080/v1",
+        "api_key": "os.environ/EVAL_TEST_AGENT_KEY" if authenticated else "not-needed",
+        "temperature": 0.2,
+        "top_p": 0.8,
+        "max_tokens": 256,
+    }
+    assert result.llm_args_user == {
+        "base_url": "http://localhost:8081/v1",
+        "api_key": "os.environ/EVAL_TEST_USER_KEY" if authenticated else "not-needed",
+    }
+    assert result.save_to == str(run_directory.resolve())
+    assert config.model_dump() == original_config
 
 
 def test_authentication_returns_no_key_when_environment_variable_is_unspecified(
@@ -284,3 +407,126 @@ def test_preflight_stops_before_user_request_when_agent_model_check_fails(
     assert [str(request.url) for request in requests] == [
         "http://localhost:8080/v1/models"
     ]
+
+
+@pytest.fixture
+def evaluation_config(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    preflight_config: EvalConfig,
+    mock_http: Callable,
+) -> EvalConfig:
+    from tau2.registry import Registry
+
+    from evals.tasks import list_tasks
+
+    preflight_config.evaluation.task_ids = [list_tasks()[0].id]
+    preflight_config.output.directory = tmp_path / "evaluations"
+    monkeypatch.setattr(import_module("tau2.registry"), "registry", Registry())
+    mock_http(
+        lambda request: httpx.Response(
+            200, json={"data": [{"id": "agent-model"}, {"id": "user-model"}]}
+        )
+    )
+    return preflight_config
+
+
+def test_evaluation_returns_official_results_path_after_preparing_run(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    evaluation_config: EvalConfig,
+) -> None:
+    from tau2.data_model.simulation import TextRunConfig
+    from tau2.registry import registry
+
+    from agents.task_agent import create_task_agent
+
+    config_path = tmp_path / "evaluation.toml"
+    saved_paths: list[Path] = []
+
+    def run_domain(config: TextRunConfig) -> None:
+        assert registry.get_agent_factory(config.agent) is create_task_agent
+        assert config.task_ids == evaluation_config.evaluation.task_ids
+        assert config.save_to is not None
+        directory = Path(config.save_to)
+        recorded = tomllib.loads((directory / "metadata.toml").read_text("utf-8"))
+        assert recorded["run"]["config_path"] == str(config_path.resolve())
+        assert recorded["evaluation"]["task_ids"] == config.task_ids
+        result_path = directory / "results.json"
+        result_path.write_text('{"official_result": true}', encoding="utf-8")
+        saved_paths.append(result_path)
+
+    monkeypatch.setattr(import_module("tau2.runner"), "run_domain", run_domain)
+
+    result = runner_module.run_evaluation(evaluation_config, config_path=config_path)
+
+    assert saved_paths == [result]
+    assert result.parent.parent == evaluation_config.output.directory
+    assert result.read_text("utf-8") == '{"official_result": true}'
+
+
+@pytest.mark.parametrize(
+    "failure", ["unknown_task", "model_unavailable", "name_conflict"]
+)
+def test_evaluation_stops_before_creating_output_when_preparation_fails(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    evaluation_config: EvalConfig,
+    failure: str,
+) -> None:
+    from tau2.registry import registry
+
+    from evals.tasks import list_tasks
+
+    if failure == "unknown_task":
+        known_ids = {task.id for task in list_tasks()}
+        unknown_id = "unknown"
+        while unknown_id in known_ids:
+            unknown_id += "_"
+        evaluation_config.evaluation.task_ids = [unknown_id]
+    elif failure == "model_unavailable":
+        evaluation_config.agent.model = "unavailable-model"
+    else:
+        registry.register_agent_factory(lambda: None, "task_agent")
+
+    def unexpected_run(config: object) -> None:
+        pytest.fail("Evaluation started despite a preparation failure")
+
+    monkeypatch.setattr(import_module("tau2.runner"), "run_domain", unexpected_run)
+
+    with pytest.raises(ValueError):
+        runner_module.run_evaluation(
+            evaluation_config, config_path=tmp_path / "evaluation.toml"
+        )
+
+    assert not evaluation_config.output.directory.exists()
+
+
+def test_evaluation_preserves_artifacts_when_official_execution_fails(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    evaluation_config: EvalConfig,
+) -> None:
+    from tau2.data_model.simulation import TextRunConfig
+
+    failure = RuntimeError("Official evaluation failed")
+    saved_paths: list[Path] = []
+
+    def interrupted_run(config: TextRunConfig) -> None:
+        assert config.save_to is not None
+        result_path = Path(config.save_to) / "results.json"
+        result_path.write_text("partial results", encoding="utf-8")
+        saved_paths.append(result_path)
+        raise failure
+
+    monkeypatch.setattr(import_module("tau2.runner"), "run_domain", interrupted_run)
+
+    with pytest.raises(RuntimeError) as error:
+        runner_module.run_evaluation(
+            evaluation_config, config_path=tmp_path / "evaluation.toml"
+        )
+
+    assert error.value is failure
+    assert len(saved_paths) == 1
+    assert saved_paths[0].read_text("utf-8") == "partial results"
+    assert saved_paths[0].with_name("metadata.toml").is_file()
