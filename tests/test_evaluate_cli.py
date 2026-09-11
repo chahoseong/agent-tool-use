@@ -14,7 +14,7 @@ evaluate = import_module("scripts.evaluate")
 
 @pytest.mark.parametrize(
     "arguments",
-    [["tasks"], ["show", "task"], ["run", "eval.toml"]],
+    [["tasks"], ["show", "mock", "task"], ["run", "eval.toml"]],
     ids=["tasks", "show", "run"],
 )
 def test_cli_rejects_missing_data_directory_before_loading_tau2(
@@ -159,22 +159,59 @@ def test_cli_run_reports_execution_failure_without_exposing_exception_details(
     assert output.err == "error: Evaluation failed.\n"
 
 
-@pytest.mark.parametrize("command", ["tasks", "show"])
-def test_cli_displays_formatted_official_tasks(
-    command: str, capsys: pytest.CaptureFixture[str]
+def test_cli_tasks_lists_available_domains(
+    capsys: pytest.CaptureFixture[str],
 ) -> None:
-    from evals.tasks import format_task_detail, format_task_list, list_tasks
+    from tau2.registry import registry
 
-    tasks = list_tasks()
-    arguments = ["tasks"] if command == "tasks" else ["show", tasks[0].id]
-    expected = (
-        format_task_list(tasks) if command == "tasks" else format_task_detail(tasks[0])
-    )
-
-    result = evaluate.main(arguments)
+    result = evaluate.main(["tasks"])
 
     assert result == 0
-    assert capsys.readouterr().out == expected + "\n"
+    assert capsys.readouterr().out == "\n".join(registry.get_domains()) + "\n"
+
+
+def test_cli_tasks_lists_tasks_from_selected_domain(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    from evals.tasks import format_task_list, list_tasks
+
+    tasks = list_tasks("retail")
+
+    result = evaluate.main(["tasks", "retail"])
+
+    assert result == 0
+    assert capsys.readouterr().out == format_task_list(tasks) + "\n"
+
+
+def test_cli_show_displays_task_from_selected_domain(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    from evals.tasks import format_task_detail, list_tasks
+
+    task = list_tasks("mock")[0]
+
+    result = evaluate.main(["show", "mock", task.id])
+
+    assert result == 0
+    assert capsys.readouterr().out == format_task_detail(task) + "\n"
+
+
+def test_cli_reports_unknown_domain_without_displaying_tasks(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    from tau2.registry import registry
+
+    known_domains = set(registry.get_domains())
+    unknown_domain = "unknown-domain"
+    while unknown_domain in known_domains:
+        unknown_domain += "-"
+
+    result = evaluate.main(["tasks", unknown_domain])
+
+    assert result == 1
+    output = capsys.readouterr()
+    assert output.out == ""
+    assert output.err == f"error: Cannot read {unknown_domain} tasks.\n"
 
 
 def test_cli_reports_unknown_task_without_displaying_task_details(
@@ -182,12 +219,12 @@ def test_cli_reports_unknown_task_without_displaying_task_details(
 ) -> None:
     from evals.tasks import list_tasks
 
-    known_ids = {task.id for task in list_tasks()}
+    known_ids = {task.id for task in list_tasks("mock")}
     unknown_id = "unknown"
     while unknown_id in known_ids:
         unknown_id += "_"
 
-    result = evaluate.main(["show", unknown_id])
+    result = evaluate.main(["show", "mock", unknown_id])
 
     assert result == 1
     output = capsys.readouterr()
@@ -202,7 +239,7 @@ def test_cli_loads_task_listing_from_script_outside_project(tmp_path: Path) -> N
     environment = {**os.environ, "PYTHONIOENCODING": "utf-8"}
 
     result = subprocess.run(
-        [sys.executable, str(script), "tasks"],
+        [sys.executable, str(script), "tasks", "mock"],
         cwd=tmp_path,
         env=environment,
         capture_output=True,
@@ -212,7 +249,7 @@ def test_cli_loads_task_listing_from_script_outside_project(tmp_path: Path) -> N
     )
 
     assert result.returncode == 0, result.stderr
-    assert result.stdout == format_task_list(list_tasks()) + "\n"
+    assert result.stdout == format_task_list(list_tasks("mock")) + "\n"
 
 
 def test_cli_init_creates_only_a_template_requiring_task_selection(
@@ -237,7 +274,9 @@ def test_cli_init_creates_only_a_template_requiring_task_selection(
     template_path = tmp_path / "evaluation.toml"
     assert list(tmp_path.iterdir()) == [template_path]
     template = template_path.read_text(encoding="utf-8")
-    assert tomllib.loads(template)["evaluation"]["task_ids"] == []
+    evaluation = tomllib.loads(template)["evaluation"]
+    assert evaluation["domain"] == "mock"
+    assert evaluation["task_ids"] == []
     with pytest.raises(ConfigError, match="evaluation.task_ids"):
         load_config(template_path)
 
@@ -281,8 +320,11 @@ def test_cli_init_reports_failure_without_overwriting_existing_path(
     ("arguments", "expected"),
     [
         (["init"], {"command": "init"}),
-        (["tasks"], {"command": "tasks"}),
-        (["show", "task_id"], {"command": "show", "task_id": "task_id"}),
+        (["tasks"], {"command": "tasks", "domain": None}),
+        (
+            ["show", "retail", "task_id"],
+            {"command": "show", "domain": "retail", "task_id": "task_id"},
+        ),
         (
             ["run", "my evaluation.toml"],
             {"command": "run", "config_path": Path("my evaluation.toml")},
@@ -300,7 +342,7 @@ def test_cli_parses_supported_commands(
 
 @pytest.mark.parametrize(
     "arguments",
-    [[], ["unknown"], ["show"], ["run"]],
+    [[], ["unknown"], ["show", "mock"], ["run"]],
     ids=[
         "missing_command",
         "unknown_command",
