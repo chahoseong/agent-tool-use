@@ -1,5 +1,6 @@
 # 공식 tau2-bench mock 평가 설정 (llama.cpp 서버 전용)
 [evaluation]
+domain = "mock"
 # 평가할 task ID를 하나 이상 직접 지정하세요. 기본 task는 없습니다.
 task_ids = [
     "create_task_1",

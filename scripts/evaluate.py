@@ -1,12 +1,14 @@
-"""Command-line entry point for official mock evaluations."""
+"""Command-line entry point for official tau2-bench evaluations."""
 
 import argparse
 import os
 import sys
 from pathlib import Path
 
-EVALUATION_TEMPLATE = """# 공식 tau2-bench mock 평가 설정 (llama.cpp 서버 전용)
+EVALUATION_TEMPLATE = """# 공식 tau2-bench 평가 설정 (llama.cpp 서버 전용)
 [evaluation]
+# 평가할 domain을 지정하세요.
+domain = "mock"
 # 평가할 task ID를 하나 이상 직접 지정하세요. 기본 task는 없습니다.
 task_ids = []
 seed = 42
@@ -81,13 +83,15 @@ def _validate_data_directory() -> None:
 def _build_parser() -> argparse.ArgumentParser:
     """Define commands without loading evaluation dependencies."""
     parser = argparse.ArgumentParser(
-        description="Evaluate TaskAgent on tau2 mock tasks."
+        description="Evaluate TaskAgent on official tau2-bench tasks."
     )
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("init", help="Create an evaluation.toml template.")
-    commands.add_parser("tasks", help="List available mock tasks.")
-    show = commands.add_parser("show", help="Show the details of a mock task.")
-    show.add_argument("task_id", help="ID of the mock task to inspect.")
+    tasks = commands.add_parser("tasks", help="List domains or tasks in a domain.")
+    tasks.add_argument("domain", nargs="?", help="Domain whose tasks to list.")
+    show = commands.add_parser("show", help="Show the details of a task.")
+    show.add_argument("domain", help="Domain containing the task.")
+    show.add_argument("task_id", help="ID of the task to inspect.")
     run = commands.add_parser("run", help="Run an evaluation using a TOML file.")
     run.add_argument("config_path", type=Path, help="Path to the evaluation TOML file.")
     return parser
@@ -119,19 +123,23 @@ def main(argv: list[str] | None = None) -> int:
             format_task_detail,
             format_task_list,
             get_task,
+            list_domains,
             list_tasks,
         )
 
         try:
             if arguments.command == "tasks":
-                output = format_task_list(list_tasks())
+                output = (
+                    "\n".join(list_domains())
+                    if arguments.domain is None
+                    else format_task_list(list_tasks(arguments.domain))
+                )
             else:
-                output = format_task_detail(get_task(arguments.task_id))
+                output = format_task_detail(
+                    get_task(arguments.domain, arguments.task_id)
+                )
         except EvaluationPreparationError as error:
             print(f"error: {error}", file=sys.stderr)
-            return 1
-        except OSError:
-            print("error: Cannot read mock tasks.", file=sys.stderr)
             return 1
         print(output)
         return 0

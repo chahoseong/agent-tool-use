@@ -1,4 +1,4 @@
-"""Task lookup for official mock evaluations."""
+"""Task lookup for official evaluation domains."""
 
 from tau2.data_model.tasks import Task
 from tau2.runner.helpers import load_tasks
@@ -6,29 +6,42 @@ from tau2.runner.helpers import load_tasks
 from evals.errors import EvaluationPreparationError
 
 
-def list_tasks() -> list[Task]:
-    """Return all official mock tasks without filtering or transformation."""
+def list_domains() -> list[str]:
+    """Return registered official evaluation domains."""
+    from tau2.registry import registry
+
+    return registry.get_domains()
+
+
+def list_tasks(domain: str) -> list[Task]:
+    """Return all official tasks for the selected domain."""
     try:
-        return load_tasks("mock")
-    except (OSError, ValueError):
-        raise EvaluationPreparationError("Cannot read mock tasks.") from None
+        return load_tasks(domain, None)
+    except (KeyError, OSError, ValueError):
+        raise EvaluationPreparationError(f"Cannot read {domain} tasks.") from None
 
 
-def get_task(task_id: str) -> Task:
-    """Return the matching official mock task, or raise ValueError if absent."""
-    for task in list_tasks():
+def get_task(
+    domain: str,
+    task_id: str,
+) -> Task:
+    """Return the requested task from the selected official domain."""
+    for task in list_tasks(domain):
         if task.id == task_id:
             return task
-    raise EvaluationPreparationError(f"Unknown mock task ID: {task_id}.")
+    raise EvaluationPreparationError(f"Unknown {domain} task ID: {task_id}.")
 
 
-def validate_task_ids(task_ids: list[str]) -> None:
-    """Raise ValueError listing any IDs absent from the official mock tasks."""
-    existing_ids = {task.id for task in list_tasks()}
+def validate_task_ids(
+    domain: str,
+    task_ids: list[str],
+) -> None:
+    """Reject IDs absent from the selected official domain."""
+    existing_ids = {task.id for task in list_tasks(domain)}
     unknown_ids = [task_id for task_id in task_ids if task_id not in existing_ids]
     if unknown_ids:
         raise EvaluationPreparationError(
-            f"Unknown mock task IDs: {', '.join(unknown_ids)}."
+            f"Unknown {domain} task IDs: {', '.join(unknown_ids)}."
         )
 
 

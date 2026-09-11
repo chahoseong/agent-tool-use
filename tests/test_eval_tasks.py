@@ -3,14 +3,16 @@
 import pytest
 from tau2.data_model.tasks import Description, Task
 from tau2.domains.mock.environment import get_tasks as get_mock_tasks
+from tau2.runner.helpers import load_tasks
 
 from evals import tasks as tasks_module
 
 
-def test_task_listing_returns_all_official_mock_tasks() -> None:
-    expected_tasks = get_mock_tasks()
+@pytest.mark.parametrize("domain", ["mock", "retail"])
+def test_task_listing_returns_all_official_tasks_from_domain(domain: str) -> None:
+    expected_tasks = load_tasks(domain, None)
 
-    tasks = tasks_module.list_tasks()
+    tasks = tasks_module.list_tasks(domain)
 
     assert tasks == expected_tasks
 
@@ -18,7 +20,7 @@ def test_task_listing_returns_all_official_mock_tasks() -> None:
 def test_task_lookup_returns_official_task_with_requested_id() -> None:
     expected_task = get_mock_tasks()[-1]
 
-    task = tasks_module.get_task(expected_task.id)
+    task = tasks_module.get_task("mock", expected_task.id)
 
     assert task == expected_task
 
@@ -30,7 +32,7 @@ def test_task_lookup_raises_value_error_when_id_is_unknown() -> None:
         unknown_id += "_"
 
     with pytest.raises(ValueError) as error:
-        tasks_module.get_task(unknown_id)
+        tasks_module.get_task("mock", unknown_id)
 
     assert str(error.value) == f"Unknown mock task ID: {unknown_id}."
 
@@ -38,7 +40,16 @@ def test_task_lookup_raises_value_error_when_id_is_unknown() -> None:
 def test_task_selection_accepts_existing_mock_task_ids() -> None:
     task_ids = [task.id for task in get_mock_tasks()]
 
-    tasks_module.validate_task_ids(task_ids)
+    tasks_module.validate_task_ids("mock", task_ids)
+
+
+def test_task_listing_reports_domain_when_official_loading_fails() -> None:
+    domain = "unknown-domain"
+
+    with pytest.raises(ValueError) as error:
+        tasks_module.list_tasks(domain)
+
+    assert str(error.value) == f"Cannot read {domain} tasks."
 
 
 def test_task_selection_reports_all_unknown_ids() -> None:
@@ -52,7 +63,7 @@ def test_task_selection_reports_all_unknown_ids() -> None:
     selected_ids = [unknown_ids[0], tasks[0].id, unknown_ids[1]]
 
     with pytest.raises(ValueError) as error:
-        tasks_module.validate_task_ids(selected_ids)
+        tasks_module.validate_task_ids("mock", selected_ids)
 
     assert str(error.value) == f"Unknown mock task IDs: {', '.join(unknown_ids)}."
 

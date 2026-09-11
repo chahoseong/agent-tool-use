@@ -138,6 +138,7 @@ def test_metadata_records_effective_settings_and_run_context_without_api_key_val
         None
     )
     assert recorded["evaluation"] == {
+        "domain": "mock",
         "task_ids": ["create_task_1"],
         "seed": 42,
         "max_steps": metadata_config.evaluation.max_steps,

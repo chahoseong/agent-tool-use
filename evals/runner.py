@@ -1,4 +1,4 @@
-"""Preparation and execution of official mock evaluations."""
+"""Preparation and execution of official tau2-bench evaluations."""
 
 import os
 from pathlib import Path
@@ -28,8 +28,19 @@ class EvaluationInfrastructureError(Exception):
         )
 
 
+def _validate_domain(domain: str) -> None:
+    from tau2.registry import registry
+
+    try:
+        registry.get_env_constructor(domain)
+    except KeyError:
+        raise EvaluationPreparationError(
+            f"Unknown evaluation domain: {domain}."
+        ) from None
+
+
 def run_evaluation(config: EvalConfig, *, config_path: Path) -> Path:
-    """Prepare a mock evaluation and return its official results file path.
+    """Prepare an evaluation and return its official results file path.
 
     Preparation failures propagate before execution. Once execution starts,
     preserve metadata and any official checkpoints if it fails.
@@ -40,7 +51,8 @@ def run_evaluation(config: EvalConfig, *, config_path: Path) -> Path:
     from evals.metadata import create_run_directory, write_metadata
     from evals.tasks import validate_task_ids
 
-    validate_task_ids(config.evaluation.task_ids)
+    _validate_domain(config.evaluation.domain)
+    validate_task_ids(config.evaluation.domain, config.evaluation.task_ids)
     _preflight_models(config)
     _register_task_agent()
     try:
@@ -91,8 +103,8 @@ def _build_run_config(config: EvalConfig, run_directory: Path) -> "TextRunConfig
 
     return TextRunConfig.model_validate(
         {
-            "domain": "mock",
-            "task_set_name": "mock",
+            "domain": config.evaluation.domain,
+            "task_set_name": None,
             "task_split_name": None,
             "task_ids": list(config.evaluation.task_ids),
             "agent": "task_agent",

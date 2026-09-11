@@ -61,6 +61,7 @@ base_url = "http://localhost:8081/v1"
     config = config_module.load_config(config_path)
 
     assert config.evaluation.task_ids == ["create_task_1"]
+    assert config.evaluation.domain == "mock"
     assert config.evaluation.seed == 42
     assert config.evaluation.num_trials == 1
     assert config.evaluation.max_concurrency == 1
@@ -83,6 +84,7 @@ def test_config_preserves_explicit_evaluation_and_model_options(tmp_path: Path) 
     config_path.write_text(
         """
 [evaluation]
+domain = "retail"
 task_ids = ["create_task_1", "update_task_1"]
 seed = 73
 num_trials = 3
@@ -115,6 +117,7 @@ max_tokens = 128
 
     config = config_module.load_config(config_path)
 
+    assert config.evaluation.domain == "retail"
     assert config.evaluation.task_ids == ["create_task_1", "update_task_1"]
     assert config.evaluation.seed == 73
     assert config.evaluation.num_trials == 3
@@ -360,6 +363,8 @@ def test_config_rejects_evaluation_integer_below_lower_bound(
         ("agent.model", " \t"),
         ("agent.model", " model"),
         ("agent.model", "model "),
+        ("evaluation.domain", ""),
+        ("evaluation.domain", " retail"),
         ("user.model", " model "),
         ("agent.base_url", " http://localhost:8080/v1"),
         ("user.base_url", "http://localhost:8081/v1 "),
@@ -384,6 +389,22 @@ def test_config_rejects_empty_or_untrimmed_string_setting(
         config_module.load_config(config_path)
 
     assert str(error.value) == f"Invalid setting: {setting_path}."
+
+
+@pytest.mark.parametrize("setting", ["task_set", "task_split"])
+def test_config_rejects_removed_task_scope_setting(
+    tmp_path: Path,
+    toml_sections: dict[str, dict[str, str]],
+    setting: str,
+) -> None:
+    toml_sections["evaluation"][setting] = '"retail"'
+    config_path = tmp_path / "evaluation.toml"
+    write_toml_config(config_path, toml_sections)
+
+    with pytest.raises(config_module.ConfigError) as error:
+        config_module.load_config(config_path)
+
+    assert str(error.value) == f"Unknown setting: evaluation.{setting}."
 
 
 @pytest.mark.parametrize(
@@ -471,6 +492,31 @@ base_url = "http://localhost:8081/v1"
     )
     config = config_module.load_config(config_path)
     assert config.evaluation.task_ids == ["123", "arbitrary/id", "not_a_known_task"]
+
+
+def test_config_preserves_domain_selection_without_imposing_a_name_format(
+    tmp_path: Path,
+) -> None:
+    config_path = tmp_path / "evaluation.toml"
+    config_path.write_text(
+        """
+[evaluation]
+domain = "custom-domain"
+task_ids = ["selected-task"]
+seed = 42
+[agent]
+model = "agent-model"
+base_url = "http://localhost:8080/v1"
+[user]
+model = "user-model"
+base_url = "http://localhost:8081/v1"
+""",
+        encoding="utf-8",
+    )
+
+    config = config_module.load_config(config_path)
+
+    assert config.evaluation.domain == "custom-domain"
 
 
 @pytest.mark.parametrize(

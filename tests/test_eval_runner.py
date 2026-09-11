@@ -105,7 +105,7 @@ def test_run_config_maps_evaluation_settings_to_official_mock_execution(
 
     assert isinstance(result, TextRunConfig)
     assert result.domain == "mock"
-    assert result.task_set_name == "mock"
+    assert result.task_set_name is None
     assert result.task_split_name is None
     assert result.num_tasks is None
     assert result.task_ids == ["second_task", "first_task"]
@@ -417,13 +417,16 @@ def evaluation_config(
     preflight_config: EvalConfig,
     mock_http: Callable,
 ) -> EvalConfig:
+    from tau2.domains.mock.environment import get_environment
     from tau2.registry import Registry
 
     from evals.tasks import list_tasks
 
-    preflight_config.evaluation.task_ids = [list_tasks()[0].id]
+    preflight_config.evaluation.task_ids = [list_tasks("mock")[0].id]
     preflight_config.output.directory = tmp_path / "evaluations"
-    monkeypatch.setattr(import_module("tau2.registry"), "registry", Registry())
+    registry = Registry()
+    registry.register_domain(get_environment, "mock")
+    monkeypatch.setattr(import_module("tau2.registry"), "registry", registry)
     mock_http(
         lambda request: httpx.Response(
             200, json={"data": [{"id": "agent-model"}, {"id": "user-model"}]}
@@ -474,6 +477,96 @@ def test_evaluation_returns_official_results_path_after_preparing_run(
     assert result.read_text("utf-8") == '{"official_result": true}'
 
 
+def test_evaluation_runs_selected_task_ids_from_domain(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from tau2.data_model.simulation import TextRunConfig
+
+    config = EvalConfig.model_validate(
+        {
+            "evaluation": {
+                "domain": "retail",
+                "task_ids": ["0"],
+                "seed": 42,
+            },
+            "agent": {
+                "model": "agent-model",
+                "base_url": "http://localhost:8080/v1",
+            },
+            "user": {
+                "model": "user-model",
+                "base_url": "http://localhost:8081/v1",
+            },
+            "output": {"directory": tmp_path / "evaluations"},
+        }
+    )
+    monkeypatch.setattr(runner_module, "_preflight_models", lambda config: None)
+    received: list[TextRunConfig] = []
+
+    def run_domain(run_config: TextRunConfig) -> SimpleNamespace:
+        received.append(run_config)
+        assert run_config.save_to is not None
+        result_path = Path(run_config.save_to) / "results.json"
+        result_path.write_text('{"official_result": true}', encoding="utf-8")
+        return SimpleNamespace(simulations=[])
+
+    monkeypatch.setattr(import_module("tau2.runner"), "run_domain", run_domain)
+
+    result = runner_module.run_evaluation(config, config_path=tmp_path / "retail.toml")
+
+    assert result.read_text("utf-8") == '{"official_result": true}'
+    assert len(received) == 1
+    assert received[0].domain == "retail"
+    assert received[0].task_set_name is None
+    assert received[0].task_split_name is None
+    assert received[0].task_ids == ["0"]
+
+
+def test_evaluation_rejects_unregistered_domain_before_creating_output(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from tau2.registry import registry
+
+    from evals.tasks import list_tasks
+
+    known_domains = set(registry.get_domains())
+    unknown_domain = "unknown-domain"
+    while unknown_domain in known_domains:
+        unknown_domain += "-"
+    config = EvalConfig.model_validate(
+        {
+            "evaluation": {
+                "domain": unknown_domain,
+                "task_ids": [list_tasks("mock")[0].id],
+                "seed": 42,
+            },
+            "agent": {
+                "model": "agent-model",
+                "base_url": "http://localhost:8080/v1",
+            },
+            "user": {
+                "model": "user-model",
+                "base_url": "http://localhost:8081/v1",
+            },
+            "output": {"directory": tmp_path / "evaluations"},
+        }
+    )
+    monkeypatch.setattr(runner_module, "_preflight_models", lambda config: None)
+    monkeypatch.setattr(
+        import_module("tau2.runner"),
+        "run_domain",
+        lambda config: pytest.fail("Evaluation started for an unregistered domain"),
+    )
+
+    with pytest.raises(runner_module.EvaluationPreparationError) as error:
+        runner_module.run_evaluation(config, config_path=tmp_path / "evaluation.toml")
+
+    assert str(error.value) == f"Unknown evaluation domain: {unknown_domain}."
+    assert not config.output.directory.exists()
+
+
 @pytest.mark.parametrize(
     "failure", ["unknown_task", "model_unavailable", "name_conflict"]
 )
@@ -488,7 +581,7 @@ def test_evaluation_stops_before_creating_output_when_preparation_fails(
     from evals.tasks import list_tasks
 
     if failure == "unknown_task":
-        known_ids = {task.id for task in list_tasks()}
+        known_ids = {task.id for task in list_tasks("mock")}
         unknown_id = "unknown"
         while unknown_id in known_ids:
             unknown_id += "_"

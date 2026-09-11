@@ -39,12 +39,18 @@ def _default_max_errors() -> int:
 class EvaluationOptions(_ConfigModel):
     """Evaluation conditions, including resolved official execution limits."""
 
+    domain: str = "mock"
     task_ids: list[str] = Field(min_length=1)
     seed: int = Field(ge=0)
     max_steps: int = Field(default_factory=_default_max_steps, ge=1)
     max_errors: int = Field(default_factory=_default_max_errors, ge=1)
     num_trials: int = Field(default=1, ge=1)
     max_concurrency: int = Field(default=1, ge=1)
+
+    @field_validator("domain")
+    @classmethod
+    def validate_domain(cls, value: str) -> str:
+        return _validate_setting_string(value)
 
     @field_validator("task_ids")
     @classmethod
