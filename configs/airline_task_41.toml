@@ -1,0 +1,20 @@
+# 공식 tau2-bench airline task 41 평가 설정 (llama.cpp 서버 전용)
+[evaluation]
+domain = "airline"
+task_ids = ["41"]
+seed = 42
+num_trials = 3
+max_concurrency = 1
+max_steps = 200
+max_errors = 10
+
+[agent]
+model = "google/gemma-4-12B-it-qat-q4_0-gguf:Q4_0"
+base_url = "http://100.80.184.89:8080/v1"
+
+[user]
+model = "google/gemma-4-12B-it-qat-q4_0-gguf:Q4_0"
+base_url = "http://100.80.184.89:8080/v1"
+
+[output]
+directory = "artifacts/evaluations"
