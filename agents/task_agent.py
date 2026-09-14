@@ -17,6 +17,12 @@ from tau2.utils.llm_utils import generate
 AGENT_PROMPT = (
     "You are a helpful customer service agent.\n\n"
     "Follow the policy strictly. Use the provided tools to help the user."
+    "\n\n"
+    "Before proposing changes, use the available tools to retrieve the records "
+    "needed to identify the correct targets. Check those records against the "
+    "user's requirements, exclusions, and the policy. Do not conclude that a "
+    "relevant record is absent, or expand the scope of work, based on information "
+    "you have not checked."
 )
 
 
