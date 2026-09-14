@@ -3,7 +3,7 @@
 ## 상태와 범위
 
 - 관련 이슈: [#15](https://github.com/chahoseong/agent-tool-use/issues/15), 상위 에픽 [#14](https://github.com/chahoseong/agent-tool-use/issues/14), 선행 분석 [#13](https://github.com/chahoseong/agent-tool-use/issues/13), [#8](https://github.com/chahoseong/agent-tool-use/issues/8).
-- 작성일: 2026-09-11, 최종 감사일: 2026-09-14. **이슈 #15 준비와 이슈 #16의 승인된 1–6단계 작업을 완료했다. 신규 변경 전 기준 4 task × 3 trial의 원본·분석을 확보하고 최종 대조했다. 사용자는 서버 context·슬롯 차이와 기록 한계를 명시한 현재 12개 결과를 비교 기준으로 수용하고 이슈 #16 마무리를 승인했다. 이 차이가 관찰된 오류를 일으켰다는 증거는 없으며 이를 이유로 추가 기준 평가를 요구하지 않는다. 이슈 #17에서 P1 적용과 코드 검증을 완료했다. 변경 후 평가·효과 판정은 아직 수행하지 않았다. 기준 결과는 이슈 #16 6단계 절, 현재 코드와 검증은 이슈 #17 적용 기록 절을 기준으로 한다.**
+- 작성일: 2026-09-11, 최종 감사일: 2026-09-14. **이슈 #15 준비와 이슈 #16의 승인된 1–6단계 작업을 완료했다. 신규 변경 전 기준 4 task × 3 trial의 원본·분석을 확보하고 최종 대조했다. 사용자는 서버 context·슬롯 차이와 기록 한계를 명시한 현재 12개 결과를 비교 기준으로 수용하고 이슈 #16 마무리를 승인했다. 이 차이가 관찰된 오류를 일으켰다는 증거는 없으며 이를 이유로 추가 기준 평가를 요구하지 않는다. 이슈 #17에서 P1 적용과 코드 검증을 완료했다. 이슈 #18의 승인된 1–6단계도 완료하여 고정 P1의 변경 후 12개 결과와 원본 감사를 확보했다. 상세 대화 분석·효과 판정은 아직 수행하지 않았다. 기준 결과는 이슈 #16 6단계 절, 현재 코드와 검증은 이슈 #17 적용 기록 절, 변경 후 최종 상태는 이슈 #18 6단계 절을 기준으로 한다.**
 - 사용자는 전체 계획을 승인했고, 각 단계 시작 전 별도 승인과 완료 후 상세 설명을 요청했다. 1단계 task·채점 분석과 2단계 기존 결과 비교 조사를 마쳤으며, 승인받은 3단계에서 이 초안을 작성했다.
 - 이슈 #15의 4단계에서 사용자가 P1의 정확한 문구·적용 위치, 기대 행동·판정 기준, 기존 두 결과를 정량 기준으로 재사용하지 않는 방침을 각각 확정했다. 신규 기준 12회·변경 후 12회로 준비한다. 5·6단계도 별도 승인 후 완료했다. 이슈 #16에서는 각 task의 실행 단계마다 별도 승인을 받는다.
 - 승인받은 5단계에서 설정 추가·검증을 완료하고, 6단계에서 실행·중단·재개 및 원본 보존 절차를 작성·점검했다. 이슈 #15 완료 당시에는 Agent 프롬프트에 확정 문구를 적용하지 않았다.
@@ -760,7 +760,234 @@ Agent·User 모델명은 모두 `google/gemma-4-12B-it-qat-q4_0-gguf:Q4_0`, endp
 
 ## 변경 후 결과
 
-아직 실행하지 않음. 후속 작업에서 원본 경로·metadata·trial별 관찰표를 기록한다.
+이슈 #18의 승인된 1–6단계를 완료했다. 아래 실행 중·승인 대기·미완료 표현은 당시 이력이며, 현재 선택된 12개 결과와 검증은 마지막 6단계 절을 기준으로 한다.
+
+### 이슈 #18 1단계: 적용 버전·실행 환경 확인
+
+2026-09-14 14:44 KST, 사용자 승인으로 읽기 전용 점검을 수행했다. 모델 추론·평가·재개는 실행하지 않았다. 별도 준비 디렉터리를 만들지 않고 점검 결과를 이 절에 기록한다.
+
+- 적용 HEAD: `8044d2d82162d59a68271ff376a3a6aa0d51d7ca`. 사용자 커밋으로 P1이 포함됐고 점검 시작 시 작업 트리는 깨끗했다. #17 기록의 미커밋 표현은 커밋 전 작성 당시의 상태다. 이번 기록으로 문서만 수정했다.
+- 실제 P1 프롬프트 및 LF 정규화 소스 SHA-256은 #17 적용 후 해시와 일치했다. 기준 평가 HEAD `80168d861bee680ec2d15620fc28fcbe78ce2241` 대비 변경 파일은 Agent 프롬프트와 통합 문서뿐이다.
+- 네 설정을 기존 `load_config()`로 로드하고 공식 task ID 검증을 통과했다. Evaluation·Agent·User·output 설정은 각 기준 metadata와 일치한다. Seed 42, trial 3, concurrency 1, max_steps 200, max_errors 10, 역할별 generation 생략을 유지한다.
+- 선택된 기준 네 묶음의 results·metadata 해시 8개가 최종 감사 기록과 일치하며 각 3개 simulation이 있다. 네 설정·공식 task/policy/db·User Simulator 지침 해시도 각 기준 분석 기록과 일치한다.
+- 공식 HEAD `fc0055dc4e0a316c3f83133267fbd6faaa770992`, 설치된 Python 소스 233개가 checkout과 일치한다. 기존 공식 uv.lock 차이 외 변경은 없다. Python 3.12.10 / tau2 1.0.1 / LiteLLM 1.82.6 / Pydantic 2.13.5 / httpx 0.28.1 / OpenAI SDK 3.8.0 유지.
+- 14:44:37 KST 서버 GET /health·/v1/models·/props 모두 HTTP 200. 네 설정이 동일한 모델/endpoint를 사용함을 확인하고 대표 설정으로 기존 `_preflight_models()`의 Agent·User 확인을 통과했다. 이는 모델 존재·접근 확인이며 추론이나 실행 중 안정성 검증은 아니다.
+- 모델 `google/gemma-4-12B-it-qat-q4_0-gguf:Q4_0`, endpoint `http://100.80.184.89:8080/v1`, 빌드 `b10883-91f6a6cf3`, 템플릿 SHA-256 `6a1015c47ccfcfa67c3b772385bccee357a4d37c3cda37bd202e9047f391ab82`.
+- 서버 관찰 n_ctx **193280**, 슬롯 **1**. 주요 기본값 temperature 1.0 / top_k 64 / top_p 0.949999988079071 / min_p 0.05000000074505806 / max_tokens -1. 마지막 기준 실행 전 관찰과 같다. A42·A41의 과거 context·슬롯 차이는 #16에서 수용한 기록대로 유지하며 추가 기준 평가의 사유로 삼지 않는다.
+- 실제 GGUF 체크섬·전체 시작 옵션·GPU/backend·실행 중 연속 상태는 여전히 미확인이다. 서버 기본값은 요청별 최종 유효 옵션 전체를 증명하지 않는다. 새롭게 처리 방침을 정해야 할 차이는 발견하지 못했다.
+
+1단계 완료. 다음은 Airline 42 신규 3회 실행이다. 승인 후 기존 CLI와 설정을 사용하고 Python 출력은 Tee-Object로 기록한다. 평가 직전 현재 서버 조건을 재확인하며 P1을 고정한다. 기존 uv 실행 링크 문제에는 검증된 가상환경 Python을 사용한다. 원본 결과는 새로운 실행 디렉터리에 보존하며 중단 시 기존 원본 보존·승인 후 공식 재개 방침을 따른다.
+
+### 이슈 #18 2단계 실행 기록
+
+2026-09-14 14:46:24 KST, 사용자 승인 후 기존 CLI로 Airline 42 변경 후 3회 평가를 시작했다. 실행 직전 서버 context 193280·슬롯 1·빌드·템플릿이 1단계 관찰과 같음을 확인했다. 실행 명령은 `.venv/Scripts/python.exe -u -B scripts/evaluate.py run configs/airline_task_42.toml`, TAU2_DATA_DIR은 `C:/Users/chahoseong/projects/tau2-bench/data`다.
+
+결과 디렉터리는 `artifacts/evaluations/2026-09-14_14-46-24_KST_038e5003/`, 콘솔 로그는 `artifacts/evaluations/airline42-p1_20260914_144618_988.log`이며 stdout/stderr를 Tee-Object로 기록한다. 신규 metadata의 P1 해시와 적용 commit `8044d2d82162d59a68271ff376a3a6aa0d51d7ca`를 확인했다. 기준 원본을 덮어쓰지 않았다. 아래 완료 기록에 결과·종료·원본 해시를 기록한다. 효과 판정은 후속 분석에 남긴다.
+
+
+2026-09-14 15:05:52 KST에 세 trial이 모두 완료됐고 CLI 종료 코드는 0이다. 신규 실행 1회, 중단·재개·추가 실행 0회다. 세 종료 사유는 모두 user_stop이며 완료 trial을 제외하거나 재평가하지 않았다.
+
+| Trial | Simulation ID | Seed | Reward / DB match | Read / write match | 메시지 수 | 소요 초 |
+| --- | --- | ---: | --- | --- | ---: | ---: |
+| 0 | `e6792cd8-942f-4cb0-b6f6-d863f0b9af4f` | 670487 | 1 / true | 8/8 / 2/2 | 36 | 384.84 |
+| 1 | `1c3556ec-877f-4ea2-9f61-85d498ad4eaa` | 116739 | 1 / true | 8/8 / 2/2 | 40 | 545.24 |
+| 2 | `c5cb4328-9e0f-4b30-a039-e4ba124209e2` | 26225 | 0 / false | 7/8 / 1/2 | 30 | 236.44 |
+
+| 원본 | 바이트 | SHA-256 |
+| --- | ---: | --- |
+| results.json | 482470 | `cec966f0ded6c4f8b294c7f6f332dd77f8081e974c63f1041fcc0663c3c3ff90` |
+| metadata.toml | 1284 | `3995ab27d7ebb79825efe3a3abceac54853e88f3990c7f4aaaa69fd06b2486a0` |
+| airline42-p1_20260914_144618_988.log | 39246 | `40a621d7597c871afbaaf0434077b590d5059f5e0ea0b9f34f62d92a94543185` |
+
+예정한 task 42의 trial 0/1/2·seed와 일치하며 저장된 도구 호출 29개 모두 대응 반환이 있다. 모든 반환은 error=false이고 세 trial의 review=null, hallucination_retries_used=0이다. 신규 metadata의 P1 해시·commit을 재확인했고 A42 기준 results/metadata 해시도 유지됐다.
+
+실행 후 /props는 HTTP 200, context 193280·슬롯 1·빌드·템플릿·주요 기본값은 실행 전과 같은 관찰값이었다. 실행 중 모든 상태가 같았음을 증명하는 것은 아니다. 비용 계산의 모델 가격표 미등록 메시지가 기록됐으며 저장 비용 0을 실제 비용 0이나 추론 실패로 해석하지 않는다.
+
+2단계 완료. 공식 성공은 2/3이지만 제안·동의·정책 준수와 P1 개선 효과는 전체 대화의 후속 비교 분석에서 판단한다. 이 단계에서는 analysis.md나 추가 분석 에이전트를 생성하지 않았다. 다음 Airline 41 실행은 별도 승인 후 진행한다.
+
+### 이슈 #18 3단계: Airline 41 조건 차이·중단 기록
+
+2026-09-14 사용자가 3단계를 승인했다. 실행 직전 P1 해시는 일치했으나 서버 조건 비교가 실패했다. 주 에이전트가 이 실패를 다음 실행 명령의 차단 조건으로 처리하지 못해 15:09:24 KST에 기존 CLI 평가가 시작됐다. 실패 확인 후 즉시 Ctrl+C로 중단했으며 종료 코드 1이다. 이는 서버 셧다운으로 확인된 사건이 아니라 주 에이전트의 실행 순서 처리 오류다.
+
+재조회한 서버는 HTTP 200, context 207872로 직전 193280과 다르다. 빌드 b10883-91f6a6cf3·슬롯 1·템플릿 해시·주요 샘플러 기본값은 같다. 차이의 원인이나 사용자 설정 변경 여부는 단정하지 않는다. 현재 조건을 기록한 뒤 재개 승인 전까지 추론을 추가 실행하지 않는다.
+
+결과 경로는 `artifacts/evaluations/2026-09-14_15-09-24_KST_37c6c3a1/`, 로그는 `artifacts/evaluations/airline41-p1_20260914_150919_156.log`다. 완료 simulation은 0개이며 실패 점수로 집계하지 않는다. 세 파일을 `preserved/20260914_151009/`에 보존하고 바이트 일치를 확인했다.
+
+| 원본 | SHA-256 |
+| --- | --- |
+| results.json | `b7b17bec49e30e09fbbbe8f42adeff6e8e22c77f4f3ef241e559054b89e4cce5` |
+| metadata.toml | `34ff9dad1c85eaebb35bdc9d6926add84d0c577c4c97b14ce41aaf6af3f1ab22` |
+| airline41-p1_20260914_150919_156.log | `7e237fb3b8bb8424d581a1cba69141e1fe828becb3b22cad1545e49b632fc6f7` |
+
+3단계 미완료. 재개할 경우 현재 조건 승인 후 기존 metadata·원본을 유지하고 공식 auto_resume으로 세 trial을 처음부터 실행한다. 이후 사전 점검은 성공한 반환을 확인한 다음 별도 호출로 실행·재개한다.
+
+
+2026-09-14 사용자가 현재 조건의 재개를 승인하고, 서버 성능 부하를 줄이기 위한 batch-size 조정 때문에 context가 변경된다고 설명했다. 이는 사용자 제공 실행 환경 정보로 기록하며 이전의 원인 미확인 기록을 보충한다. /props에는 batch-size 값이 노출되지 않아 실제 수치·조정 시각·trial별 유효 값은 확인하지 못했다. 이를 P1 성능 개선이나 오류의 원인으로 단정하지 않는다.
+
+재개 전 보존 사본의 results·metadata 바이트 일치, 완료 0개, 설정·P1 해시, context 207872·슬롯 1·빌드·템플릿과 기존 Agent/User preflight 통과를 확인했다. 성공 확인 후 별도 실행 호출로 15:12:47 KST 공식 auto_resume을 시작했다. 로그는 `artifacts/evaluations/airline41-p1-resume_20260914_151247_477.log`다. Runner는 완료 0개·남은 3개를 보고했으며 최초 metadata를 유지한다. 현재 실행 중이다.
+
+
+2026-09-14 15:26:04 KST, 승인된 재개에서 Airline 41 세 trial을 완료했고 종료 코드 0이다. 최초 신규 시도 1회는 주 에이전트의 조건 확인 실패 처리 누락으로 중단됐고, 사용자 승인 재개 1회에서 완료 결과 3개를 확보했다. 재개 중 추가 중단은 없었다. 앞 절의 미완료·실행 중 표현은 당시 이력이다.
+
+| Trial | Simulation ID | Seed | Reward / DB match | Read / write match | 메시지 수 | 소요 초 |
+| --- | --- | ---: | --- | --- | ---: | ---: |
+| 0 | `88a8e89e-4ab1-464c-82e0-261e62ba2ee6` | 670487 | 1 / true | 8/8 / 해당 없음 | 30 | 276.75 |
+| 1 | `69a8473b-1a51-4094-b9ca-9a211ff62eed` | 116739 | 1 / true | 8/8 / 해당 없음 | 26 | 203.00 |
+| 2 | `286c594f-9618-4b1d-83a0-d674d1d39ec8` | 26225 | 1 / true | 8/8 / 해당 없음 | 32 | 311.15 |
+
+| 최종 원본 | 바이트 | SHA-256 |
+| --- | ---: | --- |
+| results.json | 366058 | `208731193ed92d3dd7519d81963eb7a32da16f8c02e77d61bd9cfe51d63b74ef` |
+| metadata.toml | 1284 | `34ff9dad1c85eaebb35bdc9d6926add84d0c577c4c97b14ce41aaf6af3f1ab22` |
+| airline41-p1-resume_20260914_151247_477.log | 32262 | `35235354a454a0c0b2dacf8016bd74f855a252ba0de7422a628c529f4d71b2bd` |
+
+세 종료 사유는 user_stop이다. Task·trial·seed와 도구 호출 30개의 대응 반환을 확인했고 모두 error=false, review=null, hallucination_retries_used=0이다. Metadata는 최초 보존 사본과 바이트 단위로 일치하며 P1 해시도 유지됐다. 기준 A41 및 완료된 변경 후 A42 결과 해시는 변하지 않았다. 공식 read match 8/8과 DB 성공을 전체 판단·정책 안내의 완전성으로 해석하지 않으며 상세 비교는 후속 분석에 남긴다.
+
+실행 후 /props HTTP 200, context 207872·슬롯 1·빌드·템플릿·주요 기본값이 재개 전 관찰과 같았다. Batch-size 조정에 대한 사용자 설명과 실제 값 미확인 한계를 함께 유지한다. 최초 metadata 시각 15:09는 중단된 시도이며 완료 trial의 실제 시작은 15:12 이후임을 구분한다. 3단계 완료, 변경 후 총 6/12 확보. 다음 Airline 22의 4단계는 별도 승인 후 진행한다.
+
+### 이슈 #18 4단계: Airline 22 변경 후 실행
+
+사용자 승인 후 사전 점검에서 context가 직전 A41의 207872에서 193280으로 돌아왔음을 확인했다. 첫 비교 실패 시 평가를 시작하지 않고 나머지 조건을 별도 확인했다. 193280은 이미 수용한 값이며 기준 A22와 변경 후 A42에서도 사용했다. 사용자가 설명한 batch-size 조정 상황과 함께 기록하고 기존 수용 범위에서 진행했다. 실제 batch-size는 여전히 미확인이다.
+
+P1 해시·빌드·템플릿·슬롯 1·주요 샘플러 값과 기존 Agent/User preflight가 통과한 뒤 2026-09-14 15:32:42 KST 기존 CLI로 신규 3회 평가를 시작했다. 명령은 `.venv/Scripts/python.exe -u -B scripts/evaluate.py run configs/airline_task_22.toml`, TAU2_DATA_DIR은 기존 공식 data 경로다. 결과는 `artifacts/evaluations/2026-09-14_15-32-42_KST_3313ef4b/`, 로그는 `artifacts/evaluations/airline22-p1_20260914_153236_721.log`다. stdout/stderr를 Tee-Object로 기록한다. 신규 metadata의 P1과 commit 8044d2d를 확인했다. 현재 실행 중이며 기준 원본을 덮어쓰지 않는다.
+
+
+2026-09-14 15:39 KST, 사용자가 서버 다운을 알려 즉시 Airline 22 평가에 Ctrl+C를 보냈다. 종료 코드 1, 해당 평가 Python 프로세스 부재를 확인했다. 마지막 진행 상태는 trial 0 약 390초, 완료 0/3이며 results의 simulations는 빈 배열이다. 미완료 시도를 reward 0으로 집계하지 않는다. 앞 절의 실행 중 표현은 중단 전 이력이다.
+
+Results·metadata·콘솔 로그를 `artifacts/evaluations/2026-09-14_15-32-42_KST_3313ef4b/preserved/20260914_153936/`에 보존하고 바이트 일치를 확인했다.
+
+| 중단 원본 | SHA-256 |
+| --- | --- |
+| results.json | `381c11f465076eef7d71d372e9374cb94b8bce0fe36dfcbd4100c00ec580ab94` |
+| metadata.toml | `b18039422d3d14cd6e54e21d074a566032eb41f79cdb5cff5eea173e0b0ff0a5` |
+| airline22-p1_20260914_153236_721.log | `dcf7cd95b3c49e2598facb043bd3081d6f5bdcf8f3d5c6fb677f6b7e050598ce` |
+
+서버 다운 원인은 확인하지 못했다. 사용자가 설명한 batch-size 조정과 이번 다운의 인과관계는 단정하지 않는다. 복구 확인·재개 승인 전까지 평가를 추가 실행하지 않는다. 4단계 미완료, 전체 변경 후 결과는 여전히 6/12개다. 재개 시 최초 원본·metadata를 유지하고 공식 auto_resume으로 세 trial을 처음부터 실행한다.
+
+
+### 이슈 #18 Airline 22: Ollama 전환 점검
+
+사용자가 서버를 llama.cpp에서 Ollama로 전환했고 주소 `http://100.80.184.89:11434`를 확인했다. 재연결 후 /api/version·/api/tags·/v1/models 조회 및 짧은 OpenAI 호환 응답·가상 도구 호출·도구 결과 왕복은 모두 HTTP 200이었다. 사용자가 환경변수 수정 후 재평가를 승인했다.
+
+CLI의 모델/주소는 TOML에서 읽으므로 `configs/airline_task_22.toml`의 Agent·User 모델을 `hf.co/google/gemma-4-12B-it-qat-q4_0-gguf:Q4_0`, base_url을 `http://100.80.184.89:11434/v1`로 변경했다. 다른 task 설정은 아직 변경하지 않았다. P1과 평가 횟수·seed·제한은 유지한다. 설정 SHA-256은 `e28dc11747ac5ea89f9d6d88835a2319d66874b6b1c28b99f04ae650de6725b9`다.
+
+전환 후 기존 Agent/User preflight 통과. Ollama 0.34.0, GGUF gemma4 11.9B Q4_0, 모델 digest `f6dc48d5e89ec18e6548bde828fd302490752b49797f1af6bbdbcae7581ab49b`, 템플릿 SHA-256 `ae53464bf3be25802b3a5b37def7fd89667067d7577049b3b2d74c4d8de4c6d4`다. 서버 종류·템플릿 차이를 이전 llama.cpp 조건과 구분한다. Digest는 이전에 확인하지 못한 GGUF 파일 체크섬과 동일하다고 간주하지 않는다.
+
+현재 /api/ps는 로드된 대상 모델 context_length=4096을 보고한다. 모델 지원 최대 길이와 실제 실행 길이를 구분하며 사용자에게 OLLAMA_CONTEXT_LENGTH 값 및 재시작 여부를 확인 중이다. 새 평가 요청은 아직 보내지 않았다. 기존 중단 디렉터리는 보존하고, Ollama 조건 확인 후 기존 CLI의 새 실행 디렉터리에 결과를 기록한다. 서버 전환 후 조건을 기존 metadata에 덮어써 재개하지 않는다.
+
+
+사용자가 OLLAMA_CONTEXT_LENGTH 수정 후 확인을 요청했다. 로드 전 /api/ps는 빈 목록이었으며 OpenAI 호환 짧은 요청으로 로드한 뒤 **context_length=32768**을 확인했다. 모델 digest는 그대로다. 첫 점검 max_tokens=32에서는 최종 content가 비었고, max_tokens=128 재확인에서는 HTTP 200·OK·finish_reason=stop이었다. 점검 한도는 평가 설정에 추가하지 않았다. 기존 Agent/User preflight도 통과했다.
+
+앞서 승인된 Ollama 재평가를 2026-09-14 16:15:53 KST 기존 CLI로 시작했다. 결과는 `artifacts/evaluations/2026-09-14_16-15-53_KST_73adb253/`, 로그는 `artifacts/evaluations/airline22-p1-ollama_20260914_161548_395.log`다. 명령은 `.venv/Scripts/python.exe -u -B scripts/evaluate.py run configs/airline_task_22.toml`이며 stdout/stderr를 Tee-Object로 기록한다. 새 metadata의 P1·Ollama 주소를 확인했다. 기존 중단 묶음은 별도 보존하고 결과를 혼합하지 않는다. 현재 실행 중이다. 서버·템플릿·context가 바뀐 실행임을 전후 비교에 명시한다.
+
+
+2026-09-14 16:32:24 KST, Ollama 신규 실행에서 Airline 22의 세 trial을 완료했다. 종료 코드 0, Ollama 실행 중 중단·재개 0회다. 이 task의 변경 후 시도는 llama.cpp 중단 1회(완료 0개)와 Ollama 신규 1회(완료 3개)이며 통신 점검용 요청은 평가 trial로 집계하지 않는다.
+
+| Trial | Simulation ID | Seed | Reward / DB match | Reference write | 메시지 수 | 소요 초 |
+| --- | --- | ---: | --- | --- | ---: | ---: |
+| 0 | `5d3bef09-b78b-4e8c-9afa-a0cb8f7c1d4e` | 670487 | 0 / false | 0/3 | 26 | 363.91 |
+| 1 | `1d801b21-3f5a-4724-b5af-7b2f93f69757` | 116739 | 1 / true | 2/3 | 38 | 413.54 |
+| 2 | `3d2c9153-0427-425f-bc01-92f697f069f9` | 26225 | 0 / false | 0/3 | 24 | 212.18 |
+
+세 종료는 user_stop, reference read는 해당 없음이다. 도구 호출 22개 모두 대응 반환이 있고 error=false이며 review=null, hallucination_retries_used=0이다. Task·trial·seed와 P1 해시를 확인했다. 최초 llama.cpp 중단 results·metadata는 preserved 사본과 동일하다. 새 metadata의 commit은 8044d2d이며 Ollama 주소·모델 설정 변경은 미커밋 상태이므로 실제 설정·위 설정 해시를 함께 사용한다.
+
+| 최종 원본 | 바이트 | SHA-256 |
+| --- | ---: | --- |
+| results.json | 495612 | `c25320d90df1cfd63646a970da3e8c2fe1156bde7ba522b35734d28906126f10` |
+| metadata.toml | 1298 | `cf7ffc13d82b407bd7d92a65db1f62c131b298e40597b477b87dbe6869c1f88c` |
+| airline22-p1-ollama_20260914_161548_395.log | 34146 | `c015222e5dd89f26dd86e44cfe21b50a6400bc44f6f7e5dc152349170589080d` |
+
+실행 후 /api/ps HTTP 200, 동일 모델 digest와 context_length 32768을 확인했다. Agent prompt_tokens 최대값은 trial별 10268·9243·6639로 보고됐다. 이 수치는 전체 서버 내부 처리·잘림 부재를 독립적으로 증명하지 않는다. 서버 전환·템플릿·context 차이가 있으므로 기준 대비 변화가 P1만의 효과라고 해석하지 않는다. Trial 1의 DB 성공과 write 2/3 차이는 후속 전체 대화 분석 대상으로 남긴다.
+
+4단계 완료, 변경 후 결과 9/12개 확보. 다음 Retail 0은 별도 단계 승인 후 Ollama 접속 설정과 실행 조건을 확인해 진행한다. 아직 후속 상세 분석이나 개선 효과 판정은 수행하지 않았다.
+
+### 이슈 #18 5단계: Retail 0 변경 후 실행
+
+사용자 승인으로 configs/retail.toml의 Agent·User 주소와 모델을 앞선 A22와 같은 Ollama 값으로 변경했다. P1·seed·3 trial·concurrency 1·실행 제한은 유지한다. Ollama 0.34.0, 로드된 모델 context 32768·동일 digest·템플릿, P1 해시와 기존 Agent/User preflight 통과 후 2026-09-14 16:35:31 KST에 기존 CLI로 실행했다.
+
+명령은 `.venv/Scripts/python.exe -u -B scripts/evaluate.py run configs/retail.toml`, 공식 TAU2_DATA_DIR 유지. 결과는 `artifacts/evaluations/2026-09-14_16-35-31_KST_4b5b1ea5/`, 로그는 `artifacts/evaluations/retail0-p1-ollama_20260914_163525_884.log`다. stdout/stderr를 Tee-Object로 기록하고 새 metadata의 P1을 확인했다. 현재 실행 중이며 기존 기준 결과는 보존한다. 기준 llama.cpp 대비 서버·템플릿·context 차이를 전후 분석에 유지한다.
+
+
+2026-09-14 16:41 KST, 사용자가 서버 셧다운을 알려 즉시 Ctrl+C로 Retail 평가를 중단했다. 종료 코드 1 및 해당 평가 Python 프로세스 부재를 확인했다. 마지막 상태는 완료 1/3·trial 1 약 79초이며 results에는 완료 simulation 한 개가 있다.
+
+완료 trial 0은 `10d81ce9-37e7-4bf5-921c-96051c4dcb35`, seed 670487, user_stop, reward 1·DB true·read 4/4·write 1/1이다. 나머지 두 trial은 미완료이며 실패 점수로 집계하지 않는다. 원본·metadata·로그를 같은 실행 디렉터리 `preserved/20260914_164105/`에 보존하고 바이트 일치를 확인했다.
+
+| 중단 원본 | SHA-256 |
+| --- | --- |
+| results.json | `f96ab271ff9a17b3083a8872d8e206dfcdbadd1892b9a11bce8fba98d779bac3` |
+| metadata.toml | `f636081075e10577eb40517662b756ba760f5519127bae4a02bf0a29fa152ac1` |
+| retail0-p1-ollama_20260914_163525_884.log | `6357e4427d1b3682a6df53f7fa8b80df9e87bad54a4ef3b2b2598468c3d772ec` |
+
+5단계 미완료, 전체 변경 후 완료 10/12개다. Ollama 전환 뒤에도 사용자가 셧다운을 보고했지만 원인은 미확인이다. 복구·재개 승인 후 조건과 완료 trial 보존을 확인하고 공식 auto_resume으로 누락 trial 1·2만 실행한다. 완료 trial 0은 다시 실행하지 않는다.
+
+
+복구 후 Ollama 0.34.0·Agent/User preflight·템플릿을 재확인했다. 모델이 아직 로드되지 않아 짧은 OK 요청으로 로드한 뒤 context_length 32768과 동일 digest를 확인했다. 완료 trial 0·results·최초 metadata가 보존 사본과 같고 현재 설정도 일치했다.
+
+사용자 재개 승인 후 2026-09-14 16:54:35 KST 공식 auto_resume을 시작했다. 재개 로그는 `artifacts/evaluations/retail0-p1-ollama-resume_20260914_165435_165.log`다. Runner는 완료 1개를 건너뛰고 남은 2개를 보고했으며 trial 1부터 실행 중이다. 최초 metadata를 갱신하지 않는다.
+
+### 이슈 #18 5단계 완료: Retail 0
+
+2026-09-14 17:01:40 KST, 공식 auto_resume이 남은 두 trial을 완료하고 종료 코드 0으로 끝났다. 최초 실행의 서버 중단 1회와 재개 1회가 있었으며 재개 후 추가 중단은 없었다. 완료 trial 0의 전체 simulation 객체가 중단 당시 보존 사본과 같고 최초 metadata도 바이트 단위로 일치한다. 미완료 시도는 별도 실패 점수에 포함하지 않는다.
+
+| Trial | Simulation ID | Seed | Reward / DB match | Read / write match | 메시지 수 | 소요 초 |
+| --- | --- | ---: | --- | --- | ---: | ---: |
+| 0 | `10d81ce9-37e7-4bf5-921c-96051c4dcb35` | 670487 | 1 / true | 4/4 / 1/1 | 24 | 250.33 |
+| 1 | `fca6d390-0401-4e65-85db-a3d36bea90fc` | 116739 | 1 / true | 4/4 / 1/1 | 26 | 228.09 |
+| 2 | `0f196840-7109-4e37-ac2d-80a9eb7c6d85` | 26225 | 1 / true | 4/4 / 1/1 | 20 | 191.28 |
+
+세 trial 모두 user_stop, review=null, hallucination_retries_used=0이다. Task·trial·seed와 도구 호출 16개의 대응 반환을 확인했으며 도구 반환 error는 모두 false다. 공식 점수와 도구 대응 확인은 전체 대화의 판단·정책 준수 검토를 대신하지 않는다.
+
+| 최종 원본 | 바이트 | SHA-256 |
+| --- | ---: | --- |
+| results.json | 353970 | `db5fe2799088d408af6cdf04335e3607f3de656d3689c99a7bcc4a11e37eb110` |
+| metadata.toml | 1287 | `f636081075e10577eb40517662b756ba760f5519127bae4a02bf0a29fa152ac1` |
+| retail0-p1-ollama-resume_20260914_165435_165.log | 22059 | `6086676d92130cceff60cd778c2f3f3fc1875834b2813cbac05f64ea722a2b26` |
+
+최초 실행 로그 해시는 위 중단 기록과 같고 P1 해시도 유지됐다. 실제 Retail 설정 SHA-256은 `f63cba18c6c11b2ddc11e6140bb470b8ca5ca5a32856950654654e53bf26b99e`다. 실행 후 /api/ps에서 동일 모델 digest와 context_length 32768을 확인했다. 기준 실행과 서버·템플릿·context가 달라 점수 변화를 P1만의 효과로 단정하지 않는다.
+
+5단계 완료로 변경 후 결과 12/12개를 확보했다. 전체 원본·설정·중단 이력 검증과 인계를 수행하는 6단계는 별도 사용자 승인 후 진행한다. 상세 대화 분석 및 개선 효과 판정은 아직 수행하지 않았다.
+
+### 이슈 #18 6단계: 변경 후 최종 검증과 인계
+
+2026-09-14 사용자 승인으로 원본 대조와 인계 정리를 완료했다. 이 단계에서는 추가 추론·평가·상세 대화 분석을 실행하지 않았다. 아래 경로는 모두 `artifacts/evaluations/` 아래이며 각 디렉터리의 `results.json`과 `metadata.toml`을 함께 사용한다. Trial 순서는 0·1·2, seed는 각각 670487·116739·26225다.
+
+| Domain / task | 선택된 변경 후 디렉터리 | Trial별 reward | DB 통과 | 실행 서버 / context |
+| --- | --- | --- | --- | --- |
+| airline / 42 | `2026-09-14_14-46-24_KST_038e5003` | 1·1·0 | 2/3 | llama.cpp / 193280, 슬롯 1 |
+| airline / 41 | `2026-09-14_15-09-24_KST_37c6c3a1` | 1·1·1 | 3/3 | llama.cpp / 207872, 슬롯 1 |
+| airline / 22 | `2026-09-14_16-15-53_KST_73adb253` | 0·1·0 | 1/3 | Ollama / 32768 |
+| retail / 0 | `2026-09-14_16-35-31_KST_4b5b1ea5` | 1·1·1 | 3/3 | Ollama / 32768 |
+
+#### 원본 검증
+
+- 네 task × 세 trial, 서로 다른 simulation ID 12개를 확인했다. Domain/task/trial/seed가 예정 집합과 일치하며 누락·중복은 없다. 공식 reward 합계 9/12, DB 통과 9/12, 종료 사유는 모두 user_stop이다. 점수 0도 그대로 포함하며 성공 사례를 골라내지 않았다.
+- 기준 네 디렉터리와 변경 후 네 디렉터리의 results·metadata 총 16개 파일 SHA-256이 앞 절의 기록과 일치한다. 기준의 analysis.md 네 개도 존재한다. 변경 후 원본별 해시는 각 실행 완료 절에 기록했다.
+- 변경 후 97개 도구 호출에 대해 대응 반환과 선후관계를 대조했고 반환 error는 모두 false다. 이는 도구 실행 기록의 일관성 검사이며 판단·정책 준수의 의미 검증은 아니다.
+- 네 metadata 모두 고정 P1 해시 `dde31a582b9495743e5fb29257e34e9d1cb4f544a98f2354495cb21e0ddb2bd3`와 commit `8044d2d82162d59a68271ff376a3a6aa0d51d7ca`를 기록한다. 현재 Agent 소스 LF 정규화 해시는 이슈 #17 적용 기록과 같다.
+- 현재 각 TOML의 evaluation·Agent·User 값이 해당 변경 후 metadata와 일치한다. 기준 대비 evaluation 옵션은 같고 역할별 generation={}를 유지했다. A42·A41의 역할 설정은 기준과 같으며 A22·Retail의 모델 이름과 base_url만 Ollama 값으로 바뀌었다. 두 TOML 변경은 metadata의 commit에 포함되지 않은 미커밋 변경이므로 실제 metadata와 기록된 설정 해시를 함께 사용한다.
+- 공식 저장소 HEAD는 `fc0055dc4e0a316c3f83133267fbd6faaa770992`, 현재 변경은 기존 uv.lock 하나뿐이다. 공식 환경 코드·정책·도구·evaluator를 이번 평가에서 수정하지 않았다.
+- 중단 보존 파일과 실행 로그의 해시가 기록과 일치한다. Retail의 완료 trial 0 전체 객체와 최초 metadata는 재개 후에도 보존 사본과 동일하다. A41 최초 metadata도 보존 사본과 같다.
+
+#### 실행 횟수와 예외
+
+| Task | 신규 실행 | 공식 재개 | 중단 및 처리 |
+| --- | ---: | ---: | --- |
+| A42 | 1 | 0 | 없음 |
+| A41 | 1 | 1 | 에이전트가 사전 조건 실패 후 실행을 잘못 시작하여 중단. 완료 0개 보존, 조건 설명·승인 후 재개 |
+| A22 | 2 | 0 | llama.cpp 서버 중단으로 완료 0개 보존. 사용자 서버 전환·재평가 승인 후 Ollama 새 디렉터리에서 실행 |
+| Retail 0 | 1 | 1 | 서버 중단 시 완료 1개 보존. 복구·승인 후 남은 2개만 재개 |
+
+총 신규 실행 5회 + 재개 2회 = 평가 진입 7회, 중단 3회다. 서버 통신 점검 요청은 평가 trial에 포함하지 않는다. A22의 `2026-09-14_15-32-42_KST_3313ef4b`는 simulations가 빈 중단 원본이며 선택된 12개에 포함하지 않고 보존한다. 중단 시도의 미완료 trial에 reward 0을 부여하지 않는다. 실행 명령은 기존 `.venv/Scripts/python.exe -u -B scripts/evaluate.py run <config>`이고 uv 실행 링크 문제 때문에 기존 가상환경 Python을 사용했다. 재개는 기존 runner 구성과 공식 auto_resume을 사용했다. 각 시각·로그·설정은 앞 실행 절에 있다.
+
+#### 비교 한계와 다음 작업
+
+기준 대비 context·슬롯 차이는 사용자가 수용한 기록대로 유지한다. 사용자는 batch-size 조정 중이라고 설명했지만 실제 값은 확인하지 못했다. A22·Retail은 서버와 템플릿도 바뀌었으므로 동일 조건의 P1 단독 효과 실험으로 표현하지 않는다. Context·슬롯 또는 batch-size가 관찰 결과나 셧다운을 일으켰다는 인과 증거는 확보하지 못했다. Ollama의 generation={}는 서버 기본값 사용을 뜻하며 llama.cpp와 같은 샘플링 값을 보장하지 않는다.
+
+후속 작업은 같은 domain/task/trial/seed의 기준·변경 후 전체 대화를 대조하여 대상 판단, 필요한 변경 완료, 부작용, 사용자 확인, 조기 종료 영향을 기존 기준으로 분석한다. 특히 A41의 DB 무변경 성공과 충분한 조사 수행을 구분하고, A22의 DB 성공·reference write 2/3 차이를 확인해야 한다. 공식 reward만으로 개선 효과를 결론 내리지 않는다. 분석 결과가 불리하더라도 자동 튜닝·추가 평가를 하지 않는다.
+
+원본은 Git 제외 경로이므로 문서 커밋만으로 다른 환경에 전달되지 않는다. 후속 분석에는 위 네 변경 후 디렉터리, 이슈 #16 6단계의 기준 네 디렉터리와 analysis.md, 중단 preserved 사본 및 앞 절의 실행 로그를 함께 전달한다. 이번 단계에서 변경 후 analysis.md는 생성하지 않았다.
+
+이슈 #18의 결과 확보·프롬프트 고정·버전/조건 추적·중단 이력·후속 인계 조건을 충족했다. 6단계 작업은 완료했으며 상세 분석·효과 판정은 남아 있다. 6단계 직후 사용자 승인으로 GitHub #18의 체크리스트·결과·검증·비교 한계를 갱신하고 completed 사유로 종료했다. 커밋은 사용자가 진행하며 이번 작업에서는 수행하지 않았다.
 
 ## 결론
 
