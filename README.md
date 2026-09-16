@@ -6,7 +6,7 @@ LLM 기반 Agent의 Tool Use를 이해하고, Agent를 구현·평가한 뒤 실
 
 ### Evaluation
 
-- Benchmark: tau2-bench
+- Benchmark: tau2-bench v1.0.1
 - Domains:
   - mock
   - retail — 0
@@ -24,10 +24,10 @@ LLM 기반 Agent의 Tool Use를 이해하고, Agent를 구현·평가한 뒤 실
 - Python 3.12 또는 3.13
 - uv
 
-아래 명령은 프로젝트 루트에서 실행합니다. `tau2-bench`가 없다면 github 저장소에서 다운받습니다.
+아래 명령은 프로젝트 루트에서 실행합니다. `tau2-bench`가 없다면 평가에 사용한 버전인 `v1.0.1`을 GitHub 저장소에서 받습니다.
 
 ```powershell
-git clone https://github.com/sierra-research/tau2-bench.git ../tau2-bench
+git clone --branch v1.0.1 https://github.com/sierra-research/tau2-bench.git ../tau2-bench
 ```
 
 ```text
@@ -124,6 +124,9 @@ agent-tool-use/
 `artifacts/`의 자료는 평가 실행 및 분석 과정에서 생성됩니다.
 
 ## Results
+
+- **프롬프트 개선:** 조회·대조 지침을 추가한 뒤 공식 평가 성공은 **4/12 → 9/12**로 증가했지만, 추가 채점에서는 사용자의 요청과 조건에 맞는 예약·상품을 선택하는 능력이 일관되게 개선되었다고 보기 어려웠습니다.
+- **Reflection:** 일부 조회 누락을 수정했지만, 취소해야 할 예약을 잘못 선택하는 오류는 남았습니다. 실행 시간이 길고 첫 실행에서 유의미한 개선을 확인하지 못해 추가 실행을 중단했습니다.
 
 실험의 가설과 결과는 [프롬프트 개선](docs/experiments/001-prompt-improvement.md), [Reflection](docs/experiments/002-reflection.md)에 정리했습니다. [평가 원본과 판정 근거](artifacts/published/README.md)도 저장소에서 확인할 수 있습니다.
 
