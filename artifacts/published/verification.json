@@ -1,0 +1,25 @@
+{
+  "checks": {
+    "original_file_hashes": 109,
+    "unique_completed_trials": 25,
+    "report_official_and_common_judge_tables": "matched",
+    "retail_consent_corrections": 3,
+    "local_links": 27,
+    "reflection_review_count": 21,
+    "reflection_revision_count": 3
+  },
+  "documents": {
+    "README.md": "18b0701c6e0933b36598a2e16f1264cebd38e8580d36097e2407dac78e0bd7e7",
+    "docs/experiments/001-prompt-improvement.md": "c08d83aa9aed2e91d5d8823a30ca440de1dbd35ffe2be51345d1627951ba79c0",
+    "docs/experiments/002-reflection.md": "923aae5ad2ab9c7d5f62943a4e61bfd46d692276c7ed0e6aa83b42ed7668cf19",
+    "artifacts/published/README.md": "979d260292ad8183982c6a486d377d10237966a17350900a75c348d13f453062"
+  },
+  "charts": {
+    "docs/assets/charts/judge-stacked-airline-22.png": "826dcd4667ee351e79ec16fe629ff6829d755434e5f47e30c932e5000447cd54",
+    "docs/assets/charts/judge-stacked-airline-41.png": "629794f09a10223067a74f53c5acf7cd330bdaae56ff6bf8b251418b4b216423",
+    "docs/assets/charts/judge-stacked-airline-42.png": "062ad8fbf66549c38be0b6f026d8d72f1467156625d59cef49dc1dbdff8d1e4a",
+    "docs/assets/charts/judge-stacked-retail-0.png": "621221948db074333627e788259abf28c67e302432273ff270b5f6ef861091d2",
+    "docs/assets/charts/official-results.png": "5ce4e709cae934ee6782d5482162d2c1a3807bfd7ed31ec664c7548cef029e00"
+  },
+  "notes": "Checks verify stored evidence and report consistency, not an independent new model evaluation or regrading."
+}

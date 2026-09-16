@@ -1,0 +1,19 @@
+{
+  "recorded_at": "2026-09-16T01:20:57.482414+00:00",
+  "reason": "User requested stopping after the first trial completed.",
+  "planned_trials": 3,
+  "completed_trials": [
+    0
+  ],
+  "evaluation_processes_stopped": true,
+  "next_trial_start_announced": true,
+  "next_trial_saved_result": false,
+  "reflection_index_rebuilt_after_stop": true,
+  "linked_reflection_outputs": 18,
+  "review_counts": {
+    "approve": 18,
+    "revise": 3,
+    "errors": 0
+  },
+  "langfuse_published": false
+}

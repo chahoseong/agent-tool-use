@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-15T02:20:25.290239+00:00",
+  "source": "C:\\Users\\chahoseong\\projects\\agent-tool-use\\artifacts\\evaluations\\2026-09-14_16-15-53_KST_73adb253",
+  "source_hashes": {
+    "results.json": "c25320d90df1cfd63646a970da3e8c2fe1156bde7ba522b35734d28906126f10",
+    "metadata.toml": "cf7ffc13d82b407bd7d92a65db1f62c131b298e40597b477b87dbe6869c1f88c"
+  },
+  "model": "gpt-6-astra",
+  "reasoning_effort": "high",
+  "criteria_version": "1",
+  "resource_hashes": {
+    "judge.md": "3a3b6ebb42c3ecd3510d5ba585bb6635a8b4b7222569b5080839c2c88c4a3bd8",
+    "criteria.json": "73adf019c81d0e92b013b1efde6bce6bfbe229dd2a8578a96e17c164baaf661c",
+    "schema.json": "01cc5634d34306b6e58ab6c8b749347b654d141b08b0831e5a17d7b4d4aaa61d"
+  },
+  "trials": [
+    {
+      "trial": 0,
+      "simulation_id": "5d3bef09-b78b-4e8c-9afa-a0cb8f7c1d4e",
+      "input_sha256": "2798ae2a1ec3b532a0aeb4a7fb3084091b3a6d90c8e18e0d93ad33f92f9bde4b"
+    },
+    {
+      "trial": 1,
+      "simulation_id": "1d801b21-3f5a-4724-b5af-7b2f93f69757",
+      "input_sha256": "c66d85d1a697d8e382fa1ee7b9f28d41a55724bfa84f7be086fbf72a8e8343af"
+    },
+    {
+      "trial": 2,
+      "simulation_id": "3d2c9153-0427-425f-bc01-92f697f069f9",
+      "input_sha256": "868c296b6eb89fb2c8379ddf049904af96e205cdae014529e6dcdd5adf890dae"
+    }
+  ],
+  "status": "prepared"
+}

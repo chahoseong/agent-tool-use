@@ -1,0 +1,313 @@
+{
+  "schema_version": 1,
+  "message_index_base": 0,
+  "results_status": "available",
+  "outputs": [
+    {
+      "output_id": "00c390aca9324dd0a0434abe07b91f59",
+      "file": "00c390aca9324dd0a0434abe07b91f59.jsonl",
+      "context": {
+        "task_id": "42",
+        "seed": 670487,
+        "attempt_id": "bffeca6efb004a07b75e6305763523fc",
+        "agent_turn": 11
+      },
+      "status": "linked",
+      "simulation_id": "7a42ff38-a6c4-485b-a186-3fdc6480a6eb",
+      "task_id": "42",
+      "trial": 0,
+      "seed": 670487,
+      "message_index": 20,
+      "turn_idx": 20
+    },
+    {
+      "output_id": "08fa01835b9748d0a00fb0291c0a3400",
+      "file": "08fa01835b9748d0a00fb0291c0a3400.jsonl",
+      "context": {
+        "task_id": "42",
+        "seed": 670487,
+        "attempt_id": "bffeca6efb004a07b75e6305763523fc",
+        "agent_turn": 19
+      },
+      "status": "linked",
+      "simulation_id": "7a42ff38-a6c4-485b-a186-3fdc6480a6eb",
+      "task_id": "42",
+      "trial": 0,
+      "seed": 670487,
+      "message_index": 36,
+      "turn_idx": 36
+    },
+    {
+      "output_id": "1292237a96fe415e8f78093e0a581e48",
+      "file": "1292237a96fe415e8f78093e0a581e48.jsonl",
+      "context": {
+        "task_id": "42",
+        "seed": 670487,
+        "attempt_id": "bffeca6efb004a07b75e6305763523fc",
+        "agent_turn": 12
+      },
+      "status": "linked",
+      "simulation_id": "7a42ff38-a6c4-485b-a186-3fdc6480a6eb",
+      "task_id": "42",
+      "trial": 0,
+      "seed": 670487,
+      "message_index": 22,
+      "turn_idx": 22
+    },
+    {
+      "output_id": "21abcf8ea80d497c8a8cdb92f6306301",
+      "file": "21abcf8ea80d497c8a8cdb92f6306301.jsonl",
+      "context": {
+        "task_id": "42",
+        "seed": 670487,
+        "attempt_id": "bffeca6efb004a07b75e6305763523fc",
+        "agent_turn": 7
+      },
+      "status": "linked",
+      "simulation_id": "7a42ff38-a6c4-485b-a186-3fdc6480a6eb",
+      "task_id": "42",
+      "trial": 0,
+      "seed": 670487,
+      "message_index": 12,
+      "turn_idx": 12
+    },
+    {
+      "output_id": "2377308d897242db9cc1a34a644d612b",
+      "file": "2377308d897242db9cc1a34a644d612b.jsonl",
+      "context": {
+        "task_id": "42",
+        "seed": 670487,
+        "attempt_id": "bffeca6efb004a07b75e6305763523fc",
+        "agent_turn": 10
+      },
+      "status": "linked",
+      "simulation_id": "7a42ff38-a6c4-485b-a186-3fdc6480a6eb",
+      "task_id": "42",
+      "trial": 0,
+      "seed": 670487,
+      "message_index": 18,
+      "turn_idx": 18
+    },
+    {
+      "output_id": "2560b2391af24fba9c65d5cadcc56ce4",
+      "file": "2560b2391af24fba9c65d5cadcc56ce4.jsonl",
+      "context": {
+        "task_id": "42",
+        "seed": 670487,
+        "attempt_id": "bffeca6efb004a07b75e6305763523fc",
+        "agent_turn": 3
+      },
+      "status": "linked",
+      "simulation_id": "7a42ff38-a6c4-485b-a186-3fdc6480a6eb",
+      "task_id": "42",
+      "trial": 0,
+      "seed": 670487,
+      "message_index": 4,
+      "turn_idx": 4
+    },
+    {
+      "output_id": "3d54cfb764634bbcb8780a2b2937112f",
+      "file": "3d54cfb764634bbcb8780a2b2937112f.jsonl",
+      "context": {
+        "task_id": "42",
+        "seed": 670487,
+        "attempt_id": "bffeca6efb004a07b75e6305763523fc",
+        "agent_turn": 15
+      },
+      "status": "linked",
+      "simulation_id": "7a42ff38-a6c4-485b-a186-3fdc6480a6eb",
+      "task_id": "42",
+      "trial": 0,
+      "seed": 670487,
+      "message_index": 28,
+      "turn_idx": 28
+    },
+    {
+      "output_id": "4be5ea460c3340ff935ec6d124dd3ded",
+      "file": "4be5ea460c3340ff935ec6d124dd3ded.jsonl",
+      "context": {
+        "task_id": "42",
+        "seed": 670487,
+        "attempt_id": "bffeca6efb004a07b75e6305763523fc",
+        "agent_turn": 13
+      },
+      "status": "linked",
+      "simulation_id": "7a42ff38-a6c4-485b-a186-3fdc6480a6eb",
+      "task_id": "42",
+      "trial": 0,
+      "seed": 670487,
+      "message_index": 24,
+      "turn_idx": 24
+    },
+    {
+      "output_id": "50e5b771c3224e4d9357f6bcd2ab44f3",
+      "file": "50e5b771c3224e4d9357f6bcd2ab44f3.jsonl",
+      "context": {
+        "task_id": "42",
+        "seed": 670487,
+        "attempt_id": "bffeca6efb004a07b75e6305763523fc",
+        "agent_turn": 8
+      },
+      "status": "linked",
+      "simulation_id": "7a42ff38-a6c4-485b-a186-3fdc6480a6eb",
+      "task_id": "42",
+      "trial": 0,
+      "seed": 670487,
+      "message_index": 14,
+      "turn_idx": 14
+    },
+    {
+      "output_id": "6a6ce8b8ce8a4bfbb9a76c88aace65dd",
+      "file": "6a6ce8b8ce8a4bfbb9a76c88aace65dd.jsonl",
+      "context": {
+        "task_id": "42",
+        "seed": 670487,
+        "attempt_id": "bffeca6efb004a07b75e6305763523fc",
+        "agent_turn": 18
+      },
+      "status": "linked",
+      "simulation_id": "7a42ff38-a6c4-485b-a186-3fdc6480a6eb",
+      "task_id": "42",
+      "trial": 0,
+      "seed": 670487,
+      "message_index": 34,
+      "turn_idx": 34
+    },
+    {
+      "output_id": "88a31916cfba4d10ae3a41e40229b4a5",
+      "file": "88a31916cfba4d10ae3a41e40229b4a5.jsonl",
+      "context": {
+        "task_id": "42",
+        "seed": 670487,
+        "attempt_id": "bffeca6efb004a07b75e6305763523fc",
+        "agent_turn": 17
+      },
+      "status": "linked",
+      "simulation_id": "7a42ff38-a6c4-485b-a186-3fdc6480a6eb",
+      "task_id": "42",
+      "trial": 0,
+      "seed": 670487,
+      "message_index": 32,
+      "turn_idx": 32
+    },
+    {
+      "output_id": "ac6777158be74750bb97357488520eef",
+      "file": "ac6777158be74750bb97357488520eef.jsonl",
+      "context": {
+        "task_id": "42",
+        "seed": 670487,
+        "attempt_id": "bffeca6efb004a07b75e6305763523fc",
+        "agent_turn": 6
+      },
+      "status": "linked",
+      "simulation_id": "7a42ff38-a6c4-485b-a186-3fdc6480a6eb",
+      "task_id": "42",
+      "trial": 0,
+      "seed": 670487,
+      "message_index": 10,
+      "turn_idx": 10
+    },
+    {
+      "output_id": "b015d1fa5849489b89d5212878ff64bb",
+      "file": "b015d1fa5849489b89d5212878ff64bb.jsonl",
+      "context": {
+        "task_id": "42",
+        "seed": 670487,
+        "attempt_id": "bffeca6efb004a07b75e6305763523fc",
+        "agent_turn": 2
+      },
+      "status": "linked",
+      "simulation_id": "7a42ff38-a6c4-485b-a186-3fdc6480a6eb",
+      "task_id": "42",
+      "trial": 0,
+      "seed": 670487,
+      "message_index": 2,
+      "turn_idx": 2
+    },
+    {
+      "output_id": "baa660b191c44f5bbb74a94ba67c47da",
+      "file": "baa660b191c44f5bbb74a94ba67c47da.jsonl",
+      "context": {
+        "task_id": "42",
+        "seed": 670487,
+        "attempt_id": "bffeca6efb004a07b75e6305763523fc",
+        "agent_turn": 9
+      },
+      "status": "linked",
+      "simulation_id": "7a42ff38-a6c4-485b-a186-3fdc6480a6eb",
+      "task_id": "42",
+      "trial": 0,
+      "seed": 670487,
+      "message_index": 16,
+      "turn_idx": 16
+    },
+    {
+      "output_id": "cd80fe09498d48ef98685886a845eee9",
+      "file": "cd80fe09498d48ef98685886a845eee9.jsonl",
+      "context": {
+        "task_id": "42",
+        "seed": 670487,
+        "attempt_id": "bffeca6efb004a07b75e6305763523fc",
+        "agent_turn": 4
+      },
+      "status": "linked",
+      "simulation_id": "7a42ff38-a6c4-485b-a186-3fdc6480a6eb",
+      "task_id": "42",
+      "trial": 0,
+      "seed": 670487,
+      "message_index": 6,
+      "turn_idx": 6
+    },
+    {
+      "output_id": "d21d975b8df14804a325f56a0d482581",
+      "file": "d21d975b8df14804a325f56a0d482581.jsonl",
+      "context": {
+        "task_id": "42",
+        "seed": 670487,
+        "attempt_id": "bffeca6efb004a07b75e6305763523fc",
+        "agent_turn": 16
+      },
+      "status": "linked",
+      "simulation_id": "7a42ff38-a6c4-485b-a186-3fdc6480a6eb",
+      "task_id": "42",
+      "trial": 0,
+      "seed": 670487,
+      "message_index": 30,
+      "turn_idx": 30
+    },
+    {
+      "output_id": "e6c8d048f09c47afaa44af582ad3ee5e",
+      "file": "e6c8d048f09c47afaa44af582ad3ee5e.jsonl",
+      "context": {
+        "task_id": "42",
+        "seed": 670487,
+        "attempt_id": "bffeca6efb004a07b75e6305763523fc",
+        "agent_turn": 14
+      },
+      "status": "linked",
+      "simulation_id": "7a42ff38-a6c4-485b-a186-3fdc6480a6eb",
+      "task_id": "42",
+      "trial": 0,
+      "seed": 670487,
+      "message_index": 26,
+      "turn_idx": 26
+    },
+    {
+      "output_id": "fefa78ac276f414bb570a38c6c471dac",
+      "file": "fefa78ac276f414bb570a38c6c471dac.jsonl",
+      "context": {
+        "task_id": "42",
+        "seed": 670487,
+        "attempt_id": "bffeca6efb004a07b75e6305763523fc",
+        "agent_turn": 5
+      },
+      "status": "linked",
+      "simulation_id": "7a42ff38-a6c4-485b-a186-3fdc6480a6eb",
+      "task_id": "42",
+      "trial": 0,
+      "seed": 670487,
+      "message_index": 8,
+      "turn_idx": 8
+    }
+  ]
+}

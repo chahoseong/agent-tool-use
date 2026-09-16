@@ -1,0 +1,39 @@
+[run]
+started_at = 2026-09-14 09:19:22.907950+09:00
+config_path = "C:\\Users\\chahoseong\\projects\\agent-tool-use\\configs\\airline_task_41.toml"
+directory = "C:\\Users\\chahoseong\\projects\\agent-tool-use\\artifacts\\evaluations\\2026-09-14_09-19-22_KST_6a9c3f3f"
+
+[evaluation]
+domain = "airline"
+task_ids = [
+    "41",
+]
+seed = 42
+max_steps = 200
+max_errors = 10
+num_trials = 3
+max_concurrency = 1
+
+[agent]
+model = "google/gemma-4-12B-it-qat-q4_0-gguf:Q4_0"
+base_url = "http://100.80.184.89:8080/v1"
+
+[agent.generation]
+
+[user]
+model = "google/gemma-4-12B-it-qat-q4_0-gguf:Q4_0"
+base_url = "http://100.80.184.89:8080/v1"
+
+[user.generation]
+
+[output]
+directory = "C:\\Users\\chahoseong\\projects\\agent-tool-use\\artifacts\\evaluations"
+
+[prompts]
+agent = "You are a helpful customer service agent.\n\nFollow the policy strictly. Use the provided tools to help the user."
+
+[project]
+commit = "80168d861bee680ec2d15620fc28fcbe78ce2241"
+
+[tau2]
+version = "1.0.1"

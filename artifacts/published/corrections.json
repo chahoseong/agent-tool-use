@@ -1,0 +1,75 @@
+{
+  "type": "documented_user_agreed_correction",
+  "scope": "retail 0 baseline consent only; not a new LLM judge run or a regrading of other criteria/trials",
+  "criterion_interpretation": "Whether explicit consent for the specified exchange was obtained; absence of subsequent execution does not make this observed consent inapplicable.",
+  "entries": [
+    {
+      "simulation_id": "3083d48e-8cd9-40d8-ab1f-09501a24b095",
+      "trial": 0,
+      "criterion_id": "consent",
+      "original_verdict": "-",
+      "reported_verdict": "pass",
+      "reason": "User explicitly confirmed the exchange details before STOP. No change tool ran, but consent was obtained. The original judgment also acknowledges this fact.",
+      "source_judgment": "prompt-improvement/retail-0/baseline/judge/trial_0.json",
+      "evidence": [
+        {
+          "message_index": 16,
+          "field": "content",
+          "excerpt": "For the Mechanical Keyboard, the price difference is -$3.17 (you will receive a refund of $3.17).\nFor the Smart Thermostat, the price difference is -$13.46 (you will receive a refund of $13.46).\nThe total refund amount will be $16.63.\n\nHere are the details of the exchange for your confirmation:\n\n**Order #W2378156:**\n- **Item 1:** Mechanical Keyboard (Item ID: 1151293680) to be exchanged for Mechanical Keyboard (Item ID: 7706410293, clicky switches, no backlight, full size).\n- **Item 2:** Smart Thermostat (Item ID: 4983901480) to be exchanged for Smart Thermostat (Item ID: 7747408585, Google Assistant compatible, black).\n- **Payment Method for Price Difference:** Original credit card (credit_card_9513926)\n- **Total Refund:** $16.63\n\nPlease confirm if you would like me to proceed with this exchange by saying \"yes\"."
+        },
+        {
+          "message_index": 17,
+          "field": "content",
+          "excerpt": "Yes.\n\n###STOP###"
+        }
+      ]
+    },
+    {
+      "simulation_id": "ea00ac59-3472-493f-8eb9-34a3bb1322d7",
+      "trial": 1,
+      "criterion_id": "consent",
+      "original_verdict": "-",
+      "reported_verdict": "pass",
+      "reason": "User explicitly confirmed the exchange details before STOP. No change tool ran, but consent was obtained. The original judgment also acknowledges this fact.",
+      "source_judgment": "prompt-improvement/retail-0/baseline/judge/trial_1.json",
+      "evidence": [
+        {
+          "message_index": 16,
+          "field": "content",
+          "excerpt": "Here are the details for the requested exchanges for order #W2378156:\n\n**Exchange 1: Mechanical Keyboard**\n*   **Original Item:** Item ID: 1151293680 (Price: $272.33)\n*   **New Item:** Item ID: 7706410293 (Price: $269.16)\n*   **Price Difference:** $3.17 (Refund)\n\n**Exchange 2: Smart Thermostat**\n*   **Original Item:** Item ID: 4983901480 (Price: $262.47)\n*   **New Item:** Item ID: 7747408585 (Price: $249.01)\n*   **Price Difference:** $13.46 (Refund)\n\n**Summary:**\n*   **Total Refund Amount:** $16.63\n*   **Refund Method:** Credit Card (Original payment method)\n*   **Refund Timeline:** 5 to 7 business days\n\nPlease confirm if you would like me to proceed with these exchanges by saying \"yes\"."
+        },
+        {
+          "message_index": 17,
+          "field": "content",
+          "excerpt": "Yes, those details are correct. Please proceed with the exchanges.\n\n###STOP###"
+        }
+      ]
+    },
+    {
+      "simulation_id": "38e3283d-1ee9-454b-aa5a-71374e189e0b",
+      "trial": 2,
+      "criterion_id": "consent",
+      "original_verdict": "-",
+      "reported_verdict": "pass",
+      "reason": "User explicitly confirmed the exchange details before STOP. No change tool ran, but consent was obtained. The original judgment also acknowledges this fact.",
+      "source_judgment": "prompt-improvement/retail-0/baseline/judge/trial_2.json",
+      "evidence": [
+        {
+          "message_index": 19,
+          "field": "content",
+          "excerpt": "That looks correct. Since the clicky switches are my priority, I'm fine with the no-backlight keyboard as long as it has those switches. For the refund, I'd prefer to have it credited back to my original payment method. Can you go ahead and process that?"
+        },
+        {
+          "message_index": 20,
+          "field": "content",
+          "excerpt": "To proceed with the exchange for order #W2378156, here are the details:\n\n**Items to be exchanged:**\n1. **Mechanical Keyboard** (Item #1151293680, Price: $272.33) will be exchanged for the **Full-size, Clicky switches, no backlight** model (Item #7706410293, Price: $269.16).\n2. **Smart Thermostat** (Item #4983901480, Price: $262.47) will be exchanged for the **Google Assistant compatible, black** model (Item #7747408585, Price: $249.01).\n\n**Refund Details:**\n*   **Total Refund:** $16.63\n*   **Refund Method:** Your original payment method (credit_card_9513926).\n\nPlease confirm with a \"yes\" if you would like me to proceed with this exchange."
+        },
+        {
+          "message_index": 21,
+          "field": "content",
+          "excerpt": "Yes, that all looks correct. Please go ahead and process the exchange.\n\n###STOP###"
+        }
+      ]
+    }
+  ]
+}

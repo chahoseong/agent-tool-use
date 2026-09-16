@@ -1,0 +1,1242 @@
+{
+  "description": "Selected completed trials; originals retained byte-for-byte.",
+  "runs": [
+    {
+      "task": "airline 42",
+      "variant": "baseline",
+      "path": "prompt-improvement/airline-42/baseline",
+      "source_run": "2026-09-11_18-44-51_KST_07b17b0e",
+      "judge_run": "20260915T000614Z_285eb9f7fae14e58897df3d7c00dba51",
+      "trials": [
+        {
+          "trial": 0,
+          "seed": 670487,
+          "simulation_id": "dbb5637b-b5e8-4f4c-8a57-4a523167b400",
+          "duration_seconds": 298.8989708000008
+        },
+        {
+          "trial": 1,
+          "seed": 116739,
+          "simulation_id": "206d5785-e17d-45d8-b094-185056a7f9eb",
+          "duration_seconds": 392.03303849999793
+        },
+        {
+          "trial": 2,
+          "seed": 26225,
+          "simulation_id": "26fe0f18-f706-43ce-af0b-424ccc842917",
+          "duration_seconds": 412.0920446999953
+        }
+      ],
+      "official": {
+        "read": [
+          23,
+          24
+        ],
+        "write": [
+          4,
+          6
+        ],
+        "db": [
+          0,
+          3
+        ],
+        "reward": [
+          0,
+          3
+        ]
+      },
+      "original_common_judge_counts": {
+        "retrieval": {
+          "pass": 2,
+          "fail": 1
+        },
+        "proposals": {
+          "fail": 3
+        },
+        "consent": {
+          "-": 1,
+          "pass": 2
+        },
+        "side_effects": {
+          "pass": 1,
+          "fail": 2
+        },
+        "guidance": {
+          "fail": 3
+        }
+      }
+    },
+    {
+      "task": "airline 42",
+      "variant": "prompt",
+      "path": "prompt-improvement/airline-42/prompt",
+      "source_run": "2026-09-14_14-46-24_KST_038e5003",
+      "judge_run": "20260915T005543Z_24f2ee0dc4a74af1b55d22eab02071a8",
+      "trials": [
+        {
+          "trial": 0,
+          "seed": 670487,
+          "simulation_id": "e6792cd8-942f-4cb0-b6f6-d863f0b9af4f",
+          "duration_seconds": 384.841541400001
+        },
+        {
+          "trial": 1,
+          "seed": 116739,
+          "simulation_id": "1c3556ec-877f-4ea2-9f61-85d498ad4eaa",
+          "duration_seconds": 545.2366322000016
+        },
+        {
+          "trial": 2,
+          "seed": 26225,
+          "simulation_id": "c5cb4328-9e0f-4b30-a039-e4ba124209e2",
+          "duration_seconds": 236.43565599999783
+        }
+      ],
+      "official": {
+        "read": [
+          23,
+          24
+        ],
+        "write": [
+          5,
+          6
+        ],
+        "db": [
+          2,
+          3
+        ],
+        "reward": [
+          2,
+          3
+        ]
+      },
+      "original_common_judge_counts": {
+        "retrieval": {
+          "fail": 3
+        },
+        "proposals": {
+          "fail": 3
+        },
+        "consent": {
+          "pass": 3
+        },
+        "side_effects": {
+          "pass": 2,
+          "fail": 1
+        },
+        "guidance": {
+          "fail": 3
+        }
+      }
+    },
+    {
+      "task": "airline 41",
+      "variant": "baseline",
+      "path": "prompt-improvement/airline-41/baseline",
+      "source_run": "2026-09-14_09-19-22_KST_6a9c3f3f",
+      "judge_run": "20260915T012325Z_86dc103932ff4bec8bef01b18f08d5c0",
+      "trials": [
+        {
+          "trial": 0,
+          "seed": 670487,
+          "simulation_id": "69749b69-e051-4890-9b65-9f6db8b1ee57",
+          "duration_seconds": 825.3682979
+        },
+        {
+          "trial": 1,
+          "seed": 116739,
+          "simulation_id": "bca95ee9-04bf-4003-aad4-41288a2613f2",
+          "duration_seconds": 525.0054709000001
+        },
+        {
+          "trial": 2,
+          "seed": 26225,
+          "simulation_id": "9fd2bd41-355e-4289-9c61-e07830e63dcb",
+          "duration_seconds": 409.66054319999967
+        }
+      ],
+      "official": {
+        "read": [
+          19,
+          24
+        ],
+        "write": [
+          0,
+          0
+        ],
+        "db": [
+          3,
+          3
+        ],
+        "reward": [
+          3,
+          3
+        ]
+      },
+      "original_common_judge_counts": {
+        "retrieval": {
+          "pass": 2,
+          "fail": 1
+        },
+        "proposals": {
+          "fail": 1,
+          "-": 1,
+          "pass": 1
+        },
+        "consent": {
+          "-": 3
+        },
+        "side_effects": {
+          "fail": 1,
+          "pass": 2
+        },
+        "guidance": {
+          "fail": 2,
+          "pass": 1
+        }
+      }
+    },
+    {
+      "task": "airline 41",
+      "variant": "prompt",
+      "path": "prompt-improvement/airline-41/prompt",
+      "source_run": "2026-09-14_15-09-24_KST_37c6c3a1",
+      "judge_run": "20260915T015541Z_6ddea4ea85a044aaa783edcada0fce77",
+      "trials": [
+        {
+          "trial": 0,
+          "seed": 670487,
+          "simulation_id": "88a8e89e-4ab1-464c-82e0-261e62ba2ee6",
+          "duration_seconds": 276.74953040000037
+        },
+        {
+          "trial": 1,
+          "seed": 116739,
+          "simulation_id": "69a8473b-1a51-4094-b9ca-9a211ff62eed",
+          "duration_seconds": 202.99956349999775
+        },
+        {
+          "trial": 2,
+          "seed": 26225,
+          "simulation_id": "286c594f-9618-4b1d-83a0-d674d1d39ec8",
+          "duration_seconds": 311.1521802999996
+        }
+      ],
+      "official": {
+        "read": [
+          24,
+          24
+        ],
+        "write": [
+          0,
+          0
+        ],
+        "db": [
+          3,
+          3
+        ],
+        "reward": [
+          3,
+          3
+        ]
+      },
+      "original_common_judge_counts": {
+        "retrieval": {
+          "fail": 3
+        },
+        "proposals": {
+          "fail": 2,
+          "-": 1
+        },
+        "consent": {
+          "-": 3
+        },
+        "side_effects": {
+          "fail": 3
+        },
+        "guidance": {
+          "fail": 2,
+          "pass": 1
+        }
+      }
+    },
+    {
+      "task": "airline 22",
+      "variant": "baseline",
+      "path": "prompt-improvement/airline-22/baseline",
+      "source_run": "2026-09-14_10-29-21_KST_7ea1bbde",
+      "judge_run": "20260915T020830Z_2053e74d38894c7ba2f1dfd037d4ee42",
+      "trials": [
+        {
+          "trial": 0,
+          "seed": 670487,
+          "simulation_id": "2b1114b6-45d9-440d-8b59-d85bed47bf18",
+          "duration_seconds": 580.1118824000005
+        },
+        {
+          "trial": 1,
+          "seed": 116739,
+          "simulation_id": "ab71f8c7-a013-44dc-a8ab-6756fae3db42",
+          "duration_seconds": 459.13129260000096
+        },
+        {
+          "trial": 2,
+          "seed": 26225,
+          "simulation_id": "a592f292-f935-488b-9d7b-9b2f472d814b",
+          "duration_seconds": 310.03820070000074
+        }
+      ],
+      "official": {
+        "read": [
+          0,
+          0
+        ],
+        "write": [
+          3,
+          9
+        ],
+        "db": [
+          1,
+          3
+        ],
+        "reward": [
+          1,
+          3
+        ]
+      },
+      "original_common_judge_counts": {
+        "retrieval": {
+          "pass": 2,
+          "fail": 1
+        },
+        "proposals": {
+          "fail": 3
+        },
+        "consent": {
+          "pass": 1,
+          "-": 1,
+          "fail": 1
+        },
+        "side_effects": {
+          "fail": 3
+        },
+        "guidance": {
+          "fail": 2,
+          "pass": 1
+        }
+      }
+    },
+    {
+      "task": "airline 22",
+      "variant": "prompt",
+      "path": "prompt-improvement/airline-22/prompt",
+      "source_run": "2026-09-14_16-15-53_KST_73adb253",
+      "judge_run": "20260915T022025Z_5c6a0af32275495f9b6ae10dcef4b299",
+      "trials": [
+        {
+          "trial": 0,
+          "seed": 670487,
+          "simulation_id": "5d3bef09-b78b-4e8c-9afa-a0cb8f7c1d4e",
+          "duration_seconds": 363.9132935999987
+        },
+        {
+          "trial": 1,
+          "seed": 116739,
+          "simulation_id": "1d801b21-3f5a-4724-b5af-7b2f93f69757",
+          "duration_seconds": 413.5396058000006
+        },
+        {
+          "trial": 2,
+          "seed": 26225,
+          "simulation_id": "3d2c9153-0427-425f-bc01-92f697f069f9",
+          "duration_seconds": 212.1757703000003
+        }
+      ],
+      "official": {
+        "read": [
+          0,
+          0
+        ],
+        "write": [
+          2,
+          9
+        ],
+        "db": [
+          1,
+          3
+        ],
+        "reward": [
+          1,
+          3
+        ]
+      },
+      "original_common_judge_counts": {
+        "retrieval": {
+          "pass": 2,
+          "fail": 1
+        },
+        "proposals": {
+          "pass": 1,
+          "fail": 1,
+          "-": 1
+        },
+        "consent": {
+          "-": 2,
+          "pass": 1
+        },
+        "side_effects": {
+          "fail": 1,
+          "pass": 2
+        },
+        "guidance": {
+          "pass": 1,
+          "fail": 2
+        }
+      }
+    },
+    {
+      "task": "retail 0",
+      "variant": "baseline",
+      "path": "prompt-improvement/retail-0/baseline",
+      "source_run": "2026-09-14_11-34-46_KST_c0605556",
+      "judge_run": "20260915T032708Z_46dae452fc964869a41287ab8f5a4757",
+      "trials": [
+        {
+          "trial": 0,
+          "seed": 670487,
+          "simulation_id": "3083d48e-8cd9-40d8-ab1f-09501a24b095",
+          "duration_seconds": 219.7685674000004
+        },
+        {
+          "trial": 1,
+          "seed": 116739,
+          "simulation_id": "ea00ac59-3472-493f-8eb9-34a3bb1322d7",
+          "duration_seconds": 199.66220700000122
+        },
+        {
+          "trial": 2,
+          "seed": 26225,
+          "simulation_id": "38e3283d-1ee9-454b-aa5a-71374e189e0b",
+          "duration_seconds": 283.493477
+        }
+      ],
+      "official": {
+        "read": [
+          12,
+          12
+        ],
+        "write": [
+          0,
+          3
+        ],
+        "db": [
+          0,
+          3
+        ],
+        "reward": [
+          0,
+          3
+        ]
+      },
+      "original_common_judge_counts": {
+        "retrieval": {
+          "pass": 3
+        },
+        "proposals": {
+          "pass": 3
+        },
+        "consent": {
+          "-": 3
+        },
+        "side_effects": {
+          "fail": 2,
+          "pass": 1
+        },
+        "guidance": {
+          "pass": 1,
+          "fail": 2
+        }
+      }
+    },
+    {
+      "task": "retail 0",
+      "variant": "prompt",
+      "path": "prompt-improvement/retail-0/prompt",
+      "source_run": "2026-09-14_16-35-31_KST_4b5b1ea5",
+      "judge_run": "20260915T034353Z_4603c0b9b08a4a0389b0554d384762ca",
+      "trials": [
+        {
+          "trial": 0,
+          "seed": 670487,
+          "simulation_id": "10d81ce9-37e7-4bf5-921c-96051c4dcb35",
+          "duration_seconds": 250.3341552999991
+        },
+        {
+          "trial": 1,
+          "seed": 116739,
+          "simulation_id": "fca6d390-0401-4e65-85db-a3d36bea90fc",
+          "duration_seconds": 228.0911612000018
+        },
+        {
+          "trial": 2,
+          "seed": 26225,
+          "simulation_id": "0f196840-7109-4e37-ac2d-80a9eb7c6d85",
+          "duration_seconds": 191.28306969999903
+        }
+      ],
+      "official": {
+        "read": [
+          12,
+          12
+        ],
+        "write": [
+          3,
+          3
+        ],
+        "db": [
+          3,
+          3
+        ],
+        "reward": [
+          3,
+          3
+        ]
+      },
+      "original_common_judge_counts": {
+        "retrieval": {
+          "fail": 1,
+          "pass": 2
+        },
+        "proposals": {
+          "pass": 3
+        },
+        "consent": {
+          "pass": 3
+        },
+        "side_effects": {
+          "fail": 2,
+          "pass": 1
+        },
+        "guidance": {
+          "fail": 1,
+          "pass": 2
+        }
+      }
+    },
+    {
+      "task": "airline 42",
+      "variant": "reflection",
+      "path": "reflection/airline-42",
+      "source_run": "2026-09-16_09-37-44_KST_b088b938",
+      "judge_run": "20260916T012222Z_cee9429af5314e59bdb9da89d322a9dd",
+      "trials": [
+        {
+          "trial": 0,
+          "seed": 670487,
+          "simulation_id": "7a42ff38-a6c4-485b-a186-3fdc6480a6eb",
+          "duration_seconds": 2528.8390017
+        }
+      ],
+      "official": {
+        "read": [
+          8,
+          8
+        ],
+        "write": [
+          1,
+          2
+        ],
+        "db": [
+          0,
+          1
+        ],
+        "reward": [
+          0,
+          1
+        ]
+      },
+      "original_common_judge_counts": {
+        "retrieval": {
+          "pass": 1
+        },
+        "proposals": {
+          "pass": 1
+        },
+        "consent": {
+          "pass": 1
+        },
+        "side_effects": {
+          "pass": 1
+        },
+        "guidance": {
+          "fail": 1
+        }
+      },
+      "reflection_counts": {
+        "outputs": 18,
+        "reviews": 21,
+        "revisions": 3
+      },
+      "comparison": {
+        "path": "prompt-improvement/airline-42/prompt",
+        "trial": 0
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "prompt-improvement/airline-42/baseline/results.json",
+      "source": "artifacts/evaluations/2026-09-11_18-44-51_KST_07b17b0e/results.json",
+      "sha256": "02597d744c4e6a8c030195f6cd02c6fdafbace41bd9b880a1d367fc9c6dcebee",
+      "bytes": 429493
+    },
+    {
+      "path": "prompt-improvement/airline-42/baseline/metadata.toml",
+      "source": "artifacts/evaluations/2026-09-11_18-44-51_KST_07b17b0e/metadata.toml",
+      "sha256": "5375e8fd57f5b0290a353841afab49c2e3363297bc48135d9d250cbd3b63f761",
+      "bytes": 964
+    },
+    {
+      "path": "prompt-improvement/airline-42/baseline/judge/manifest.json",
+      "source": "artifacts/evaluations/2026-09-11_18-44-51_KST_07b17b0e/llm-judge/20260915T000614Z_285eb9f7fae14e58897df3d7c00dba51/manifest.json",
+      "sha256": "e30cfe027455e9e3d5b1721116816f7b4a27deeeaa5a50afdadf6eca56b907f8",
+      "bytes": 1397
+    },
+    {
+      "path": "prompt-improvement/airline-42/baseline/judge/criteria.json",
+      "source": "artifacts/evaluations/2026-09-11_18-44-51_KST_07b17b0e/llm-judge/20260915T000614Z_285eb9f7fae14e58897df3d7c00dba51/criteria.json",
+      "sha256": "73adf019c81d0e92b013b1efde6bce6bfbe229dd2a8578a96e17c164baaf661c",
+      "bytes": 4667
+    },
+    {
+      "path": "prompt-improvement/airline-42/baseline/judge/completion.json",
+      "source": "artifacts/evaluations/2026-09-11_18-44-51_KST_07b17b0e/llm-judge/20260915T000614Z_285eb9f7fae14e58897df3d7c00dba51/completion.json",
+      "sha256": "2d3122047ac0fb09f238d7d180ae2604000c20c864439427850de2b98fbaf3f7",
+      "bytes": 174
+    },
+    {
+      "path": "prompt-improvement/airline-42/baseline/judge/judge.md",
+      "source": "artifacts/evaluations/2026-09-11_18-44-51_KST_07b17b0e/llm-judge/20260915T000614Z_285eb9f7fae14e58897df3d7c00dba51/judge.md",
+      "sha256": "3a3b6ebb42c3ecd3510d5ba585bb6635a8b4b7222569b5080839c2c88c4a3bd8",
+      "bytes": 3450
+    },
+    {
+      "path": "prompt-improvement/airline-42/baseline/judge/schema.json",
+      "source": "artifacts/evaluations/2026-09-11_18-44-51_KST_07b17b0e/llm-judge/20260915T000614Z_285eb9f7fae14e58897df3d7c00dba51/schema.json",
+      "sha256": "01cc5634d34306b6e58ab6c8b749347b654d141b08b0831e5a17d7b4d4aaa61d",
+      "bytes": 3784
+    },
+    {
+      "path": "prompt-improvement/airline-42/baseline/judge/trial_0.json",
+      "source": "artifacts/evaluations/2026-09-11_18-44-51_KST_07b17b0e/llm-judge/20260915T000614Z_285eb9f7fae14e58897df3d7c00dba51/trial_0.json",
+      "sha256": "196e79ddfe83dbaf2402787747fb55cacba51855d032641ca7c9ee0f0f702f93",
+      "bytes": 28218
+    },
+    {
+      "path": "prompt-improvement/airline-42/baseline/judge/trial_1.json",
+      "source": "artifacts/evaluations/2026-09-11_18-44-51_KST_07b17b0e/llm-judge/20260915T000614Z_285eb9f7fae14e58897df3d7c00dba51/trial_1.json",
+      "sha256": "c200113cb28d7569b76f49efb50d79e9a78cf7278bce437370734ae4b861a19c",
+      "bytes": 55596
+    },
+    {
+      "path": "prompt-improvement/airline-42/baseline/judge/trial_2.json",
+      "source": "artifacts/evaluations/2026-09-11_18-44-51_KST_07b17b0e/llm-judge/20260915T000614Z_285eb9f7fae14e58897df3d7c00dba51/trial_2.json",
+      "sha256": "ef4ce9ebdf9cb888b217628cb423a46c05c43a290af29c69a84ea133bab63cd0",
+      "bytes": 49112
+    },
+    {
+      "path": "prompt-improvement/airline-42/prompt/results.json",
+      "source": "artifacts/evaluations/2026-09-14_14-46-24_KST_038e5003/results.json",
+      "sha256": "cec966f0ded6c4f8b294c7f6f332dd77f8081e974c63f1041fcc0663c3c3ff90",
+      "bytes": 482470
+    },
+    {
+      "path": "prompt-improvement/airline-42/prompt/metadata.toml",
+      "source": "artifacts/evaluations/2026-09-14_14-46-24_KST_038e5003/metadata.toml",
+      "sha256": "3995ab27d7ebb79825efe3a3abceac54853e88f3990c7f4aaaa69fd06b2486a0",
+      "bytes": 1284
+    },
+    {
+      "path": "prompt-improvement/airline-42/prompt/judge/manifest.json",
+      "source": "artifacts/evaluations/2026-09-14_14-46-24_KST_038e5003/llm-judge/20260915T005543Z_24f2ee0dc4a74af1b55d22eab02071a8/manifest.json",
+      "sha256": "811c6224e0e817b1ce8e332c075d608713f85ab62df50bc8af695043215b17e6",
+      "bytes": 1397
+    },
+    {
+      "path": "prompt-improvement/airline-42/prompt/judge/criteria.json",
+      "source": "artifacts/evaluations/2026-09-14_14-46-24_KST_038e5003/llm-judge/20260915T005543Z_24f2ee0dc4a74af1b55d22eab02071a8/criteria.json",
+      "sha256": "73adf019c81d0e92b013b1efde6bce6bfbe229dd2a8578a96e17c164baaf661c",
+      "bytes": 4667
+    },
+    {
+      "path": "prompt-improvement/airline-42/prompt/judge/completion.json",
+      "source": "artifacts/evaluations/2026-09-14_14-46-24_KST_038e5003/llm-judge/20260915T005543Z_24f2ee0dc4a74af1b55d22eab02071a8/completion.json",
+      "sha256": "c76e229abfdafd67f948c770a29ed518342fcb04ac6d5c8d23106fa1ee87a6f6",
+      "bytes": 174
+    },
+    {
+      "path": "prompt-improvement/airline-42/prompt/judge/judge.md",
+      "source": "artifacts/evaluations/2026-09-14_14-46-24_KST_038e5003/llm-judge/20260915T005543Z_24f2ee0dc4a74af1b55d22eab02071a8/judge.md",
+      "sha256": "3a3b6ebb42c3ecd3510d5ba585bb6635a8b4b7222569b5080839c2c88c4a3bd8",
+      "bytes": 3450
+    },
+    {
+      "path": "prompt-improvement/airline-42/prompt/judge/schema.json",
+      "source": "artifacts/evaluations/2026-09-14_14-46-24_KST_038e5003/llm-judge/20260915T005543Z_24f2ee0dc4a74af1b55d22eab02071a8/schema.json",
+      "sha256": "01cc5634d34306b6e58ab6c8b749347b654d141b08b0831e5a17d7b4d4aaa61d",
+      "bytes": 3784
+    },
+    {
+      "path": "prompt-improvement/airline-42/prompt/judge/trial_0.json",
+      "source": "artifacts/evaluations/2026-09-14_14-46-24_KST_038e5003/llm-judge/20260915T005543Z_24f2ee0dc4a74af1b55d22eab02071a8/trial_0.json",
+      "sha256": "31130b222487b8ae56b109bb0ed6e189c9f2c07bdf1d649a7c7b9cede5b67174",
+      "bytes": 53771
+    },
+    {
+      "path": "prompt-improvement/airline-42/prompt/judge/trial_1.json",
+      "source": "artifacts/evaluations/2026-09-14_14-46-24_KST_038e5003/llm-judge/20260915T005543Z_24f2ee0dc4a74af1b55d22eab02071a8/trial_1.json",
+      "sha256": "774de18a5ebad86675fc7b5916909e5ac3f694d1655cd0379c0e51fa34aa61db",
+      "bytes": 43466
+    },
+    {
+      "path": "prompt-improvement/airline-42/prompt/judge/trial_2.json",
+      "source": "artifacts/evaluations/2026-09-14_14-46-24_KST_038e5003/llm-judge/20260915T005543Z_24f2ee0dc4a74af1b55d22eab02071a8/trial_2.json",
+      "sha256": "edb0eb108bc6e7c41608712d3c030a2894541c34c020a529cd5b92cfcb83b3cd",
+      "bytes": 37711
+    },
+    {
+      "path": "prompt-improvement/airline-41/baseline/results.json",
+      "source": "artifacts/evaluations/2026-09-14_09-19-22_KST_6a9c3f3f/results.json",
+      "sha256": "a1c7831ccc0f8bb73dab580b7f5c65444a1e77445abf7391972ecacdf3b78417",
+      "bytes": 322058
+    },
+    {
+      "path": "prompt-improvement/airline-41/baseline/metadata.toml",
+      "source": "artifacts/evaluations/2026-09-14_09-19-22_KST_6a9c3f3f/metadata.toml",
+      "sha256": "7ec897cffabd643c6ce62e1424baa27792da067f82f47ff38cd267bb1e2c2010",
+      "bytes": 964
+    },
+    {
+      "path": "prompt-improvement/airline-41/baseline/judge/manifest.json",
+      "source": "artifacts/evaluations/2026-09-14_09-19-22_KST_6a9c3f3f/llm-judge/20260915T012325Z_86dc103932ff4bec8bef01b18f08d5c0/manifest.json",
+      "sha256": "ce67b34527c4e5a285f98982317fdee56d926c7f4c4f05e7efc8e514a44d5213",
+      "bytes": 1397
+    },
+    {
+      "path": "prompt-improvement/airline-41/baseline/judge/criteria.json",
+      "source": "artifacts/evaluations/2026-09-14_09-19-22_KST_6a9c3f3f/llm-judge/20260915T012325Z_86dc103932ff4bec8bef01b18f08d5c0/criteria.json",
+      "sha256": "73adf019c81d0e92b013b1efde6bce6bfbe229dd2a8578a96e17c164baaf661c",
+      "bytes": 4667
+    },
+    {
+      "path": "prompt-improvement/airline-41/baseline/judge/completion.json",
+      "source": "artifacts/evaluations/2026-09-14_09-19-22_KST_6a9c3f3f/llm-judge/20260915T012325Z_86dc103932ff4bec8bef01b18f08d5c0/completion.json",
+      "sha256": "1dca4d7bda631224f177808afca6eef5f38b6e9cef3c75ac73d54cc9e8eb64f5",
+      "bytes": 174
+    },
+    {
+      "path": "prompt-improvement/airline-41/baseline/judge/judge.md",
+      "source": "artifacts/evaluations/2026-09-14_09-19-22_KST_6a9c3f3f/llm-judge/20260915T012325Z_86dc103932ff4bec8bef01b18f08d5c0/judge.md",
+      "sha256": "3a3b6ebb42c3ecd3510d5ba585bb6635a8b4b7222569b5080839c2c88c4a3bd8",
+      "bytes": 3450
+    },
+    {
+      "path": "prompt-improvement/airline-41/baseline/judge/schema.json",
+      "source": "artifacts/evaluations/2026-09-14_09-19-22_KST_6a9c3f3f/llm-judge/20260915T012325Z_86dc103932ff4bec8bef01b18f08d5c0/schema.json",
+      "sha256": "01cc5634d34306b6e58ab6c8b749347b654d141b08b0831e5a17d7b4d4aaa61d",
+      "bytes": 3784
+    },
+    {
+      "path": "prompt-improvement/airline-41/baseline/judge/trial_0.json",
+      "source": "artifacts/evaluations/2026-09-14_09-19-22_KST_6a9c3f3f/llm-judge/20260915T012325Z_86dc103932ff4bec8bef01b18f08d5c0/trial_0.json",
+      "sha256": "1e345d3e95e173f700f35decd536040a682704cec1f878c060af57a7ef14b2ce",
+      "bytes": 50844
+    },
+    {
+      "path": "prompt-improvement/airline-41/baseline/judge/trial_1.json",
+      "source": "artifacts/evaluations/2026-09-14_09-19-22_KST_6a9c3f3f/llm-judge/20260915T012325Z_86dc103932ff4bec8bef01b18f08d5c0/trial_1.json",
+      "sha256": "169ea1395ed2523681c1a297d740c66fbdd03cde487c5bdc066d9a18443a8d2a",
+      "bytes": 29255
+    },
+    {
+      "path": "prompt-improvement/airline-41/baseline/judge/trial_2.json",
+      "source": "artifacts/evaluations/2026-09-14_09-19-22_KST_6a9c3f3f/llm-judge/20260915T012325Z_86dc103932ff4bec8bef01b18f08d5c0/trial_2.json",
+      "sha256": "d722a7e3b40159633a6ed5bf84688d58cf4adc132edab50d68a1ca0a3b88724e",
+      "bytes": 33208
+    },
+    {
+      "path": "prompt-improvement/airline-41/prompt/results.json",
+      "source": "artifacts/evaluations/2026-09-14_15-09-24_KST_37c6c3a1/results.json",
+      "sha256": "208731193ed92d3dd7519d81963eb7a32da16f8c02e77d61bd9cfe51d63b74ef",
+      "bytes": 366058
+    },
+    {
+      "path": "prompt-improvement/airline-41/prompt/metadata.toml",
+      "source": "artifacts/evaluations/2026-09-14_15-09-24_KST_37c6c3a1/metadata.toml",
+      "sha256": "34ff9dad1c85eaebb35bdc9d6926add84d0c577c4c97b14ce41aaf6af3f1ab22",
+      "bytes": 1284
+    },
+    {
+      "path": "prompt-improvement/airline-41/prompt/judge/manifest.json",
+      "source": "artifacts/evaluations/2026-09-14_15-09-24_KST_37c6c3a1/llm-judge/20260915T015541Z_6ddea4ea85a044aaa783edcada0fce77/manifest.json",
+      "sha256": "c9915f99a37bba2495822a4e9251f1d6a3d35628c6917a3a5ec050a9e1436aec",
+      "bytes": 1397
+    },
+    {
+      "path": "prompt-improvement/airline-41/prompt/judge/criteria.json",
+      "source": "artifacts/evaluations/2026-09-14_15-09-24_KST_37c6c3a1/llm-judge/20260915T015541Z_6ddea4ea85a044aaa783edcada0fce77/criteria.json",
+      "sha256": "73adf019c81d0e92b013b1efde6bce6bfbe229dd2a8578a96e17c164baaf661c",
+      "bytes": 4667
+    },
+    {
+      "path": "prompt-improvement/airline-41/prompt/judge/completion.json",
+      "source": "artifacts/evaluations/2026-09-14_15-09-24_KST_37c6c3a1/llm-judge/20260915T015541Z_6ddea4ea85a044aaa783edcada0fce77/completion.json",
+      "sha256": "798971fe57ff4c52806f183af378f739e3d12ef5cf5a02b01227d0e1bdb65615",
+      "bytes": 174
+    },
+    {
+      "path": "prompt-improvement/airline-41/prompt/judge/judge.md",
+      "source": "artifacts/evaluations/2026-09-14_15-09-24_KST_37c6c3a1/llm-judge/20260915T015541Z_6ddea4ea85a044aaa783edcada0fce77/judge.md",
+      "sha256": "3a3b6ebb42c3ecd3510d5ba585bb6635a8b4b7222569b5080839c2c88c4a3bd8",
+      "bytes": 3450
+    },
+    {
+      "path": "prompt-improvement/airline-41/prompt/judge/schema.json",
+      "source": "artifacts/evaluations/2026-09-14_15-09-24_KST_37c6c3a1/llm-judge/20260915T015541Z_6ddea4ea85a044aaa783edcada0fce77/schema.json",
+      "sha256": "01cc5634d34306b6e58ab6c8b749347b654d141b08b0831e5a17d7b4d4aaa61d",
+      "bytes": 3784
+    },
+    {
+      "path": "prompt-improvement/airline-41/prompt/judge/trial_0.json",
+      "source": "artifacts/evaluations/2026-09-14_15-09-24_KST_37c6c3a1/llm-judge/20260915T015541Z_6ddea4ea85a044aaa783edcada0fce77/trial_0.json",
+      "sha256": "edcda21c0201c279d815014862a2fca593bc0b2436c7d7e1e7424279fa2cf1f3",
+      "bytes": 29492
+    },
+    {
+      "path": "prompt-improvement/airline-41/prompt/judge/trial_1.json",
+      "source": "artifacts/evaluations/2026-09-14_15-09-24_KST_37c6c3a1/llm-judge/20260915T015541Z_6ddea4ea85a044aaa783edcada0fce77/trial_1.json",
+      "sha256": "785dfe10e9a92c3497798a8859dcf6bf83c36302389873ae6d21678400917f48",
+      "bytes": 34532
+    },
+    {
+      "path": "prompt-improvement/airline-41/prompt/judge/trial_2.json",
+      "source": "artifacts/evaluations/2026-09-14_15-09-24_KST_37c6c3a1/llm-judge/20260915T015541Z_6ddea4ea85a044aaa783edcada0fce77/trial_2.json",
+      "sha256": "7edd80fa5b4e8fd808001981a60f62dadce50c4df6b54148ad437c65e3cdfa8a",
+      "bytes": 36999
+    },
+    {
+      "path": "prompt-improvement/airline-22/baseline/results.json",
+      "source": "artifacts/evaluations/2026-09-14_10-29-21_KST_7ea1bbde/results.json",
+      "sha256": "6f6f61fe181bf911a18c026748f59328516c3c408f31db36e37f2f52c8477443",
+      "bytes": 491332
+    },
+    {
+      "path": "prompt-improvement/airline-22/baseline/metadata.toml",
+      "source": "artifacts/evaluations/2026-09-14_10-29-21_KST_7ea1bbde/metadata.toml",
+      "sha256": "6047c958f019901a16c058a950d69ec91a6058116599864048d417e92e7ac8e9",
+      "bytes": 964
+    },
+    {
+      "path": "prompt-improvement/airline-22/baseline/judge/manifest.json",
+      "source": "artifacts/evaluations/2026-09-14_10-29-21_KST_7ea1bbde/llm-judge/20260915T020830Z_2053e74d38894c7ba2f1dfd037d4ee42/manifest.json",
+      "sha256": "8c96d53cb6535964b719e4db2a63361af76ae22c084a8b59f9150ef956ec2003",
+      "bytes": 1397
+    },
+    {
+      "path": "prompt-improvement/airline-22/baseline/judge/criteria.json",
+      "source": "artifacts/evaluations/2026-09-14_10-29-21_KST_7ea1bbde/llm-judge/20260915T020830Z_2053e74d38894c7ba2f1dfd037d4ee42/criteria.json",
+      "sha256": "73adf019c81d0e92b013b1efde6bce6bfbe229dd2a8578a96e17c164baaf661c",
+      "bytes": 4667
+    },
+    {
+      "path": "prompt-improvement/airline-22/baseline/judge/completion.json",
+      "source": "artifacts/evaluations/2026-09-14_10-29-21_KST_7ea1bbde/llm-judge/20260915T020830Z_2053e74d38894c7ba2f1dfd037d4ee42/completion.json",
+      "sha256": "894bc177cebc72c70a0ecabdf866b0ab0edbf507a4fe3743b8dc6eb74f0fff22",
+      "bytes": 174
+    },
+    {
+      "path": "prompt-improvement/airline-22/baseline/judge/judge.md",
+      "source": "artifacts/evaluations/2026-09-14_10-29-21_KST_7ea1bbde/llm-judge/20260915T020830Z_2053e74d38894c7ba2f1dfd037d4ee42/judge.md",
+      "sha256": "3a3b6ebb42c3ecd3510d5ba585bb6635a8b4b7222569b5080839c2c88c4a3bd8",
+      "bytes": 3450
+    },
+    {
+      "path": "prompt-improvement/airline-22/baseline/judge/schema.json",
+      "source": "artifacts/evaluations/2026-09-14_10-29-21_KST_7ea1bbde/llm-judge/20260915T020830Z_2053e74d38894c7ba2f1dfd037d4ee42/schema.json",
+      "sha256": "01cc5634d34306b6e58ab6c8b749347b654d141b08b0831e5a17d7b4d4aaa61d",
+      "bytes": 3784
+    },
+    {
+      "path": "prompt-improvement/airline-22/baseline/judge/trial_0.json",
+      "source": "artifacts/evaluations/2026-09-14_10-29-21_KST_7ea1bbde/llm-judge/20260915T020830Z_2053e74d38894c7ba2f1dfd037d4ee42/trial_0.json",
+      "sha256": "3304ad865a0db217419fbfedef3629aae1e3ea11a81e460472f2c7079fc30a33",
+      "bytes": 39248
+    },
+    {
+      "path": "prompt-improvement/airline-22/baseline/judge/trial_1.json",
+      "source": "artifacts/evaluations/2026-09-14_10-29-21_KST_7ea1bbde/llm-judge/20260915T020830Z_2053e74d38894c7ba2f1dfd037d4ee42/trial_1.json",
+      "sha256": "9af9176a499aa39f9f513b1c63c4a68a9c15a7e9629076faeb6180c20a85bd16",
+      "bytes": 34565
+    },
+    {
+      "path": "prompt-improvement/airline-22/baseline/judge/trial_2.json",
+      "source": "artifacts/evaluations/2026-09-14_10-29-21_KST_7ea1bbde/llm-judge/20260915T020830Z_2053e74d38894c7ba2f1dfd037d4ee42/trial_2.json",
+      "sha256": "296c6935ffeb21de482f07a876b1a9d71e77c366406318ef833568bd8b3c7a6e",
+      "bytes": 37908
+    },
+    {
+      "path": "prompt-improvement/airline-22/prompt/results.json",
+      "source": "artifacts/evaluations/2026-09-14_16-15-53_KST_73adb253/results.json",
+      "sha256": "c25320d90df1cfd63646a970da3e8c2fe1156bde7ba522b35734d28906126f10",
+      "bytes": 495612
+    },
+    {
+      "path": "prompt-improvement/airline-22/prompt/metadata.toml",
+      "source": "artifacts/evaluations/2026-09-14_16-15-53_KST_73adb253/metadata.toml",
+      "sha256": "cf7ffc13d82b407bd7d92a65db1f62c131b298e40597b477b87dbe6869c1f88c",
+      "bytes": 1298
+    },
+    {
+      "path": "prompt-improvement/airline-22/prompt/judge/manifest.json",
+      "source": "artifacts/evaluations/2026-09-14_16-15-53_KST_73adb253/llm-judge/20260915T022025Z_5c6a0af32275495f9b6ae10dcef4b299/manifest.json",
+      "sha256": "e26c047af21143f4d25b09d1ab0abac0fca21ef9ed7e6cf1bc4cbd992ef932e0",
+      "bytes": 1397
+    },
+    {
+      "path": "prompt-improvement/airline-22/prompt/judge/criteria.json",
+      "source": "artifacts/evaluations/2026-09-14_16-15-53_KST_73adb253/llm-judge/20260915T022025Z_5c6a0af32275495f9b6ae10dcef4b299/criteria.json",
+      "sha256": "73adf019c81d0e92b013b1efde6bce6bfbe229dd2a8578a96e17c164baaf661c",
+      "bytes": 4667
+    },
+    {
+      "path": "prompt-improvement/airline-22/prompt/judge/completion.json",
+      "source": "artifacts/evaluations/2026-09-14_16-15-53_KST_73adb253/llm-judge/20260915T022025Z_5c6a0af32275495f9b6ae10dcef4b299/completion.json",
+      "sha256": "fceb0850a45dc8ab5f6eb04d2b5076c42e414462262a2d076802e06642cbf890",
+      "bytes": 174
+    },
+    {
+      "path": "prompt-improvement/airline-22/prompt/judge/judge.md",
+      "source": "artifacts/evaluations/2026-09-14_16-15-53_KST_73adb253/llm-judge/20260915T022025Z_5c6a0af32275495f9b6ae10dcef4b299/judge.md",
+      "sha256": "3a3b6ebb42c3ecd3510d5ba585bb6635a8b4b7222569b5080839c2c88c4a3bd8",
+      "bytes": 3450
+    },
+    {
+      "path": "prompt-improvement/airline-22/prompt/judge/schema.json",
+      "source": "artifacts/evaluations/2026-09-14_16-15-53_KST_73adb253/llm-judge/20260915T022025Z_5c6a0af32275495f9b6ae10dcef4b299/schema.json",
+      "sha256": "01cc5634d34306b6e58ab6c8b749347b654d141b08b0831e5a17d7b4d4aaa61d",
+      "bytes": 3784
+    },
+    {
+      "path": "prompt-improvement/airline-22/prompt/judge/trial_0.json",
+      "source": "artifacts/evaluations/2026-09-14_16-15-53_KST_73adb253/llm-judge/20260915T022025Z_5c6a0af32275495f9b6ae10dcef4b299/trial_0.json",
+      "sha256": "616ae1de4bf76656dcf53f2511b313c7d46c3c94b93be9edcff363f904f223e8",
+      "bytes": 45805
+    },
+    {
+      "path": "prompt-improvement/airline-22/prompt/judge/trial_1.json",
+      "source": "artifacts/evaluations/2026-09-14_16-15-53_KST_73adb253/llm-judge/20260915T022025Z_5c6a0af32275495f9b6ae10dcef4b299/trial_1.json",
+      "sha256": "c72d9974031609cb33e8a6aa9f4a6be8d56baca5e92c7d4e0fed686f4be50d00",
+      "bytes": 45834
+    },
+    {
+      "path": "prompt-improvement/airline-22/prompt/judge/trial_2.json",
+      "source": "artifacts/evaluations/2026-09-14_16-15-53_KST_73adb253/llm-judge/20260915T022025Z_5c6a0af32275495f9b6ae10dcef4b299/trial_2.json",
+      "sha256": "b31dee7d164c7083ca58c9ba12557f887919a46efdf5aa5e4992cd75ff8ec823",
+      "bytes": 23182
+    },
+    {
+      "path": "prompt-improvement/retail-0/baseline/results.json",
+      "source": "artifacts/evaluations/2026-09-14_11-34-46_KST_c0605556/results.json",
+      "sha256": "622622bb6bb508ad5160898265d0a209a19d67e4487edae97ddebb4a2432a8f5",
+      "bytes": 296364
+    },
+    {
+      "path": "prompt-improvement/retail-0/baseline/metadata.toml",
+      "source": "artifacts/evaluations/2026-09-14_11-34-46_KST_c0605556/metadata.toml",
+      "sha256": "2b9620a2bf477daa73b2f675dd76aaf74f586d21b28ad569efeac50110715894",
+      "bytes": 953
+    },
+    {
+      "path": "prompt-improvement/retail-0/baseline/judge/manifest.json",
+      "source": "artifacts/evaluations/2026-09-14_11-34-46_KST_c0605556/llm-judge/20260915T032708Z_46dae452fc964869a41287ab8f5a4757/manifest.json",
+      "sha256": "f3f9d3c0ca868e21c48f2246b7e47815db70c4ecc28dcce10309234d05421533",
+      "bytes": 1397
+    },
+    {
+      "path": "prompt-improvement/retail-0/baseline/judge/criteria.json",
+      "source": "artifacts/evaluations/2026-09-14_11-34-46_KST_c0605556/llm-judge/20260915T032708Z_46dae452fc964869a41287ab8f5a4757/criteria.json",
+      "sha256": "62f906495bd4a33b9cfdba937cc583eb14ba9a3d7c6088bed43cda75da2c03da",
+      "bytes": 4792
+    },
+    {
+      "path": "prompt-improvement/retail-0/baseline/judge/completion.json",
+      "source": "artifacts/evaluations/2026-09-14_11-34-46_KST_c0605556/llm-judge/20260915T032708Z_46dae452fc964869a41287ab8f5a4757/completion.json",
+      "sha256": "9e8fe602b4ac4e113ff58dec0c2865c4cbf59ec62880b46273be1a79f87ac70c",
+      "bytes": 174
+    },
+    {
+      "path": "prompt-improvement/retail-0/baseline/judge/judge.md",
+      "source": "artifacts/evaluations/2026-09-14_11-34-46_KST_c0605556/llm-judge/20260915T032708Z_46dae452fc964869a41287ab8f5a4757/judge.md",
+      "sha256": "3a3b6ebb42c3ecd3510d5ba585bb6635a8b4b7222569b5080839c2c88c4a3bd8",
+      "bytes": 3450
+    },
+    {
+      "path": "prompt-improvement/retail-0/baseline/judge/schema.json",
+      "source": "artifacts/evaluations/2026-09-14_11-34-46_KST_c0605556/llm-judge/20260915T032708Z_46dae452fc964869a41287ab8f5a4757/schema.json",
+      "sha256": "01cc5634d34306b6e58ab6c8b749347b654d141b08b0831e5a17d7b4d4aaa61d",
+      "bytes": 3784
+    },
+    {
+      "path": "prompt-improvement/retail-0/baseline/judge/trial_0.json",
+      "source": "artifacts/evaluations/2026-09-14_11-34-46_KST_c0605556/llm-judge/20260915T032708Z_46dae452fc964869a41287ab8f5a4757/trial_0.json",
+      "sha256": "16f5ac658e552241eef67ebc93e03e6fa0c0fdd419506d752a21cda9ce587a1c",
+      "bytes": 40880
+    },
+    {
+      "path": "prompt-improvement/retail-0/baseline/judge/trial_1.json",
+      "source": "artifacts/evaluations/2026-09-14_11-34-46_KST_c0605556/llm-judge/20260915T032708Z_46dae452fc964869a41287ab8f5a4757/trial_1.json",
+      "sha256": "99664f0e4fa5ffd71418da6972848fecdf851a95eea4ea5c043c94e8cb08447d",
+      "bytes": 32293
+    },
+    {
+      "path": "prompt-improvement/retail-0/baseline/judge/trial_2.json",
+      "source": "artifacts/evaluations/2026-09-14_11-34-46_KST_c0605556/llm-judge/20260915T032708Z_46dae452fc964869a41287ab8f5a4757/trial_2.json",
+      "sha256": "d3e295aebba01ecf7061ff0f5d30f2097ea7b8865e5ae34426f45bfe653284e5",
+      "bytes": 45046
+    },
+    {
+      "path": "prompt-improvement/retail-0/prompt/results.json",
+      "source": "artifacts/evaluations/2026-09-14_16-35-31_KST_4b5b1ea5/results.json",
+      "sha256": "db5fe2799088d408af6cdf04335e3607f3de656d3689c99a7bcc4a11e37eb110",
+      "bytes": 353970
+    },
+    {
+      "path": "prompt-improvement/retail-0/prompt/metadata.toml",
+      "source": "artifacts/evaluations/2026-09-14_16-35-31_KST_4b5b1ea5/metadata.toml",
+      "sha256": "f636081075e10577eb40517662b756ba760f5519127bae4a02bf0a29fa152ac1",
+      "bytes": 1287
+    },
+    {
+      "path": "prompt-improvement/retail-0/prompt/judge/manifest.json",
+      "source": "artifacts/evaluations/2026-09-14_16-35-31_KST_4b5b1ea5/llm-judge/20260915T034353Z_4603c0b9b08a4a0389b0554d384762ca/manifest.json",
+      "sha256": "f7a91bda901cc32434ed75f1e211a16761bdaf11628f142b0c3a9f7f4b497c90",
+      "bytes": 1397
+    },
+    {
+      "path": "prompt-improvement/retail-0/prompt/judge/criteria.json",
+      "source": "artifacts/evaluations/2026-09-14_16-35-31_KST_4b5b1ea5/llm-judge/20260915T034353Z_4603c0b9b08a4a0389b0554d384762ca/criteria.json",
+      "sha256": "62f906495bd4a33b9cfdba937cc583eb14ba9a3d7c6088bed43cda75da2c03da",
+      "bytes": 4792
+    },
+    {
+      "path": "prompt-improvement/retail-0/prompt/judge/completion.json",
+      "source": "artifacts/evaluations/2026-09-14_16-35-31_KST_4b5b1ea5/llm-judge/20260915T034353Z_4603c0b9b08a4a0389b0554d384762ca/completion.json",
+      "sha256": "c5a576d927be622525d8e026654a87156ac93dbce6f8e03ba54c30376040a29f",
+      "bytes": 174
+    },
+    {
+      "path": "prompt-improvement/retail-0/prompt/judge/judge.md",
+      "source": "artifacts/evaluations/2026-09-14_16-35-31_KST_4b5b1ea5/llm-judge/20260915T034353Z_4603c0b9b08a4a0389b0554d384762ca/judge.md",
+      "sha256": "3a3b6ebb42c3ecd3510d5ba585bb6635a8b4b7222569b5080839c2c88c4a3bd8",
+      "bytes": 3450
+    },
+    {
+      "path": "prompt-improvement/retail-0/prompt/judge/schema.json",
+      "source": "artifacts/evaluations/2026-09-14_16-35-31_KST_4b5b1ea5/llm-judge/20260915T034353Z_4603c0b9b08a4a0389b0554d384762ca/schema.json",
+      "sha256": "01cc5634d34306b6e58ab6c8b749347b654d141b08b0831e5a17d7b4d4aaa61d",
+      "bytes": 3784
+    },
+    {
+      "path": "prompt-improvement/retail-0/prompt/judge/trial_0.json",
+      "source": "artifacts/evaluations/2026-09-14_16-35-31_KST_4b5b1ea5/llm-judge/20260915T034353Z_4603c0b9b08a4a0389b0554d384762ca/trial_0.json",
+      "sha256": "4bf51707d57570d34bd4a4ee513253346f2286bb6a82fdee497f28c1f69a6641",
+      "bytes": 33822
+    },
+    {
+      "path": "prompt-improvement/retail-0/prompt/judge/trial_1.json",
+      "source": "artifacts/evaluations/2026-09-14_16-35-31_KST_4b5b1ea5/llm-judge/20260915T034353Z_4603c0b9b08a4a0389b0554d384762ca/trial_1.json",
+      "sha256": "7183b4c23e4e36f5c3f14878c6813d7f053cd9640d71acc5f88545bdf0ba40f4",
+      "bytes": 45248
+    },
+    {
+      "path": "prompt-improvement/retail-0/prompt/judge/trial_2.json",
+      "source": "artifacts/evaluations/2026-09-14_16-35-31_KST_4b5b1ea5/llm-judge/20260915T034353Z_4603c0b9b08a4a0389b0554d384762ca/trial_2.json",
+      "sha256": "e9f4dff87d8e3c5af99ae99c92b1f97c7ce3082359e1e33fc1ba2dcc0a1e454f",
+      "bytes": 40981
+    },
+    {
+      "path": "reflection/airline-42/results.json",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/results.json",
+      "sha256": "a1e22def796f6ff4fa6b31127646398980432881347b81c526d38d1358130cfe",
+      "bytes": 185211
+    },
+    {
+      "path": "reflection/airline-42/metadata.toml",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/metadata.toml",
+      "sha256": "d33c86c718e64b6d53a661861b33983e55d56c9084e7397468dfcd403415854b",
+      "bytes": 1333
+    },
+    {
+      "path": "reflection/airline-42/judge/manifest.json",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/llm-judge/20260916T012222Z_cee9429af5314e59bdb9da89d322a9dd/manifest.json",
+      "sha256": "2905b915998125c501701c610a6467fd743018df688ef449db8ed5a751968854",
+      "bytes": 1021
+    },
+    {
+      "path": "reflection/airline-42/judge/criteria.json",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/llm-judge/20260916T012222Z_cee9429af5314e59bdb9da89d322a9dd/criteria.json",
+      "sha256": "62f906495bd4a33b9cfdba937cc583eb14ba9a3d7c6088bed43cda75da2c03da",
+      "bytes": 4792
+    },
+    {
+      "path": "reflection/airline-42/judge/completion.json",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/llm-judge/20260916T012222Z_cee9429af5314e59bdb9da89d322a9dd/completion.json",
+      "sha256": "b1a9001ea3069a02390123e912b7399c05c3b5efa976c47a44ec940f16375e60",
+      "bytes": 128
+    },
+    {
+      "path": "reflection/airline-42/judge/judge.md",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/llm-judge/20260916T012222Z_cee9429af5314e59bdb9da89d322a9dd/judge.md",
+      "sha256": "3a3b6ebb42c3ecd3510d5ba585bb6635a8b4b7222569b5080839c2c88c4a3bd8",
+      "bytes": 3450
+    },
+    {
+      "path": "reflection/airline-42/judge/schema.json",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/llm-judge/20260916T012222Z_cee9429af5314e59bdb9da89d322a9dd/schema.json",
+      "sha256": "01cc5634d34306b6e58ab6c8b749347b654d141b08b0831e5a17d7b4d4aaa61d",
+      "bytes": 3784
+    },
+    {
+      "path": "reflection/airline-42/judge/trial_0.json",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/llm-judge/20260916T012222Z_cee9429af5314e59bdb9da89d322a9dd/trial_0.json",
+      "sha256": "aaae448d13019f0555e868a04a34c003def2ffc2c2a41371261756ff9112ffa1",
+      "bytes": 55006
+    },
+    {
+      "path": "reflection/airline-42/prompt-snapshot.json",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/prompt-snapshot.json",
+      "sha256": "bf6b6478eda96b91498005137a1ed9d74465e439fb5daf5a0d834129bb700d3e",
+      "bytes": 7299
+    },
+    {
+      "path": "reflection/airline-42/stop-record.json",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/stop-record.json",
+      "sha256": "5a4452874a0a6f745f07c869ceaff7583accc1cca18be6a840e42fe9f4a2b076",
+      "bytes": 510
+    },
+    {
+      "path": "reflection/airline-42/reflection/index.json",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/reflection/index.json",
+      "sha256": "302152e7f95fb6db88b42c74a917f0627b7453ab31110e65b46a21cff472ce57",
+      "bytes": 9114
+    },
+    {
+      "path": "reflection/airline-42/reflection/00c390aca9324dd0a0434abe07b91f59.jsonl",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/reflection/00c390aca9324dd0a0434abe07b91f59.jsonl",
+      "sha256": "286be798d32047dd2e643137fd36a1d996afa92a241c1340b6a6128925579199",
+      "bytes": 5966
+    },
+    {
+      "path": "reflection/airline-42/reflection/08fa01835b9748d0a00fb0291c0a3400.jsonl",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/reflection/08fa01835b9748d0a00fb0291c0a3400.jsonl",
+      "sha256": "8eea41e90be4603c609258f7140946dee32b82d790806a821557bc8d14a79a92",
+      "bytes": 2064
+    },
+    {
+      "path": "reflection/airline-42/reflection/1292237a96fe415e8f78093e0a581e48.jsonl",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/reflection/1292237a96fe415e8f78093e0a581e48.jsonl",
+      "sha256": "a81c28f12846e61d3635e3212656aae2156101e5cfa9614910721b19b65c49ce",
+      "bytes": 4514
+    },
+    {
+      "path": "reflection/airline-42/reflection/21abcf8ea80d497c8a8cdb92f6306301.jsonl",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/reflection/21abcf8ea80d497c8a8cdb92f6306301.jsonl",
+      "sha256": "df07f5f79ee03261036677edb1040fdf49283964c23f4d64f0c5a0a57d1f3ed0",
+      "bytes": 2268
+    },
+    {
+      "path": "reflection/airline-42/reflection/2377308d897242db9cc1a34a644d612b.jsonl",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/reflection/2377308d897242db9cc1a34a644d612b.jsonl",
+      "sha256": "b8e7485d74459a7f2ae092c107a8e1c16889ac3f58a77ddac3ce846bfe32454a",
+      "bytes": 2273
+    },
+    {
+      "path": "reflection/airline-42/reflection/2560b2391af24fba9c65d5cadcc56ce4.jsonl",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/reflection/2560b2391af24fba9c65d5cadcc56ce4.jsonl",
+      "sha256": "0b3df6459f8750cd3d6c19d53824ec3952b11b8e7ea20d50d986949de984a872",
+      "bytes": 2281
+    },
+    {
+      "path": "reflection/airline-42/reflection/3d54cfb764634bbcb8780a2b2937112f.jsonl",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/reflection/3d54cfb764634bbcb8780a2b2937112f.jsonl",
+      "sha256": "c211527f5bfe40c2120717b209c1681b3c086436dc6a573b390fe87eb1d0b862",
+      "bytes": 2265
+    },
+    {
+      "path": "reflection/airline-42/reflection/4be5ea460c3340ff935ec6d124dd3ded.jsonl",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/reflection/4be5ea460c3340ff935ec6d124dd3ded.jsonl",
+      "sha256": "ec094f1a00b290d9b579f03b27ed28500935a6793f5710af4261f0af24e93786",
+      "bytes": 7071
+    },
+    {
+      "path": "reflection/airline-42/reflection/50e5b771c3224e4d9357f6bcd2ab44f3.jsonl",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/reflection/50e5b771c3224e4d9357f6bcd2ab44f3.jsonl",
+      "sha256": "c25edea625df3cfe292137d50cf3c2866c3304d8866f2ee594006f74c5c75b1d",
+      "bytes": 2268
+    },
+    {
+      "path": "reflection/airline-42/reflection/6a6ce8b8ce8a4bfbb9a76c88aace65dd.jsonl",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/reflection/6a6ce8b8ce8a4bfbb9a76c88aace65dd.jsonl",
+      "sha256": "eb7f19098d2a9cde1c6d47738aa3874df46acd886df8b8ca8759003ea874fd23",
+      "bytes": 6078
+    },
+    {
+      "path": "reflection/airline-42/reflection/88a31916cfba4d10ae3a41e40229b4a5.jsonl",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/reflection/88a31916cfba4d10ae3a41e40229b4a5.jsonl",
+      "sha256": "ab974b66c2330d2d16af1bd76f6a3408cf0fa77d4ec8770577f831e6a23dd902",
+      "bytes": 2265
+    },
+    {
+      "path": "reflection/airline-42/reflection/ac6777158be74750bb97357488520eef.jsonl",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/reflection/ac6777158be74750bb97357488520eef.jsonl",
+      "sha256": "91c930ad6ba096b7f836ef7001802698a26fbb61b0edf73002a72de1cf607162",
+      "bytes": 2268
+    },
+    {
+      "path": "reflection/airline-42/reflection/b015d1fa5849489b89d5212878ff64bb.jsonl",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/reflection/b015d1fa5849489b89d5212878ff64bb.jsonl",
+      "sha256": "9cd397a9018c9dedcb26b8fe7893e85b01553c47e2759b833ab4982bc44bdcb3",
+      "bytes": 2149
+    },
+    {
+      "path": "reflection/airline-42/reflection/baa660b191c44f5bbb74a94ba67c47da.jsonl",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/reflection/baa660b191c44f5bbb74a94ba67c47da.jsonl",
+      "sha256": "67a206dd70e49df812aaf435a67b24d49aec2ec259ae6d02861b83d0a7f9cb64",
+      "bytes": 2286
+    },
+    {
+      "path": "reflection/airline-42/reflection/cd80fe09498d48ef98685886a845eee9.jsonl",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/reflection/cd80fe09498d48ef98685886a845eee9.jsonl",
+      "sha256": "77c9a75ec8207796a1814537b6ca37f852eb8496dc0ba85a703c34be6c9abc74",
+      "bytes": 2609
+    },
+    {
+      "path": "reflection/airline-42/reflection/d21d975b8df14804a325f56a0d482581.jsonl",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/reflection/d21d975b8df14804a325f56a0d482581.jsonl",
+      "sha256": "7dbb5d10fd4fdf59e14e974a8d6b2ee448bdcba91cd50478151403e7ce26e0a6",
+      "bytes": 2264
+    },
+    {
+      "path": "reflection/airline-42/reflection/e6c8d048f09c47afaa44af582ad3ee5e.jsonl",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/reflection/e6c8d048f09c47afaa44af582ad3ee5e.jsonl",
+      "sha256": "b0281b90b6bba6f66f2d2f1d6c2eb31620f1a64af2e286b30e7b2214ef3d666c",
+      "bytes": 2578
+    },
+    {
+      "path": "reflection/airline-42/reflection/fefa78ac276f414bb570a38c6c471dac.jsonl",
+      "source": "artifacts/evaluations/2026-09-16_09-37-44_KST_b088b938/reflection/fefa78ac276f414bb570a38c6c471dac.jsonl",
+      "sha256": "46dbfa5cb1d6330e2d572f804fdd711ed09aeb8f0d0e7771e153cefb4df0f9a5",
+      "bytes": 2286
+    }
+  ]
+}

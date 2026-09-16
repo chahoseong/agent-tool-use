@@ -1,0 +1,39 @@
+[run]
+started_at = 2026-09-14 11:34:46.719220+09:00
+config_path = "C:\\Users\\chahoseong\\projects\\agent-tool-use\\configs\\retail.toml"
+directory = "C:\\Users\\chahoseong\\projects\\agent-tool-use\\artifacts\\evaluations\\2026-09-14_11-34-46_KST_c0605556"
+
+[evaluation]
+domain = "retail"
+task_ids = [
+    "0",
+]
+seed = 42
+max_steps = 200
+max_errors = 10
+num_trials = 3
+max_concurrency = 1
+
+[agent]
+model = "google/gemma-4-12B-it-qat-q4_0-gguf:Q4_0"
+base_url = "http://100.80.184.89:8080/v1"
+
+[agent.generation]
+
+[user]
+model = "google/gemma-4-12B-it-qat-q4_0-gguf:Q4_0"
+base_url = "http://100.80.184.89:8080/v1"
+
+[user.generation]
+
+[output]
+directory = "C:\\Users\\chahoseong\\projects\\agent-tool-use\\artifacts\\evaluations"
+
+[prompts]
+agent = "You are a helpful customer service agent.\n\nFollow the policy strictly. Use the provided tools to help the user."
+
+[project]
+commit = "80168d861bee680ec2d15620fc28fcbe78ce2241"
+
+[tau2]
+version = "1.0.1"

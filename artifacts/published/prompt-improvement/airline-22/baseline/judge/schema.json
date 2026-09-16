@@ -1,0 +1,178 @@
+{
+  "$defs": {
+    "Assessment": {
+      "additionalProperties": false,
+      "properties": {
+        "criterion_id": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Criterion Id",
+          "type": "string"
+        },
+        "verdict": {
+          "enum": [
+            "pass",
+            "fail",
+            "unknown",
+            "-"
+          ],
+          "title": "Verdict",
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Reason",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "evidence_limit": {
+          "title": "Evidence Limit",
+          "type": "string"
+        }
+      },
+      "required": [
+        "criterion_id",
+        "verdict",
+        "reason",
+        "evidence",
+        "evidence_limit"
+      ],
+      "title": "Assessment",
+      "type": "object"
+    },
+    "Attempt": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "execution",
+            "review"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "detail": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Detail",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "detail"
+      ],
+      "title": "Attempt",
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "message_index": {
+          "minimum": 0,
+          "title": "Message Index",
+          "type": "integer"
+        },
+        "field": {
+          "enum": [
+            "content",
+            "tool_calls"
+          ],
+          "title": "Field",
+          "type": "string"
+        },
+        "excerpt": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Excerpt",
+          "type": "string"
+        }
+      },
+      "required": [
+        "message_index",
+        "field",
+        "excerpt"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "Review": {
+      "additionalProperties": false,
+      "properties": {
+        "verified": {
+          "title": "Verified",
+          "type": "boolean"
+        },
+        "notes": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Notes",
+          "type": "string"
+        }
+      },
+      "required": [
+        "verified",
+        "notes"
+      ],
+      "title": "Review",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "trial": {
+      "minimum": 0,
+      "title": "Trial",
+      "type": "integer"
+    },
+    "simulation_id": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Simulation Id",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "completed",
+        "evaluation_failed",
+        "review_required"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "assessments": {
+      "items": {
+        "$ref": "#/$defs/Assessment"
+      },
+      "title": "Assessments",
+      "type": "array"
+    },
+    "attempts": {
+      "items": {
+        "$ref": "#/$defs/Attempt"
+      },
+      "title": "Attempts",
+      "type": "array"
+    },
+    "review": {
+      "$ref": "#/$defs/Review"
+    }
+  },
+  "required": [
+    "trial",
+    "simulation_id",
+    "status",
+    "assessments",
+    "attempts",
+    "review"
+  ],
+  "title": "Judgment",
+  "type": "object"
+}

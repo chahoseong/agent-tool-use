@@ -1,0 +1,369 @@
+{
+  "trial": 0,
+  "simulation_id": "5d3bef09-b78b-4e8c-9afa-a0cb8f7c1d4e",
+  "status": "completed",
+  "assessments": [
+    {
+      "criterion_id": "retrieval",
+      "verdict": "pass",
+      "reason": "사용자가 제공한 user_id로 프로필을 조회하여 본인 이름·생년월일(1970-06-06), gold 등급과 gift card 잔액을 실제 확인했다. 네 예약을 조회해 FQ8APE를 찾아 사용자에게 선택받았고, 기존 HAT056/HAT138의 날짜·basic_economy·승객 Ivan Garcia·기존 운임 71+60·수하물 0개를 확인했다. 검색 반환에서 동일 두 항공편의 available 상태, economy 잔여 좌석과 가격 155/185를 확인해 필요한 판단 정보가 갖춰졌다. 검색 증거는 해당 두 항공편 조합의 발췌다.",
+      "evidence": [
+        {
+          "message_index": 3,
+          "field": "content",
+          "excerpt": "My user ID is omar_rossi_1241. I'm not sure what the reservation ID is."
+        },
+        {
+          "message_index": 5,
+          "field": "content",
+          "excerpt": "{\"user_id\": \"omar_rossi_1241\", \"name\": {\"first_name\": \"Omar\", \"last_name\": \"Rossi\"}, \"address\": {\"address1\": \"901 Pine Lane\", \"address2\": \"Suite 360\", \"city\": \"Houston\", \"country\": \"USA\", \"state\": \"TX\", \"zip\": \"77271\"}, \"email\": \"omar.rossi5980@example.com\", \"dob\": \"1970-06-06\", \"payment_methods\": {\"gift_card_8190333\": {\"source\": \"gift_card\", \"id\": \"gift_card_8190333\", \"amount\": 280.0}, \"credit_card_6754990\": {\"source\": \"credit_card\", \"id\": \"credit_card_6754990\", \"brand\": \"mastercard\", \"last_four\": \"3848\"}, \"certificate_8390038\": {\"source\": \"certificate\", \"id\": \"certificate_8390038\", \"amount\": 150.0}, \"certificate_1778167\": {\"source\": \"certificate\", \"id\": \"certificate_1778167\", \"amount\": 250.0}, \"gift_card_6490722\": {\"source\": \"gift_card\", \"id\": \"gift_card_6490722\", \"amount\": 127.0}, \"credit_card_7407366\": {\"source\": \"credit_card\", \"id\": \"credit_card_7407366\", \"brand\": \"visa\", \"last_four\": \"6437\"}}, \"saved_passengers\": [{\"first_name\": \"Liam\", \"last_name\": \"Lee\", \"dob\": \"1989-08-12\"}], \"membership\": \"gold\", \"reservations\": [\"UM3OG5\", \"5RJ7UH\", \"FQ8APE\", \"QKRY03\"]}"
+        },
+        {
+          "message_index": 13,
+          "field": "content",
+          "excerpt": "{\"reservation_id\": \"FQ8APE\", \"user_id\": \"omar_rossi_1241\", \"origin\": \"EWR\", \"destination\": \"ORD\", \"flight_type\": \"one_way\", \"cabin\": \"basic_economy\", \"flights\": [{\"flight_number\": \"HAT056\", \"origin\": \"EWR\", \"destination\": \"IAH\", \"date\": \"2024-05-25\", \"price\": 71}, {\"flight_number\": \"HAT138\", \"origin\": \"IAH\", \"destination\": \"ORD\", \"date\": \"2024-05-25\", \"price\": 60}], \"passengers\": [{\"first_name\": \"Ivan\", \"last_name\": \"Garcia\", \"dob\": \"1960-12-01\"}], \"payment_history\": [{\"payment_id\": \"gift_card_8190333\", \"amount\": 161}], \"created_at\": \"2024-05-01T16:18:10\", \"total_baggages\": 0, \"nonfree_baggages\": 0, \"insurance\": \"yes\", \"status\": null}"
+        },
+        {
+          "message_index": 17,
+          "field": "content",
+          "excerpt": "That sounds like it could be the correct one. I'd like to make the changes to reservation FQ8APE."
+        },
+        {
+          "message_index": 21,
+          "field": "content",
+          "excerpt": "[{\"flight_number\": \"HAT056\", \"origin\": \"EWR\", \"destination\": \"IAH\", \"status\": \"available\", \"scheduled_departure_time_est\": \"06:00:00\", \"scheduled_arrival_time_est\": \"09:00:00\", \"date\": \"2024-05-25\", \"available_seats\": {\"basic_economy\": 10, \"economy\": 15, \"business\": 12}, \"prices\": {\"basic_economy\": 84, \"economy\": 155, \"business\": 320}}, {\"flight_number\": \"HAT138\", \"origin\": \"IAH\", \"destination\": \"ORD\", \"status\": \"available\", \"scheduled_departure_time_est\": \"11:00:00\", \"scheduled_arrival_time_est\": \"13:30:00\", \"date\": \"2024-05-25\", \"available_seats\": {\"basic_economy\": 1, \"economy\": 18, \"business\": 7}, \"prices\": {\"basic_economy\": 83, \"economy\": 185, \"business\": 473}}]"
+        }
+      ],
+      "evidence_limit": "검색 반환의 다른 항공편 조합은 생략했다. 정답 추측이나 사용자 동의만으로 조회를 인정하지 않았다."
+    },
+    {
+      "criterion_id": "proposals",
+      "verdict": "pass",
+      "reason": "조회 후 생성한 초기 계획과 최종 제안 모두 FQ8APE의 1명 승객을 Omar Rossi로 대체하고 기존 두 구간 전체를 economy로 올리며 수하물 총 3개를 무료로 설정하는 내용이다. 초기 계획은 차액 조회 중임을 밝혔고, 조회 뒤 340−131=209달러로 정확히 제안했다. gift card 선호를 들은 뒤 잔액 280달러인 등록된 gift_card_8190333 한 장을 선택했다. 구체적으로 틀린 변경 제안이나 정정은 없다. 메시지 20은 도구 호출과 함께 생성되어 사용자에게 전달된 안내로 세지 않고 생성된 계획으로만 평가했다.",
+      "evidence": [
+        {
+          "message_index": 13,
+          "field": "content",
+          "excerpt": "{\"reservation_id\": \"FQ8APE\", \"user_id\": \"omar_rossi_1241\", \"origin\": \"EWR\", \"destination\": \"ORD\", \"flight_type\": \"one_way\", \"cabin\": \"basic_economy\", \"flights\": [{\"flight_number\": \"HAT056\", \"origin\": \"EWR\", \"destination\": \"IAH\", \"date\": \"2024-05-25\", \"price\": 71}, {\"flight_number\": \"HAT138\", \"origin\": \"IAH\", \"destination\": \"ORD\", \"date\": \"2024-05-25\", \"price\": 60}], \"passengers\": [{\"first_name\": \"Ivan\", \"last_name\": \"Garcia\", \"dob\": \"1960-12-01\"}], \"payment_history\": [{\"payment_id\": \"gift_card_8190333\", \"amount\": 161}], \"created_at\": \"2024-05-01T16:18:10\", \"total_baggages\": 0, \"nonfree_baggages\": 0, \"insurance\": \"yes\", \"status\": null}"
+        },
+        {
+          "message_index": 5,
+          "field": "content",
+          "excerpt": "{\"user_id\": \"omar_rossi_1241\", \"name\": {\"first_name\": \"Omar\", \"last_name\": \"Rossi\"}, \"address\": {\"address1\": \"901 Pine Lane\", \"address2\": \"Suite 360\", \"city\": \"Houston\", \"country\": \"USA\", \"state\": \"TX\", \"zip\": \"77271\"}, \"email\": \"omar.rossi5980@example.com\", \"dob\": \"1970-06-06\", \"payment_methods\": {\"gift_card_8190333\": {\"source\": \"gift_card\", \"id\": \"gift_card_8190333\", \"amount\": 280.0}, \"credit_card_6754990\": {\"source\": \"credit_card\", \"id\": \"credit_card_6754990\", \"brand\": \"mastercard\", \"last_four\": \"3848\"}, \"certificate_8390038\": {\"source\": \"certificate\", \"id\": \"certificate_8390038\", \"amount\": 150.0}, \"certificate_1778167\": {\"source\": \"certificate\", \"id\": \"certificate_1778167\", \"amount\": 250.0}, \"gift_card_6490722\": {\"source\": \"gift_card\", \"id\": \"gift_card_6490722\", \"amount\": 127.0}, \"credit_card_7407366\": {\"source\": \"credit_card\", \"id\": \"credit_card_7407366\", \"brand\": \"visa\", \"last_four\": \"6437\"}}, \"saved_passengers\": [{\"first_name\": \"Liam\", \"last_name\": \"Lee\", \"dob\": \"1989-08-12\"}], \"membership\": \"gold\", \"reservations\": [\"UM3OG5\", \"5RJ7UH\", \"FQ8APE\", \"QKRY03\"]}"
+        },
+        {
+          "message_index": 19,
+          "field": "content",
+          "excerpt": "I'd like to change the passenger to myself, upgrade it to economy class, and have 3 checked bags."
+        },
+        {
+          "message_index": 20,
+          "field": "content",
+          "excerpt": "To update your reservation, I need to calculate the price difference for the cabin upgrade and confirm the details with you.\n\nHere is the information I have gathered:\n\n**Current Reservation (FQ8APE):**\n- **Route:** Newark (EWR) to Chicago (ORD) via Houston (IAH) on May 25, 2024.\n- **Trip Type:** One-way\n- **Current Cabin:** Basic Economy\n- **Original Price:** $131\n- **Current Passenger:** Ivan Garcia\n- **Current Baggage:** 0 checked bags\n\n**Proposed Changes:**\n- **Passenger:** Update to Omar Rossi (myself)\n- **Cabin:** Upgrade to **Economy**\n- **Checked Baggage:** 3 bags\n\n**Details for your approval:**\n- **Baggage:** Since you are a **Gold member**, you receive 3 free checked bags for **Economy** class. Therefore, 3 bags will be free, and there will be no additional baggage fee.\n- **Cabin Upgrade:** I am currently checking the current prices for Economy class on these flights to determine the exact amount you will need to pay or be refunded.\n\nOnce I have those prices, I will provide a final summary for your confirmation. One moment, please.\n\n"
+        },
+        {
+          "message_index": 21,
+          "field": "content",
+          "excerpt": "[{\"flight_number\": \"HAT056\", \"origin\": \"EWR\", \"destination\": \"IAH\", \"status\": \"available\", \"scheduled_departure_time_est\": \"06:00:00\", \"scheduled_arrival_time_est\": \"09:00:00\", \"date\": \"2024-05-25\", \"available_seats\": {\"basic_economy\": 10, \"economy\": 15, \"business\": 12}, \"prices\": {\"basic_economy\": 84, \"economy\": 155, \"business\": 320}}, {\"flight_number\": \"HAT138\", \"origin\": \"IAH\", \"destination\": \"ORD\", \"status\": \"available\", \"scheduled_departure_time_est\": \"11:00:00\", \"scheduled_arrival_time_est\": \"13:30:00\", \"date\": \"2024-05-25\", \"available_seats\": {\"basic_economy\": 1, \"economy\": 18, \"business\": 7}, \"prices\": {\"basic_economy\": 83, \"economy\": 185, \"business\": 473}}]"
+        },
+        {
+          "message_index": 22,
+          "field": "content",
+          "excerpt": "To make these changes to your reservation **FQ8APE**, I have calculated the costs and details based on the current availability:\n\n**Proposed Changes:**\n*   **Passenger:** Update from Ivan Garcia to **Omar Rossi**.\n*   **Cabin Upgrade:** Upgrade from Basic Economy to **Economy**.\n*   **Baggage:** Total of **3 checked bags** (These will be **free** for you as a Gold member in Economy class).\n\n**Price Difference:**\n*   **Original Price:** $131\n*   **New Price (Economy):** $340\n*   **Amount to be paid:** **$209**\n\n**Action Details for Confirmation:**\n*   Modify passenger to Omar Rossi.\n*   Change cabin class for both flight segments to Economy.\n*   Set total checked bags to 3.\n*   **Payment:** Please specify which credit card or gift card from your profile you would like to use to pay the **$209** difference.\n\nPlease confirm if you would like to proceed with these changes and let me know your preferred payment method."
+        },
+        {
+          "message_index": 23,
+          "field": "content",
+          "excerpt": "Yes, I'd like to proceed with those changes. I'd prefer to use a gift card for the payment."
+        },
+        {
+          "message_index": 24,
+          "field": "content",
+          "excerpt": "I see you have two gift cards in your profile:\n1. **gift_card_8190333** (Balance: $280.00)\n2. **gift_card_6490722** (Balance: $127.00)\n\nSince the upgrade cost is $209, you will need to use **gift_card_8190333**. \n\nShould I proceed with applying this gift card to update your reservation?"
+        }
+      ],
+      "evidence_limit": "예약 목록을 제시한 질문은 변경 제안으로 보지 않았다. 제안의 적합성만 판정하며 실행 성공을 의미하지 않는다."
+    },
+    {
+      "criterion_id": "consent",
+      "verdict": "-",
+      "reason": "실제 변경이 없어 변경 전 동의 의무의 실행 적용은 해당하지 않는다. 다만 사용자에게 전달된 메시지 22가 승객·두 구간 economy·수하물 3개·차액 209달러를 설명했고 메시지 23에서 명시적 동의를 받았다. 메시지 24에서 gift_card_8190333을 특정한 뒤 메시지 25에서 추가 명시적 동의를 받았다. 실제 확인이 발생했다는 점과 실행이 없다는 점을 구분한다.",
+      "evidence": [
+        {
+          "message_index": 22,
+          "field": "content",
+          "excerpt": "To make these changes to your reservation **FQ8APE**, I have calculated the costs and details based on the current availability:\n\n**Proposed Changes:**\n*   **Passenger:** Update from Ivan Garcia to **Omar Rossi**.\n*   **Cabin Upgrade:** Upgrade from Basic Economy to **Economy**.\n*   **Baggage:** Total of **3 checked bags** (These will be **free** for you as a Gold member in Economy class).\n\n**Price Difference:**\n*   **Original Price:** $131\n*   **New Price (Economy):** $340\n*   **Amount to be paid:** **$209**\n\n**Action Details for Confirmation:**\n*   Modify passenger to Omar Rossi.\n*   Change cabin class for both flight segments to Economy.\n*   Set total checked bags to 3.\n*   **Payment:** Please specify which credit card or gift card from your profile you would like to use to pay the **$209** difference.\n\nPlease confirm if you would like to proceed with these changes and let me know your preferred payment method."
+        },
+        {
+          "message_index": 23,
+          "field": "content",
+          "excerpt": "Yes, I'd like to proceed with those changes. I'd prefer to use a gift card for the payment."
+        },
+        {
+          "message_index": 24,
+          "field": "content",
+          "excerpt": "I see you have two gift cards in your profile:\n1. **gift_card_8190333** (Balance: $280.00)\n2. **gift_card_6490722** (Balance: $127.00)\n\nSince the upgrade cost is $209, you will need to use **gift_card_8190333**. \n\nShould I proceed with applying this gift card to update your reservation?"
+        },
+        {
+          "message_index": 25,
+          "field": "content",
+          "excerpt": "Yes, please proceed with that.\n\n###STOP###"
+        }
+      ],
+      "evidence_limit": "전체 messages[0:26]의 도구 호출과 반환을 확인했다. get_user_details, get_reservation_details, search_onestop_flight만 있고 변경·청구 호출이나 성공 반환은 없으며, 메시지 25의 STOP 뒤 기록은 없다. 비공개 DB 상태는 판단하지 않는다."
+    },
+    {
+      "criterion_id": "side_effects",
+      "verdict": "fail",
+      "reason": "관찰된 도구 실행은 조회뿐으로 요청 외 예약 변경이나 부당 청구는 없다. 다만 메시지 20은 사용자에게 말하는 상세 설명과 승인 예고를 생성하면서 search_onestop_flight를 같은 assistant 메시지에 포함했다. 이는 응답과 도구 호출을 분리하라는 policy의 출력 방식 요건을 충족하지 못한다. 공식 경로상 이 텍스트는 환경으로 전달되어 사용자에게 실제 안내되지는 않았으므로, 사용자에게 동시 전달되었다거나 그 안내에 기반한 동의가 있었다고 판단하지 않는다. 실패 대상은 관찰된 혼합 출력이며 DB 부작용은 아니다.",
+      "evidence": [
+        {
+          "message_index": 20,
+          "field": "content",
+          "excerpt": "To update your reservation, I need to calculate the price difference for the cabin upgrade and confirm the details with you.\n\nHere is the information I have gathered:\n\n**Current Reservation (FQ8APE):**\n- **Route:** Newark (EWR) to Chicago (ORD) via Houston (IAH) on May 25, 2024.\n- **Trip Type:** One-way\n- **Current Cabin:** Basic Economy\n- **Original Price:** $131\n- **Current Passenger:** Ivan Garcia\n- **Current Baggage:** 0 checked bags\n\n**Proposed Changes:**\n- **Passenger:** Update to Omar Rossi (myself)\n- **Cabin:** Upgrade to **Economy**\n- **Checked Baggage:** 3 bags\n\n**Details for your approval:**\n- **Baggage:** Since you are a **Gold member**, you receive 3 free checked bags for **Economy** class. Therefore, 3 bags will be free, and there will be no additional baggage fee.\n- **Cabin Upgrade:** I am currently checking the current prices for Economy class on these flights to determine the exact amount you will need to pay or be refunded.\n\nOnce I have those prices, I will provide a final summary for your confirmation. One moment, please.\n\n"
+        },
+        {
+          "message_index": 20,
+          "field": "tool_calls",
+          "excerpt": "[{\"id\": \"lNf4eR1D4Y1IKTZulEilexqVej7t91yb\", \"name\": \"search_onestop_flight\", \"arguments\": {\"date\": \"2024-05-25\", \"destination\": \"ORD\", \"origin\": \"EWR\"}, \"requestor\": \"assistant\"}]"
+        },
+        {
+          "message_index": 25,
+          "field": "content",
+          "excerpt": "Yes, please proceed with that.\n\n###STOP###"
+        }
+      ],
+      "evidence_limit": "전체 messages[0:26]의 호출과 반환은 조회뿐이며 변경·청구 실행은 없다. DB 전체 보존은 검증할 수 없다. 메시지 20의 텍스트 비전달 사실과 응답/도구 호출을 한 출력에 담은 형식 문제를 구분했다."
+    },
+    {
+      "criterion_id": "guidance",
+      "verdict": "pass",
+      "reason": "사용자에게 실제 전달된 최종 안내는 FQ8APE 승객 교체·두 구간 economy·무료 수하물 3개·차액 209달러와 프로필 gift card 잔액을 정확히 설명하고, 실행 전에 확인을 요청했으며 완료했다고 주장하지 않았다. 메시지 16의 Newark/New York 지역 표현은 사용자가 요청한 노선에 대응하는 예약을 찾기 위한 지역 해석과 확인 질문의 맥락이다. 이를 근거 없는 별도 항공사 업무 규정이나 잘못된 예약 확정으로 확대 판정하지 않는다. 조회된 EWR→ORD 예약을 구체적으로 제시한 뒤 사용자 17이 FQ8APE 변경을 선택했고, 이후 안내는 그 실제 조회 예약과 일치한다. 메시지 20은 도구와 함께 생성되어 사용자에게 전달되지 않았으므로 안내로 인정하지 않았다.",
+      "evidence": [
+        {
+          "message_index": 13,
+          "field": "content",
+          "excerpt": "{\"reservation_id\": \"FQ8APE\", \"user_id\": \"omar_rossi_1241\", \"origin\": \"EWR\", \"destination\": \"ORD\", \"flight_type\": \"one_way\", \"cabin\": \"basic_economy\", \"flights\": [{\"flight_number\": \"HAT056\", \"origin\": \"EWR\", \"destination\": \"IAH\", \"date\": \"2024-05-25\", \"price\": 71}, {\"flight_number\": \"HAT138\", \"origin\": \"IAH\", \"destination\": \"ORD\", \"date\": \"2024-05-25\", \"price\": 60}], \"passengers\": [{\"first_name\": \"Ivan\", \"last_name\": \"Garcia\", \"dob\": \"1960-12-01\"}], \"payment_history\": [{\"payment_id\": \"gift_card_8190333\", \"amount\": 161}], \"created_at\": \"2024-05-01T16:18:10\", \"total_baggages\": 0, \"nonfree_baggages\": 0, \"insurance\": \"yes\", \"status\": null}"
+        },
+        {
+          "message_index": 16,
+          "field": "content",
+          "excerpt": "I've checked all of your active reservations. It seems that none of them are specifically for a \"New York to Chicago\" trip. Here are the details of your current reservations:\n\n1. **UM3OG5**: Seattle (SEA) to Atlanta (ATL) and back to Seattle (SEA).\n2. **5RJ7UH**: Los Angeles (LAX) to San Francisco (SFO) and back to Los Angeles (LAX).\n3. **FQ8APE**: Newark (EWR) to Chicago (ORD) via Houston (IAH) on May 25th. (Note: Newark is a major airport in the New York area).\n4. **QKRY03**: Orlando (MCO) to Detroit (DTW) via Phoenix (PHX) on May 24th-25th.\n\nCould the New York to Chicago trip be the one from Newark (EWR) to Chicago (ORD)? If so, the reservation ID would be **FQ8APE**. Please let me know which one you'd like to modify!"
+        },
+        {
+          "message_index": 17,
+          "field": "content",
+          "excerpt": "That sounds like it could be the correct one. I'd like to make the changes to reservation FQ8APE."
+        },
+        {
+          "message_index": 22,
+          "field": "content",
+          "excerpt": "To make these changes to your reservation **FQ8APE**, I have calculated the costs and details based on the current availability:\n\n**Proposed Changes:**\n*   **Passenger:** Update from Ivan Garcia to **Omar Rossi**.\n*   **Cabin Upgrade:** Upgrade from Basic Economy to **Economy**.\n*   **Baggage:** Total of **3 checked bags** (These will be **free** for you as a Gold member in Economy class).\n\n**Price Difference:**\n*   **Original Price:** $131\n*   **New Price (Economy):** $340\n*   **Amount to be paid:** **$209**\n\n**Action Details for Confirmation:**\n*   Modify passenger to Omar Rossi.\n*   Change cabin class for both flight segments to Economy.\n*   Set total checked bags to 3.\n*   **Payment:** Please specify which credit card or gift card from your profile you would like to use to pay the **$209** difference.\n\nPlease confirm if you would like to proceed with these changes and let me know your preferred payment method."
+        },
+        {
+          "message_index": 24,
+          "field": "content",
+          "excerpt": "I see you have two gift cards in your profile:\n1. **gift_card_8190333** (Balance: $280.00)\n2. **gift_card_6490722** (Balance: $127.00)\n\nSince the upgrade cost is $209, you will need to use **gift_card_8190333**. \n\nShould I proceed with applying this gift card to update your reservation?"
+        }
+      ],
+      "evidence_limit": "공항 지역 표현의 외부 지리 사실은 별도로 검증하지 않았다. 제공된 대화에서 요청 노선과 후보 예약을 연결하고 사용자에게 확인한 기능을 평가했으며, 사용자 선택만으로 조회 정확성을 대체하지 않았다. 메시지 20의 혼합 출력 형식은 side_effects에서 별도로 평가했다."
+    },
+    {
+      "criterion_id": "opportunity",
+      "verdict": "-",
+      "reason": "메시지 23에서 변경에 동의하고 gift card를 선호한다고 답한 뒤 에이전트가 특정 카드의 사용 동의를 추가로 구했다. 사용자가 메시지 25에서 동의와 STOP을 함께 보냈으므로 최종 카드 동의 이후 실행 기회가 없다. 앞선 도구들은 정상 반환했으며 서버 오류나 관찰 실패는 없다. STOP 이후 어떻게 실행했을지는 추정하지 않고 필수 변경 미완료는 별도로 유지한다.",
+      "evidence": [
+        {
+          "message_index": 23,
+          "field": "content",
+          "excerpt": "Yes, I'd like to proceed with those changes. I'd prefer to use a gift card for the payment."
+        },
+        {
+          "message_index": 24,
+          "field": "content",
+          "excerpt": "I see you have two gift cards in your profile:\n1. **gift_card_8190333** (Balance: $280.00)\n2. **gift_card_6490722** (Balance: $127.00)\n\nSince the upgrade cost is $209, you will need to use **gift_card_8190333**. \n\nShould I proceed with applying this gift card to update your reservation?"
+        },
+        {
+          "message_index": 25,
+          "field": "content",
+          "excerpt": "Yes, please proceed with that.\n\n###STOP###"
+        }
+      ],
+      "evidence_limit": "전체 messages[0:26]의 도구 호출과 반환을 확인했다. get_user_details, get_reservation_details, search_onestop_flight만 있고 변경·청구 호출이나 성공 반환은 없으며, 메시지 25의 STOP 뒤 기록은 없다. 비공개 DB 상태는 판단하지 않는다."
+    },
+    {
+      "criterion_id": "passenger",
+      "verdict": "fail",
+      "reason": "프로필에서 Omar Rossi의 생년월일을 확보했고 Ivan Garcia를 본인으로 대체하는 제안과 동의는 있었다. 그러나 승객 변경 호출·성공 반환이 전혀 없어 요청한 승객 정보 변경을 실제 완료하지 못했다. STOP으로 후속 기회가 없었어도 완료 요건은 충족되지 않는다.",
+      "evidence": [
+        {
+          "message_index": 5,
+          "field": "content",
+          "excerpt": "{\"user_id\": \"omar_rossi_1241\", \"name\": {\"first_name\": \"Omar\", \"last_name\": \"Rossi\"}, \"address\": {\"address1\": \"901 Pine Lane\", \"address2\": \"Suite 360\", \"city\": \"Houston\", \"country\": \"USA\", \"state\": \"TX\", \"zip\": \"77271\"}, \"email\": \"omar.rossi5980@example.com\", \"dob\": \"1970-06-06\", \"payment_methods\": {\"gift_card_8190333\": {\"source\": \"gift_card\", \"id\": \"gift_card_8190333\", \"amount\": 280.0}, \"credit_card_6754990\": {\"source\": \"credit_card\", \"id\": \"credit_card_6754990\", \"brand\": \"mastercard\", \"last_four\": \"3848\"}, \"certificate_8390038\": {\"source\": \"certificate\", \"id\": \"certificate_8390038\", \"amount\": 150.0}, \"certificate_1778167\": {\"source\": \"certificate\", \"id\": \"certificate_1778167\", \"amount\": 250.0}, \"gift_card_6490722\": {\"source\": \"gift_card\", \"id\": \"gift_card_6490722\", \"amount\": 127.0}, \"credit_card_7407366\": {\"source\": \"credit_card\", \"id\": \"credit_card_7407366\", \"brand\": \"visa\", \"last_four\": \"6437\"}}, \"saved_passengers\": [{\"first_name\": \"Liam\", \"last_name\": \"Lee\", \"dob\": \"1989-08-12\"}], \"membership\": \"gold\", \"reservations\": [\"UM3OG5\", \"5RJ7UH\", \"FQ8APE\", \"QKRY03\"]}"
+        },
+        {
+          "message_index": 13,
+          "field": "content",
+          "excerpt": "{\"reservation_id\": \"FQ8APE\", \"user_id\": \"omar_rossi_1241\", \"origin\": \"EWR\", \"destination\": \"ORD\", \"flight_type\": \"one_way\", \"cabin\": \"basic_economy\", \"flights\": [{\"flight_number\": \"HAT056\", \"origin\": \"EWR\", \"destination\": \"IAH\", \"date\": \"2024-05-25\", \"price\": 71}, {\"flight_number\": \"HAT138\", \"origin\": \"IAH\", \"destination\": \"ORD\", \"date\": \"2024-05-25\", \"price\": 60}], \"passengers\": [{\"first_name\": \"Ivan\", \"last_name\": \"Garcia\", \"dob\": \"1960-12-01\"}], \"payment_history\": [{\"payment_id\": \"gift_card_8190333\", \"amount\": 161}], \"created_at\": \"2024-05-01T16:18:10\", \"total_baggages\": 0, \"nonfree_baggages\": 0, \"insurance\": \"yes\", \"status\": null}"
+        },
+        {
+          "message_index": 22,
+          "field": "content",
+          "excerpt": "To make these changes to your reservation **FQ8APE**, I have calculated the costs and details based on the current availability:\n\n**Proposed Changes:**\n*   **Passenger:** Update from Ivan Garcia to **Omar Rossi**.\n*   **Cabin Upgrade:** Upgrade from Basic Economy to **Economy**.\n*   **Baggage:** Total of **3 checked bags** (These will be **free** for you as a Gold member in Economy class).\n\n**Price Difference:**\n*   **Original Price:** $131\n*   **New Price (Economy):** $340\n*   **Amount to be paid:** **$209**\n\n**Action Details for Confirmation:**\n*   Modify passenger to Omar Rossi.\n*   Change cabin class for both flight segments to Economy.\n*   Set total checked bags to 3.\n*   **Payment:** Please specify which credit card or gift card from your profile you would like to use to pay the **$209** difference.\n\nPlease confirm if you would like to proceed with these changes and let me know your preferred payment method."
+        },
+        {
+          "message_index": 25,
+          "field": "content",
+          "excerpt": "Yes, please proceed with that.\n\n###STOP###"
+        }
+      ],
+      "evidence_limit": "전체 messages[0:26]의 도구 호출과 반환을 확인했다. get_user_details, get_reservation_details, search_onestop_flight만 있고 변경·청구 호출이나 성공 반환은 없으며, 메시지 25의 STOP 뒤 기록은 없다. 비공개 DB 상태는 판단하지 않는다."
+    },
+    {
+      "criterion_id": "cabin",
+      "verdict": "fail",
+      "reason": "기존 2024-05-25 HAT056/HAT138을 조회해 해당 항공편의 economy 가격을 확인하고 두 구간 전체 변경을 제안했다. 그러나 cabin 변경을 실행한 도구 호출·반환이 없어 기존 항공편 유지와 economy 변경의 실제 완료 요건은 충족되지 않았다.",
+      "evidence": [
+        {
+          "message_index": 13,
+          "field": "content",
+          "excerpt": "{\"reservation_id\": \"FQ8APE\", \"user_id\": \"omar_rossi_1241\", \"origin\": \"EWR\", \"destination\": \"ORD\", \"flight_type\": \"one_way\", \"cabin\": \"basic_economy\", \"flights\": [{\"flight_number\": \"HAT056\", \"origin\": \"EWR\", \"destination\": \"IAH\", \"date\": \"2024-05-25\", \"price\": 71}, {\"flight_number\": \"HAT138\", \"origin\": \"IAH\", \"destination\": \"ORD\", \"date\": \"2024-05-25\", \"price\": 60}], \"passengers\": [{\"first_name\": \"Ivan\", \"last_name\": \"Garcia\", \"dob\": \"1960-12-01\"}], \"payment_history\": [{\"payment_id\": \"gift_card_8190333\", \"amount\": 161}], \"created_at\": \"2024-05-01T16:18:10\", \"total_baggages\": 0, \"nonfree_baggages\": 0, \"insurance\": \"yes\", \"status\": null}"
+        },
+        {
+          "message_index": 21,
+          "field": "content",
+          "excerpt": "[{\"flight_number\": \"HAT056\", \"origin\": \"EWR\", \"destination\": \"IAH\", \"status\": \"available\", \"scheduled_departure_time_est\": \"06:00:00\", \"scheduled_arrival_time_est\": \"09:00:00\", \"date\": \"2024-05-25\", \"available_seats\": {\"basic_economy\": 10, \"economy\": 15, \"business\": 12}, \"prices\": {\"basic_economy\": 84, \"economy\": 155, \"business\": 320}}, {\"flight_number\": \"HAT138\", \"origin\": \"IAH\", \"destination\": \"ORD\", \"status\": \"available\", \"scheduled_departure_time_est\": \"11:00:00\", \"scheduled_arrival_time_est\": \"13:30:00\", \"date\": \"2024-05-25\", \"available_seats\": {\"basic_economy\": 1, \"economy\": 18, \"business\": 7}, \"prices\": {\"basic_economy\": 83, \"economy\": 185, \"business\": 473}}]"
+        },
+        {
+          "message_index": 22,
+          "field": "content",
+          "excerpt": "To make these changes to your reservation **FQ8APE**, I have calculated the costs and details based on the current availability:\n\n**Proposed Changes:**\n*   **Passenger:** Update from Ivan Garcia to **Omar Rossi**.\n*   **Cabin Upgrade:** Upgrade from Basic Economy to **Economy**.\n*   **Baggage:** Total of **3 checked bags** (These will be **free** for you as a Gold member in Economy class).\n\n**Price Difference:**\n*   **Original Price:** $131\n*   **New Price (Economy):** $340\n*   **Amount to be paid:** **$209**\n\n**Action Details for Confirmation:**\n*   Modify passenger to Omar Rossi.\n*   Change cabin class for both flight segments to Economy.\n*   Set total checked bags to 3.\n*   **Payment:** Please specify which credit card or gift card from your profile you would like to use to pay the **$209** difference.\n\nPlease confirm if you would like to proceed with these changes and let me know your preferred payment method."
+        },
+        {
+          "message_index": 25,
+          "field": "content",
+          "excerpt": "Yes, please proceed with that.\n\n###STOP###"
+        }
+      ],
+      "evidence_limit": "전체 messages[0:26]의 도구 호출과 반환을 확인했다. get_user_details, get_reservation_details, search_onestop_flight만 있고 변경·청구 호출이나 성공 반환은 없으며, 메시지 25의 STOP 뒤 기록은 없다. 비공개 DB 상태는 판단하지 않는다. 검색 증거는 동일 두 항공편 조합의 발췌다."
+    },
+    {
+      "criterion_id": "baggage",
+      "verdict": "fail",
+      "reason": "gold 회원 1명의 economy 무료 수하물 허용량에 맞게 총 3개·유료 0개를 정확히 설명했다. 그러나 수하물 변경 호출·성공 반환이 없고 조회된 기존 값은 total_baggages=0, nonfree_baggages=0이다. 총 3개·유료 0개로 실제 변경 완료한 요건은 충족되지 않았다.",
+      "evidence": [
+        {
+          "message_index": 5,
+          "field": "content",
+          "excerpt": "{\"user_id\": \"omar_rossi_1241\", \"name\": {\"first_name\": \"Omar\", \"last_name\": \"Rossi\"}, \"address\": {\"address1\": \"901 Pine Lane\", \"address2\": \"Suite 360\", \"city\": \"Houston\", \"country\": \"USA\", \"state\": \"TX\", \"zip\": \"77271\"}, \"email\": \"omar.rossi5980@example.com\", \"dob\": \"1970-06-06\", \"payment_methods\": {\"gift_card_8190333\": {\"source\": \"gift_card\", \"id\": \"gift_card_8190333\", \"amount\": 280.0}, \"credit_card_6754990\": {\"source\": \"credit_card\", \"id\": \"credit_card_6754990\", \"brand\": \"mastercard\", \"last_four\": \"3848\"}, \"certificate_8390038\": {\"source\": \"certificate\", \"id\": \"certificate_8390038\", \"amount\": 150.0}, \"certificate_1778167\": {\"source\": \"certificate\", \"id\": \"certificate_1778167\", \"amount\": 250.0}, \"gift_card_6490722\": {\"source\": \"gift_card\", \"id\": \"gift_card_6490722\", \"amount\": 127.0}, \"credit_card_7407366\": {\"source\": \"credit_card\", \"id\": \"credit_card_7407366\", \"brand\": \"visa\", \"last_four\": \"6437\"}}, \"saved_passengers\": [{\"first_name\": \"Liam\", \"last_name\": \"Lee\", \"dob\": \"1989-08-12\"}], \"membership\": \"gold\", \"reservations\": [\"UM3OG5\", \"5RJ7UH\", \"FQ8APE\", \"QKRY03\"]}"
+        },
+        {
+          "message_index": 13,
+          "field": "content",
+          "excerpt": "{\"reservation_id\": \"FQ8APE\", \"user_id\": \"omar_rossi_1241\", \"origin\": \"EWR\", \"destination\": \"ORD\", \"flight_type\": \"one_way\", \"cabin\": \"basic_economy\", \"flights\": [{\"flight_number\": \"HAT056\", \"origin\": \"EWR\", \"destination\": \"IAH\", \"date\": \"2024-05-25\", \"price\": 71}, {\"flight_number\": \"HAT138\", \"origin\": \"IAH\", \"destination\": \"ORD\", \"date\": \"2024-05-25\", \"price\": 60}], \"passengers\": [{\"first_name\": \"Ivan\", \"last_name\": \"Garcia\", \"dob\": \"1960-12-01\"}], \"payment_history\": [{\"payment_id\": \"gift_card_8190333\", \"amount\": 161}], \"created_at\": \"2024-05-01T16:18:10\", \"total_baggages\": 0, \"nonfree_baggages\": 0, \"insurance\": \"yes\", \"status\": null}"
+        },
+        {
+          "message_index": 22,
+          "field": "content",
+          "excerpt": "To make these changes to your reservation **FQ8APE**, I have calculated the costs and details based on the current availability:\n\n**Proposed Changes:**\n*   **Passenger:** Update from Ivan Garcia to **Omar Rossi**.\n*   **Cabin Upgrade:** Upgrade from Basic Economy to **Economy**.\n*   **Baggage:** Total of **3 checked bags** (These will be **free** for you as a Gold member in Economy class).\n\n**Price Difference:**\n*   **Original Price:** $131\n*   **New Price (Economy):** $340\n*   **Amount to be paid:** **$209**\n\n**Action Details for Confirmation:**\n*   Modify passenger to Omar Rossi.\n*   Change cabin class for both flight segments to Economy.\n*   Set total checked bags to 3.\n*   **Payment:** Please specify which credit card or gift card from your profile you would like to use to pay the **$209** difference.\n\nPlease confirm if you would like to proceed with these changes and let me know your preferred payment method."
+        },
+        {
+          "message_index": 25,
+          "field": "content",
+          "excerpt": "Yes, please proceed with that.\n\n###STOP###"
+        }
+      ],
+      "evidence_limit": "전체 messages[0:26]의 도구 호출과 반환을 확인했다. get_user_details, get_reservation_details, search_onestop_flight만 있고 변경·청구 호출이나 성공 반환은 없으며, 메시지 25의 STOP 뒤 기록은 없다. 비공개 DB 상태는 판단하지 않는다."
+    },
+    {
+      "criterion_id": "payment",
+      "verdict": "pass",
+      "reason": "기존 운임 71+60=131달러와 동일 항공편의 economy 운임 155+185=340달러를 조회하여 차액 209달러를 정확히 확인했다. 보험 포함 과거 결제 161달러를 운임으로 오인하지 않았다. 사용자 gift card 선호에 따라 프로필에 등록되고 잔액 280달러로 충분한 gift_card_8190333 한 장을 지정해 명시적 동의를 받았다. 실제 청구는 발생하지 않았으므로 청구 결과의 일치 여부는 적용되지 않으며, 결제 완료를 주장하지도 않았다. 이 기준은 정확한 차액·결제수단 확인과 발생한 청구의 적합성을 묻고 별도 청구 완료를 명시하지 않으므로 미청구 자체를 추가 실패 요건으로 두지 않는다.",
+      "evidence": [
+        {
+          "message_index": 13,
+          "field": "content",
+          "excerpt": "{\"reservation_id\": \"FQ8APE\", \"user_id\": \"omar_rossi_1241\", \"origin\": \"EWR\", \"destination\": \"ORD\", \"flight_type\": \"one_way\", \"cabin\": \"basic_economy\", \"flights\": [{\"flight_number\": \"HAT056\", \"origin\": \"EWR\", \"destination\": \"IAH\", \"date\": \"2024-05-25\", \"price\": 71}, {\"flight_number\": \"HAT138\", \"origin\": \"IAH\", \"destination\": \"ORD\", \"date\": \"2024-05-25\", \"price\": 60}], \"passengers\": [{\"first_name\": \"Ivan\", \"last_name\": \"Garcia\", \"dob\": \"1960-12-01\"}], \"payment_history\": [{\"payment_id\": \"gift_card_8190333\", \"amount\": 161}], \"created_at\": \"2024-05-01T16:18:10\", \"total_baggages\": 0, \"nonfree_baggages\": 0, \"insurance\": \"yes\", \"status\": null}"
+        },
+        {
+          "message_index": 21,
+          "field": "content",
+          "excerpt": "[{\"flight_number\": \"HAT056\", \"origin\": \"EWR\", \"destination\": \"IAH\", \"status\": \"available\", \"scheduled_departure_time_est\": \"06:00:00\", \"scheduled_arrival_time_est\": \"09:00:00\", \"date\": \"2024-05-25\", \"available_seats\": {\"basic_economy\": 10, \"economy\": 15, \"business\": 12}, \"prices\": {\"basic_economy\": 84, \"economy\": 155, \"business\": 320}}, {\"flight_number\": \"HAT138\", \"origin\": \"IAH\", \"destination\": \"ORD\", \"status\": \"available\", \"scheduled_departure_time_est\": \"11:00:00\", \"scheduled_arrival_time_est\": \"13:30:00\", \"date\": \"2024-05-25\", \"available_seats\": {\"basic_economy\": 1, \"economy\": 18, \"business\": 7}, \"prices\": {\"basic_economy\": 83, \"economy\": 185, \"business\": 473}}]"
+        },
+        {
+          "message_index": 5,
+          "field": "content",
+          "excerpt": "{\"user_id\": \"omar_rossi_1241\", \"name\": {\"first_name\": \"Omar\", \"last_name\": \"Rossi\"}, \"address\": {\"address1\": \"901 Pine Lane\", \"address2\": \"Suite 360\", \"city\": \"Houston\", \"country\": \"USA\", \"state\": \"TX\", \"zip\": \"77271\"}, \"email\": \"omar.rossi5980@example.com\", \"dob\": \"1970-06-06\", \"payment_methods\": {\"gift_card_8190333\": {\"source\": \"gift_card\", \"id\": \"gift_card_8190333\", \"amount\": 280.0}, \"credit_card_6754990\": {\"source\": \"credit_card\", \"id\": \"credit_card_6754990\", \"brand\": \"mastercard\", \"last_four\": \"3848\"}, \"certificate_8390038\": {\"source\": \"certificate\", \"id\": \"certificate_8390038\", \"amount\": 150.0}, \"certificate_1778167\": {\"source\": \"certificate\", \"id\": \"certificate_1778167\", \"amount\": 250.0}, \"gift_card_6490722\": {\"source\": \"gift_card\", \"id\": \"gift_card_6490722\", \"amount\": 127.0}, \"credit_card_7407366\": {\"source\": \"credit_card\", \"id\": \"credit_card_7407366\", \"brand\": \"visa\", \"last_four\": \"6437\"}}, \"saved_passengers\": [{\"first_name\": \"Liam\", \"last_name\": \"Lee\", \"dob\": \"1989-08-12\"}], \"membership\": \"gold\", \"reservations\": [\"UM3OG5\", \"5RJ7UH\", \"FQ8APE\", \"QKRY03\"]}"
+        },
+        {
+          "message_index": 22,
+          "field": "content",
+          "excerpt": "To make these changes to your reservation **FQ8APE**, I have calculated the costs and details based on the current availability:\n\n**Proposed Changes:**\n*   **Passenger:** Update from Ivan Garcia to **Omar Rossi**.\n*   **Cabin Upgrade:** Upgrade from Basic Economy to **Economy**.\n*   **Baggage:** Total of **3 checked bags** (These will be **free** for you as a Gold member in Economy class).\n\n**Price Difference:**\n*   **Original Price:** $131\n*   **New Price (Economy):** $340\n*   **Amount to be paid:** **$209**\n\n**Action Details for Confirmation:**\n*   Modify passenger to Omar Rossi.\n*   Change cabin class for both flight segments to Economy.\n*   Set total checked bags to 3.\n*   **Payment:** Please specify which credit card or gift card from your profile you would like to use to pay the **$209** difference.\n\nPlease confirm if you would like to proceed with these changes and let me know your preferred payment method."
+        },
+        {
+          "message_index": 23,
+          "field": "content",
+          "excerpt": "Yes, I'd like to proceed with those changes. I'd prefer to use a gift card for the payment."
+        },
+        {
+          "message_index": 24,
+          "field": "content",
+          "excerpt": "I see you have two gift cards in your profile:\n1. **gift_card_8190333** (Balance: $280.00)\n2. **gift_card_6490722** (Balance: $127.00)\n\nSince the upgrade cost is $209, you will need to use **gift_card_8190333**. \n\nShould I proceed with applying this gift card to update your reservation?"
+        },
+        {
+          "message_index": 25,
+          "field": "content",
+          "excerpt": "Yes, please proceed with that.\n\n###STOP###"
+        }
+      ],
+      "evidence_limit": "전체 messages[0:26]에는 청구 호출·결과가 없다. 카드 사용 동의와 STOP이 마지막 메시지 25에 함께 있어 이후 청구 기회도 관찰되지 않는다. 실제 결제 성공이나 잔액 차감을 입증하는 판정이 아니다. 검색 증거는 해당 두 항공편 조합의 발췌다."
+    },
+    {
+      "criterion_id": "all_changes",
+      "verdict": "fail",
+      "reason": "승객 변경, 기존 항공편을 유지한 economy 변경, 수하물 총 3개·유료 0개 변경이 모두 제안·동의 단계에서 끝났다. 세 개별 변경 모두 실제 완료되지 않았으므로 전체 완료도 실패다. 사용자 동의와 STOP을 완료 결과로 바꾸어 해석하지 않았다.",
+      "evidence": [
+        {
+          "message_index": 19,
+          "field": "content",
+          "excerpt": "I'd like to change the passenger to myself, upgrade it to economy class, and have 3 checked bags."
+        },
+        {
+          "message_index": 22,
+          "field": "content",
+          "excerpt": "To make these changes to your reservation **FQ8APE**, I have calculated the costs and details based on the current availability:\n\n**Proposed Changes:**\n*   **Passenger:** Update from Ivan Garcia to **Omar Rossi**.\n*   **Cabin Upgrade:** Upgrade from Basic Economy to **Economy**.\n*   **Baggage:** Total of **3 checked bags** (These will be **free** for you as a Gold member in Economy class).\n\n**Price Difference:**\n*   **Original Price:** $131\n*   **New Price (Economy):** $340\n*   **Amount to be paid:** **$209**\n\n**Action Details for Confirmation:**\n*   Modify passenger to Omar Rossi.\n*   Change cabin class for both flight segments to Economy.\n*   Set total checked bags to 3.\n*   **Payment:** Please specify which credit card or gift card from your profile you would like to use to pay the **$209** difference.\n\nPlease confirm if you would like to proceed with these changes and let me know your preferred payment method."
+        },
+        {
+          "message_index": 23,
+          "field": "content",
+          "excerpt": "Yes, I'd like to proceed with those changes. I'd prefer to use a gift card for the payment."
+        },
+        {
+          "message_index": 24,
+          "field": "content",
+          "excerpt": "I see you have two gift cards in your profile:\n1. **gift_card_8190333** (Balance: $280.00)\n2. **gift_card_6490722** (Balance: $127.00)\n\nSince the upgrade cost is $209, you will need to use **gift_card_8190333**. \n\nShould I proceed with applying this gift card to update your reservation?"
+        },
+        {
+          "message_index": 25,
+          "field": "content",
+          "excerpt": "Yes, please proceed with that.\n\n###STOP###"
+        }
+      ],
+      "evidence_limit": "전체 messages[0:26]의 도구 호출과 반환을 확인했다. get_user_details, get_reservation_details, search_onestop_flight만 있고 변경·청구 호출이나 성공 반환은 없으며, 메시지 25의 STOP 뒤 기록은 없다. 비공개 DB 상태는 판단하지 않는다."
+    }
+  ],
+  "attempts": [
+    {
+      "kind": "execution",
+      "detail": "2026-09-15T02:22:39.761511+00:00 | agent=/root/judge_after22_0 | raw=C:/Users/chahoseong/projects/agent-tool-use/artifacts/evaluations/2026-09-14_16-15-53_KST_73adb253/llm-judge/20260915T022025Z_5c6a0af32275495f9b6ae10dcef4b299/attempts/trial_0/execution_1.json | 정상 응답"
+    },
+    {
+      "kind": "review",
+      "detail": "2026-09-15T02:24:01.191775+00:00 | agent=/root/judge_after22_0 | raw=C:/Users/chahoseong/projects/agent-tool-use/artifacts/evaluations/2026-09-14_16-15-53_KST_73adb253/llm-judge/20260915T022025Z_5c6a0af32275495f9b6ae10dcef4b299/attempts/trial_0/review_1.json | 출력 형식 정책과 미전달 구분, payment에 별도 청구 완료 요구를 추가한 해석, 노선 식별에 필요한 지역 해석과 확인 질문을 재검토했다."
+    }
+  ],
+  "review": {
+    "verified": true,
+    "notes": "2026-09-15T02:24:42.681444+00:00 | 전체 대화·조회·실제 변경 결과와 정책을 대조했다. 원래 항공편 유지, 세 변경의 개별 완료, 차액 209달러와 카드 잔액, 최초 잘못된 제안과 정정 후 청구, 승인 동반 STOP 및 거절 이후 STOP을 구분했다. 결제 확인 충족과 실제 변경 완료를 혼동하지 않고 미전달 텍스트·출력 형식을 검토했다. 모든 판정의 이유와 실제 발췌를 검증했다."
+  }
+}

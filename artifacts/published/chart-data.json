@@ -1,0 +1,256 @@
+{
+  "rows": [
+    {
+      "task": "airline 42",
+      "variant": "Baseline",
+      "source": "artifacts/published/prompt-improvement/airline-42/baseline",
+      "judge": "artifacts/published/prompt-improvement/airline-42/baseline/judge",
+      "criteria_version": "1",
+      "judge_model": "gpt-6-astra",
+      "count": 3,
+      "official_pass": 0,
+      "metrics": {
+        "retrieval": {
+          "pass": 2,
+          "fail": 1
+        },
+        "proposals": {
+          "fail": 3
+        },
+        "consent": {
+          "-": 1,
+          "pass": 2
+        },
+        "side_effects": {
+          "pass": 1,
+          "fail": 2
+        },
+        "guidance": {
+          "fail": 3
+        }
+      }
+    },
+    {
+      "task": "airline 42",
+      "variant": "프롬프트 개선",
+      "source": "artifacts/published/prompt-improvement/airline-42/prompt",
+      "judge": "artifacts/published/prompt-improvement/airline-42/prompt/judge",
+      "criteria_version": "1",
+      "judge_model": "gpt-6-astra",
+      "count": 3,
+      "official_pass": 2,
+      "metrics": {
+        "retrieval": {
+          "fail": 3
+        },
+        "proposals": {
+          "fail": 3
+        },
+        "consent": {
+          "pass": 3
+        },
+        "side_effects": {
+          "pass": 2,
+          "fail": 1
+        },
+        "guidance": {
+          "fail": 3
+        }
+      }
+    },
+    {
+      "task": "airline 41",
+      "variant": "Baseline",
+      "source": "artifacts/published/prompt-improvement/airline-41/baseline",
+      "judge": "artifacts/published/prompt-improvement/airline-41/baseline/judge",
+      "criteria_version": "1",
+      "judge_model": "gpt-6-astra",
+      "count": 3,
+      "official_pass": 3,
+      "metrics": {
+        "retrieval": {
+          "pass": 2,
+          "fail": 1
+        },
+        "proposals": {
+          "fail": 1,
+          "-": 1,
+          "pass": 1
+        },
+        "consent": {
+          "-": 3
+        },
+        "side_effects": {
+          "fail": 1,
+          "pass": 2
+        },
+        "guidance": {
+          "fail": 2,
+          "pass": 1
+        }
+      }
+    },
+    {
+      "task": "airline 41",
+      "variant": "프롬프트 개선",
+      "source": "artifacts/published/prompt-improvement/airline-41/prompt",
+      "judge": "artifacts/published/prompt-improvement/airline-41/prompt/judge",
+      "criteria_version": "1",
+      "judge_model": "gpt-6-astra",
+      "count": 3,
+      "official_pass": 3,
+      "metrics": {
+        "retrieval": {
+          "fail": 3
+        },
+        "proposals": {
+          "fail": 2,
+          "-": 1
+        },
+        "consent": {
+          "-": 3
+        },
+        "side_effects": {
+          "fail": 3
+        },
+        "guidance": {
+          "fail": 2,
+          "pass": 1
+        }
+      }
+    },
+    {
+      "task": "airline 22",
+      "variant": "Baseline",
+      "source": "artifacts/published/prompt-improvement/airline-22/baseline",
+      "judge": "artifacts/published/prompt-improvement/airline-22/baseline/judge",
+      "criteria_version": "1",
+      "judge_model": "gpt-6-astra",
+      "count": 3,
+      "official_pass": 1,
+      "metrics": {
+        "retrieval": {
+          "pass": 2,
+          "fail": 1
+        },
+        "proposals": {
+          "fail": 3
+        },
+        "consent": {
+          "pass": 1,
+          "-": 1,
+          "fail": 1
+        },
+        "side_effects": {
+          "fail": 3
+        },
+        "guidance": {
+          "fail": 2,
+          "pass": 1
+        }
+      }
+    },
+    {
+      "task": "airline 22",
+      "variant": "프롬프트 개선",
+      "source": "artifacts/published/prompt-improvement/airline-22/prompt",
+      "judge": "artifacts/published/prompt-improvement/airline-22/prompt/judge",
+      "criteria_version": "1",
+      "judge_model": "gpt-6-astra",
+      "count": 3,
+      "official_pass": 1,
+      "metrics": {
+        "retrieval": {
+          "pass": 2,
+          "fail": 1
+        },
+        "proposals": {
+          "pass": 1,
+          "fail": 1,
+          "-": 1
+        },
+        "consent": {
+          "-": 2,
+          "pass": 1
+        },
+        "side_effects": {
+          "fail": 1,
+          "pass": 2
+        },
+        "guidance": {
+          "pass": 1,
+          "fail": 2
+        }
+      }
+    },
+    {
+      "task": "retail 0",
+      "variant": "Baseline",
+      "source": "artifacts/published/prompt-improvement/retail-0/baseline",
+      "judge": "artifacts/published/prompt-improvement/retail-0/baseline/judge",
+      "criteria_version": "2",
+      "judge_model": "gpt-6-astra",
+      "count": 3,
+      "official_pass": 0,
+      "metrics": {
+        "retrieval": {
+          "pass": 3
+        },
+        "proposals": {
+          "pass": 3
+        },
+        "consent": {
+          "pass": 3
+        },
+        "side_effects": {
+          "fail": 2,
+          "pass": 1
+        },
+        "guidance": {
+          "pass": 1,
+          "fail": 2
+        }
+      },
+      "correction": "artifacts/published/corrections.json"
+    },
+    {
+      "task": "retail 0",
+      "variant": "프롬프트 개선",
+      "source": "artifacts/published/prompt-improvement/retail-0/prompt",
+      "judge": "artifacts/published/prompt-improvement/retail-0/prompt/judge",
+      "criteria_version": "2",
+      "judge_model": "gpt-6-astra",
+      "count": 3,
+      "official_pass": 3,
+      "metrics": {
+        "retrieval": {
+          "fail": 1,
+          "pass": 2
+        },
+        "proposals": {
+          "pass": 3
+        },
+        "consent": {
+          "pass": 3
+        },
+        "side_effects": {
+          "fail": 2,
+          "pass": 1
+        },
+        "guidance": {
+          "fail": 1,
+          "pass": 2
+        }
+      }
+    }
+  ],
+  "criteria": {
+    "retrieval": "판단에 필요한 레코드·필드를 도구로 확인했는가. 정답과 조회 근거를 분리하고 실제 관찰한 정보만 근거로 인정한다.",
+    "proposals": "각 구체적 변경 제안·계획이 당시 알려진 사용자 조건·제외 조건·policy에 맞는가. 정정 전 오류와 최종 판단을 따로 기록한다.",
+    "consent": "실제 변경 전에 변경 내용에 대한 사용자 동의를 받았는가. 실행이 없다면 적용 여부와 실제 확인 발생을 구분한다.",
+    "side_effects": "요청 외 변경·부당 청구·정책 위반이 없었는가. 실제 실행과 제안을 구분하고 관찰된 범위만 주장한다.",
+    "guidance": "사용자에게 전달한 설명·완료 안내가 조회·도구 결과와 policy에 부합하는가. 도구 호출과 함께 생성되어 전달되지 않은 텍스트를 안내로 인정하지 않는다."
+  },
+  "corrections": "corrections.json",
+  "note": "Original judge files preserved. Reported retail baseline consent uses the documented correction; other counts unchanged."
+}

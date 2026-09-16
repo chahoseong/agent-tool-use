@@ -1,0 +1,39 @@
+[run]
+started_at = 2026-09-14 16:35:31.159833+09:00
+config_path = "C:\\Users\\chahoseong\\projects\\agent-tool-use\\configs\\retail.toml"
+directory = "C:\\Users\\chahoseong\\projects\\agent-tool-use\\artifacts\\evaluations\\2026-09-14_16-35-31_KST_4b5b1ea5"
+
+[evaluation]
+domain = "retail"
+task_ids = [
+    "0",
+]
+seed = 42
+max_steps = 200
+max_errors = 10
+num_trials = 3
+max_concurrency = 1
+
+[agent]
+model = "hf.co/google/gemma-4-12B-it-qat-q4_0-gguf:Q4_0"
+base_url = "http://100.80.184.89:11434/v1"
+
+[agent.generation]
+
+[user]
+model = "hf.co/google/gemma-4-12B-it-qat-q4_0-gguf:Q4_0"
+base_url = "http://100.80.184.89:11434/v1"
+
+[user.generation]
+
+[output]
+directory = "C:\\Users\\chahoseong\\projects\\agent-tool-use\\artifacts\\evaluations"
+
+[prompts]
+agent = "You are a helpful customer service agent.\n\nFollow the policy strictly. Use the provided tools to help the user.\n\nBefore proposing changes, use the available tools to retrieve the records needed to identify the correct targets. Check those records against the user's requirements, exclusions, and the policy. Do not conclude that a relevant record is absent, or expand the scope of work, based on information you have not checked."
+
+[project]
+commit = "8044d2d82162d59a68271ff376a3a6aa0d51d7ca"
+
+[tau2]
+version = "1.0.1"

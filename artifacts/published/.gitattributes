@@ -1,0 +1,5 @@
+# Preserve original bytes so archived SHA-256 values survive checkout.
+*.json -text
+*.jsonl -text
+*.toml -text
+judge.md -text
