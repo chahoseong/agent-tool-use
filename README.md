@@ -112,7 +112,11 @@ agent-tool-use/
 ├── configs/     # 실험별 평가 설정
 ├── scripts/     # 평가 실행용 CLI
 ├── evals/       # 평가 실행, 추가 채점, 결과 게시
-├── docs/        # 학습 노트와 실험 문서
+├── docs/        # 프로젝트 문서
+│   ├── notes/        # 학습한 개념 정리
+│   ├── decisions/    # 주요 결정과 선택 이유
+│   ├── experiments/  # 실험 가설·조건·결과·결론
+│   └── assets/       # 문서에 사용하는 차트 이미지
 ├── artifacts/   # 실행 결과, 메타데이터, 분석 기록
 └── tests/       # 구현 동작을 검증하는 테스트
 ```
