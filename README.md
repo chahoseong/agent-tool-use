@@ -9,8 +9,8 @@ LLM 기반 Agent의 Tool Use를 이해하고, Agent를 구현·평가한 뒤 실
 - Benchmark: tau2-bench
 - Domains:
   - mock
-  - retail — 일부 task
-  - airline — 일부 task
+  - retail — 0
+  - airline — 42, 41, 22
 
 ### LLM Environment
 
