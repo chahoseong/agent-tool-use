@@ -110,12 +110,16 @@ def metadata_config() -> EvalConfig:
     )
 
 
+@pytest.mark.parametrize("enabled", [False, True])
 def test_metadata_records_effective_settings_and_run_context_without_api_key_values(
     tmp_path: Path,
     fixed_run_time: None,
     monkeypatch: pytest.MonkeyPatch,
     metadata_config: EvalConfig,
+    enabled: bool,
 ) -> None:
+    metadata_config.reflection.enabled = enabled
+    metadata_config.reflection.max_revisions = 0
     monkeypatch.chdir(tmp_path)
     monkeypatch.setenv("EVAL_METADATA_TEST_KEY", "test-only-secret-value")
     run_directory = Path("run")
@@ -146,6 +150,7 @@ def test_metadata_records_effective_settings_and_run_context_without_api_key_val
         "num_trials": 1,
         "max_concurrency": 1,
     }
+    assert recorded["reflection"] == {"enabled": enabled, "max_revisions": 0}
     assert recorded["agent"] == {
         "model": "agent-model",
         "base_url": "http://localhost:8080/v1",

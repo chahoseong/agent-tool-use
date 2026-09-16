@@ -134,6 +134,13 @@ class OutputOptions(_ConfigModel):
         return value
 
 
+class ReflectionOptions(_ConfigModel):
+    """Output review settings, separate from model generation options."""
+
+    enabled: bool = False
+    max_revisions: int = Field(default=2, ge=0)
+
+
 class EvalConfig(_ConfigModel):
     """Evaluation settings shared by execution and metadata collection."""
 
@@ -141,6 +148,7 @@ class EvalConfig(_ConfigModel):
     agent: ModelOptions
     user: ModelOptions
     output: OutputOptions = Field(default_factory=OutputOptions)
+    reflection: ReflectionOptions = Field(default_factory=ReflectionOptions)
 
 
 def load_config(path: Path) -> EvalConfig:

@@ -46,6 +46,8 @@ def test_task_agent_factory_creates_agent_with_runner_settings(
     assert agent.domain_policy == policy
     assert agent.llm == model
     assert agent.llm_args == (llm_args if llm_args is not None else {})
+    assert agent.reflection_enabled is False
+    assert agent.max_revisions == 2
 
 
 @pytest.mark.parametrize(

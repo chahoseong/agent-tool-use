@@ -24,6 +24,20 @@ uv run --env-file .env python scripts/evaluate.py run evaluation.toml
 
 `results.json`과 `metadata.toml`이 실행별 디렉토리에 저장되며, 결과 파일 경로가 출력됩니다.
 
+출력 전 검토와 피드백 반영을 활성화하려면 설정 파일에 다음 섹션을 추가합니다.
+
+```toml
+[reflection]
+enabled = true
+max_revisions = 2
+```
+
+생략하면 비활성화됩니다. `max_revisions`는 0 이상의 정수이며, 0이면 최초 검토만 수행합니다.
+작성·수정·검토는 Agent의 동일 모델 설정을 사용하고 적용값은 `metadata.toml`에 기록됩니다.
+활성화된 평가의 내부 검토 과정은 실행 디렉토리의 `reflection/<출력 ID>.jsonl`에 저장됩니다.
+`reflection/index.json`은 로그와 공식 simulation·trial·메시지 위치의 대응표입니다.
+공식 출력이 남지 않은 실패 시도의 로그는 미연결 상태로 보존합니다.
+
 ## LLM 추가 평가
 
 Codex에서 `$judge-evaluation`과 결과 디렉터리를 지정하면 trial별 서브에이전트가
@@ -55,6 +69,14 @@ trial마다 `evaluate-task` 아래 모델 응답과 도구 요청·결과가 표
 공식 점수는 `tau2.reward`, 검증 완료된 추가 판정은 `judge.<기준 ID>`로 표시됩니다.
 추가 판정의 comment에는 이유와 실제 증거를 함께 넣습니다. 미해결 판정은 점수로
 등록하지 않고 evaluator 출력에 상태와 함께 남깁니다.
+
+reflection 로그가 있으면 대응표와 공식 출력을 검증한 뒤 해당 응답 아래에
+`reflect-agent-response`를 연결합니다. 초안·수정·검토 호출과 종료 이유를 볼 수 있으며,
+reflection 판정은 judge 점수로 등록하지 않습니다. 미연결 실패 로그는 게시하지 않습니다.
+새 trace는 내부 모델 호출에서 사용량을 집계합니다. 기존 trace에 추가할 때는 최종 호출의
+사용량을 기존 관찰에 유지하고 내부의 동일 호출은 참조용 span으로 표시합니다.
+동일 로그의 재게시와 전송 불확실성은 프로젝트별 게시 기록으로 관리합니다.
+로그에는 전체 모델 요청이 없으므로 내부 관찰의 input은 저장된 초안·피드백 범위입니다.
 
 이 명령은 저장된 공식 mock 데이터를 Cloud로 전송합니다. 모델·벤치마크를 다시
 실행하지 않고 원본 파일도 변경하지 않습니다. 원본 아래 `langfuse/`의 프로젝트별

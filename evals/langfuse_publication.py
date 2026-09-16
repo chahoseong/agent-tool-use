@@ -91,7 +91,7 @@ def remote_observations(client: Any, trace_id: str) -> list[dict[str, Any]]:
         response = client.api.observations.get_many(
             trace_id=trace_id,
             fields="core,basic,metadata",
-            expand_metadata="source_sha256,simulation_id",
+            expand_metadata="source_sha256,simulation_id,message_index",
             limit=1000,
             cursor=cursor,
         )

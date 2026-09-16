@@ -66,7 +66,13 @@ def run_evaluation(config: EvalConfig, *, config_path: Path) -> Path:
     except OSError:
         raise EvaluationPreparationError("Cannot write evaluation metadata.") from None
     run_config = _build_run_config(config, run_directory)
-    results = run_domain(run_config)
+    try:
+        results = run_domain(run_config)
+    finally:
+        if config.reflection.enabled:
+            from evals.reflection_index import write_reflection_index
+
+            write_reflection_index(run_directory)
     results_path = run_directory / "results.json"
     error_count = sum(
         simulation.termination_reason == TerminationReason.INFRASTRUCTURE_ERROR
@@ -111,7 +117,21 @@ def _build_run_config(config: EvalConfig, run_directory: Path) -> "TextRunConfig
             "user": "user_simulator",
             "llm_agent": f"openai/{config.agent.model}",
             "llm_user": f"openai/{config.user.model}",
-            "llm_args_agent": _build_llm_args(config.agent),
+            # The official runner forwards this to our factory, which removes
+            # the reserved option before constructing the model arguments.
+            "llm_args_agent": {
+                **_build_llm_args(config.agent),
+                "_task_agent_reflection": config.reflection.model_dump(),
+                **(
+                    {
+                        "_task_agent_reflection_log_directory": str(
+                            run_directory.resolve() / "reflection"
+                        )
+                    }
+                    if config.reflection.enabled
+                    else {}
+                ),
+            },
             "llm_args_user": _build_llm_args(config.user),
             "seed": config.evaluation.seed,
             "num_trials": config.evaluation.num_trials,

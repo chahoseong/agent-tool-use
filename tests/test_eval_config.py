@@ -67,6 +67,8 @@ base_url = "http://localhost:8081/v1"
     assert config.evaluation.max_concurrency == 1
     assert config.evaluation.max_steps == DEFAULT_MAX_STEPS
     assert config.evaluation.max_errors == DEFAULT_MAX_ERRORS
+    assert config.reflection.enabled is False
+    assert config.reflection.max_revisions == 2
     assert config.agent.model == "agent-model"
     assert config.agent.base_url == "http://localhost:8080/v1"
     assert config.user.model == "user-model"
@@ -573,3 +575,41 @@ def test_config_rejects_invalid_generation_option_value(
         config_module.load_config(config_path)
 
     assert str(error.value) == f"Invalid setting: user.generation.{option}."
+
+
+@pytest.mark.parametrize("max_revisions", [0, 2])
+def test_config_preserves_explicit_reflection_options(
+    tmp_path: Path, toml_sections: dict[str, dict[str, str]], max_revisions: int
+) -> None:
+    toml_sections["reflection"] = {
+        "enabled": "true",
+        "max_revisions": str(max_revisions),
+    }
+    path = tmp_path / "evaluation.toml"
+    write_toml_config(path, toml_sections)
+    config = config_module.load_config(path)
+    assert config.reflection.enabled is True
+    assert config.reflection.max_revisions == max_revisions
+
+
+@pytest.mark.parametrize(
+    ("name", "value"),
+    [
+        ("enabled", '"true"'),
+        ("enabled", "1"),
+        ("max_revisions", "-1"),
+        ("max_revisions", "true"),
+        ("max_revisions", "2.5"),
+        ("max_revisions", '"2"'),
+    ],
+)
+def test_config_rejects_invalid_reflection_option(
+    tmp_path: Path, toml_sections: dict[str, dict[str, str]], name: str, value: str
+) -> None:
+    toml_sections["reflection"] = {name: value}
+    path = tmp_path / "evaluation.toml"
+    write_toml_config(path, toml_sections)
+    with pytest.raises(
+        config_module.ConfigError, match=f"Invalid setting: reflection.{name}"
+    ):
+        config_module.load_config(path)

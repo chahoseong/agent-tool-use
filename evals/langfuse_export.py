@@ -18,6 +18,7 @@ from evals.langfuse_publication import (
     stable_id,
     verify_delivery,
 )
+from evals.langfuse_reflection import attach_reflections, read_reflections
 
 
 def conversation_message(message: dict[str, Any]) -> dict[str, Any]:
@@ -79,6 +80,8 @@ def observations(
                     },
                 }
             )
+            if message.get("cost") is not None:
+                records[-1]["cost_details"] = {"total": message["cost"]}
             for call in message.get("tool_calls") or []:
                 response = returned.get(call["id"])
                 records.append(
@@ -186,6 +189,7 @@ def export(
     if not simulations:
         raise ValueError("No matching saved trials")
     judgments, judge_meta = read_judgments(judge, source) if judge else ({}, {})
+    reflections = read_reflections(source, simulations)
     info = data["info"]
     batch = uuid4().hex
     source_hash = hashlib.sha256((source / "results.json").read_bytes()).hexdigest()
@@ -207,6 +211,7 @@ def export(
                 judgments,
                 judge_meta,
                 adopt_trace,
+                reflections=reflections,
             )
     finally:
         client.shutdown()
@@ -223,6 +228,8 @@ def _export_selected(
     judgments: dict[str, Any],
     judge_meta: dict[str, Any],
     adopt_trace: str | None,
+    *,
+    reflections: dict[str, list[dict[str, Any]]] | None = None,
 ) -> list[str]:
     from langfuse import propagate_attributes
 
@@ -230,6 +237,7 @@ def _export_selected(
     if not client.auth_check():
         raise ValueError("Langfuse project authentication failed")
     for simulation in simulations:
+        reflection_records = (reflections or {}).get(simulation["id"], [])
         key = "trace:" + stable_id([source_hash, simulation["id"]])
         if adopt_trace:
             rows = remote_observations(client, adopt_trace)
@@ -261,6 +269,15 @@ def _export_selected(
             ledger.confirm(key, adopted)
         receipt = ledger.get(key)
         if receipt:
+            attach_reflections(
+                client,
+                ledger,
+                receipt,
+                simulation,
+                reflection_records,
+                source_hash,
+                info,
+            )
             _finish_trial(
                 client, ledger, receipt, simulation, judgments, judge_meta, source_hash
             )
@@ -311,14 +328,36 @@ def _export_selected(
             ) as root,
         ):
             required = {root.id}
+            agent_observations = {}
+            reflected_indices = {r["message_index"] for r in reflection_records}
             for record in observations(messages, info):
+                is_agent = record["name"] == "generate-agent-response"
+                message_index = record["metadata"]["message_index"]
+                reflected = is_agent and message_index in reflected_indices
+                if reflected:
+                    record["name"] = "agent-response"
+                    record["as_type"] = "agent"
+                    for field in ("usage_details", "cost_details", "model"):
+                        record.pop(field, None)
                 child = root.start_observation(**record)
+                if is_agent:
+                    agent_observations[str(message_index)] = {
+                        "id": child.id,
+                        "selected_on_parent": not reflected,
+                    }
                 required.add(child.id)
                 child.end()
-            receipt = {"trace_id": root.trace_id, "root_id": root.id}
+            receipt = {
+                "trace_id": root.trace_id,
+                "root_id": root.id,
+                "agent_observations": agent_observations,
+            }
         client.flush()
         verify_delivery(client, trace_id, required)
         ledger.confirm(key, receipt)
+        attach_reflections(
+            client, ledger, receipt, simulation, reflection_records, source_hash, info
+        )
         _finish_trial(
             client, ledger, receipt, simulation, judgments, judge_meta, source_hash
         )

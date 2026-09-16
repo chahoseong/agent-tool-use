@@ -1,5 +1,6 @@
 """Verify preparation for official mock evaluation runs."""
 
+import json
 import tomllib
 from collections.abc import Callable
 from importlib import import_module
@@ -15,6 +16,7 @@ from evals.config import EvalConfig, ModelOptions
 
 def test_registered_task_agent_supports_repeated_official_construction(
     monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
 ) -> None:
     from tau2.domains.mock.environment import get_environment
     from tau2.registry import Registry
@@ -28,15 +30,44 @@ def test_registered_task_agent_supports_repeated_official_construction(
     environment = get_environment()
     llm_args = {"base_url": "http://localhost:8080/v1", "temperature": 0.2}
 
-    for _ in range(2):
+    config = EvalConfig.model_validate(
+        {
+            "evaluation": {"task_ids": ["create_task_1"], "seed": 42},
+            "agent": {
+                "model": "test-model",
+                "base_url": "http://localhost:8080/v1",
+                "generation": {"temperature": 0.2},
+            },
+            "user": {"model": "user-model", "base_url": "http://localhost:8081/v1"},
+        }
+    )
+    for enabled, maximum in [(True, 0), (True, 3), (False, 2)]:
+        config.reflection.enabled = enabled
+        config.reflection.max_revisions = maximum
+        run_config = runner_module._build_run_config(config, tmp_path)
+        # Exercise the serialized arguments accepted by the official runner.
+        from tau2.data_model.simulation import TextRunConfig
+
+        run_config = TextRunConfig.model_validate_json(run_config.model_dump_json())
+        original_args = dict(run_config.llm_args_agent or {})
         runner_module._register_task_agent()
         agent = build_agent(
-            "task_agent", environment, llm="openai/test-model", llm_args=llm_args
+            "task_agent",
+            environment,
+            llm=run_config.llm_agent,
+            llm_args=run_config.llm_args_agent,
         )
 
         assert isinstance(agent, TaskAgent)
         assert agent.llm == "openai/test-model"
-        assert agent.llm_args == llm_args
+        assert agent.llm_args == {**llm_args, "api_key": "not-needed"}
+        assert agent.reflection_enabled is enabled
+        assert agent.max_revisions == maximum
+        assert agent.reflection_log_directory == (
+            tmp_path / "reflection" if enabled else None
+        )
+        assert run_config.llm_args_agent == original_args
+        assert "_task_agent_reflection" not in (run_config.llm_args_user or {})
         assert agent.domain_policy == environment.get_policy()
         assert [tool.openai_schema for tool in agent.tools] == [
             tool.openai_schema for tool in environment.get_tools()
@@ -119,6 +150,7 @@ def test_run_config_maps_evaluation_settings_to_official_mock_execution(
     assert result.llm_agent == "openai/org/agent-model"
     assert result.llm_user == "openai/user-model"
     assert result.llm_args_agent == {
+        "_task_agent_reflection": {"enabled": False, "max_revisions": 2},
         "base_url": "http://localhost:8080/v1",
         "api_key": "os.environ/EVAL_TEST_AGENT_KEY" if authenticated else "not-needed",
         "temperature": 0.2,
@@ -611,6 +643,9 @@ def test_evaluation_preserves_artifacts_when_official_execution_fails(
 ) -> None:
     from tau2.data_model.simulation import TextRunConfig
 
+    from agents.reflection_log import ReflectionLog
+
+    evaluation_config.reflection.enabled = True
     failure = RuntimeError("Official evaluation failed")
     saved_paths: list[Path] = []
 
@@ -619,6 +654,11 @@ def test_evaluation_preserves_artifacts_when_official_execution_fails(
         result_path = Path(config.save_to) / "results.json"
         result_path.write_text("partial results", encoding="utf-8")
         saved_paths.append(result_path)
+        log = ReflectionLog(
+            result_path.parent / "reflection",
+            context={"task_id": "failed-task", "seed": 100},
+        )
+        log.write("draft_started", revision_count=0)
         raise failure
 
     monkeypatch.setattr(import_module("tau2.runner"), "run_domain", interrupted_run)
@@ -632,6 +672,13 @@ def test_evaluation_preserves_artifacts_when_official_execution_fails(
     assert len(saved_paths) == 1
     assert saved_paths[0].read_text("utf-8") == "partial results"
     assert saved_paths[0].with_name("metadata.toml").is_file()
+    log_directory = saved_paths[0].parent / "reflection"
+    index = json.loads((log_directory / "index.json").read_text(encoding="utf-8"))
+    assert index["results_status"] == "unavailable"
+    assert len(index["outputs"]) == 1
+    assert index["outputs"][0]["status"] == "unlinked"
+    assert "simulation_id" not in index["outputs"][0]
+    assert len(list(log_directory.glob("*.jsonl"))) == 1
 
 
 @pytest.mark.parametrize("error_count", [1, 2], ids=["mixed_results", "all_errors"])
@@ -700,3 +747,108 @@ def test_evaluation_reports_storage_preparation_failure_before_execution(
 
     assert str(error.value) == message
     assert error.value.__suppress_context__
+
+
+@pytest.mark.parametrize("enabled", [False, True])
+def test_evaluation_links_reflection_logs_to_official_outputs_without_mixing_runs(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    evaluation_config: EvalConfig,
+    enabled: bool,
+) -> None:
+    from tau2.data_model.message import AssistantMessage, UserMessage
+    from tau2.data_model.simulation import TextRunConfig
+    from tau2.utils.llm_utils import to_litellm_messages
+
+    from agents import reflection, task_agent
+    from evals.tasks import get_task
+
+    evaluation_config.reflection.enabled = enabled
+    task = get_task("mock", evaluation_config.evaluation.task_ids[0])
+
+    def fake_generate(*, messages: list, **kwargs: object) -> AssistantMessage:
+        if messages[0].content == reflection.REVIEW_PROMPT:
+            return AssistantMessage(
+                role="assistant", content='{"decision":"approve","feedback":[]}'
+            )
+        return AssistantMessage(
+            role="assistant", content="Same answer", raw_data={"provider": "kept"}
+        )
+
+    monkeypatch.setattr(task_agent, "generate", fake_generate)
+    monkeypatch.setattr(reflection, "generate", fake_generate)
+
+    def run_domain(config: TextRunConfig) -> SimpleNamespace:
+        directory = Path(str(config.save_to))
+        simulations = []
+        for trial in range(2):
+            agent = task_agent.create_task_agent(
+                tools=[],
+                domain_policy="Policy",
+                llm=config.llm_agent,
+                llm_args=config.llm_args_agent,
+                task=task,
+            )
+            agent.set_seed(100 + trial)
+            state = agent.get_init_state()
+            for _ in range(2):
+                message, state = agent.generate_next_message(
+                    UserMessage(role="user", content="Help"), state
+                )
+                assert message.raw_data is not None
+                assert message.raw_data["provider"] == "kept"
+                assert "reflection" not in json.dumps(to_litellm_messages([message]))
+            simulations.append(
+                {
+                    "id": f"sim-{trial}",
+                    "task_id": task.id,
+                    "trial": trial,
+                    "seed": 100 + trial,
+                    "messages": [
+                        m.model_dump(mode="json") for m in state.message_history
+                    ],
+                }
+            )
+        (directory / "results.json").write_text(
+            json.dumps({"simulations": simulations}), encoding="utf-8"
+        )
+        return SimpleNamespace(
+            simulations=[SimpleNamespace(termination_reason="max_steps")]
+        )
+
+    monkeypatch.setattr(import_module("tau2.runner"), "run_domain", run_domain)
+    all_ids: set[str] = set()
+    for _ in range(2):
+        path = runner_module.run_evaluation(
+            evaluation_config, config_path=tmp_path / "config.toml"
+        )
+        directory = path.parent / "reflection"
+        if not enabled:
+            assert not directory.exists()
+            continue
+        entries = json.loads((directory / "index.json").read_text(encoding="utf-8"))[
+            "outputs"
+        ]
+        assert len(entries) == 4
+        assert {(e["trial"], e["message_index"]) for e in entries} == {
+            (0, 1),
+            (0, 3),
+            (1, 1),
+            (1, 3),
+        }
+        for entry in entries:
+            assert entry["status"] == "linked"
+            assert entry["simulation_id"] == f"sim-{entry['trial']}"
+            assert entry["output_id"] not in all_ids
+            all_ids.add(entry["output_id"])
+            events = [
+                json.loads(line)
+                for line in (directory / entry["file"])
+                .read_text(encoding="utf-8")
+                .splitlines()
+            ]
+            assert events[0]["context"]["task_id"] == task.id
+            assert events[0]["context"]["seed"] == 100 + entry["trial"]
+            assert (
+                events[0]["context"]["agent_turn"] == (entry["message_index"] + 1) // 2
+            )
